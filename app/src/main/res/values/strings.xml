@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">FFMApp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="home">Home</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="login">Sign in</string>
+    <string name="account">用户名</string>
+    <string name="error_username">This username is invalid</string>
+    <string name="error_pwd">This password is invalid</string>
+    <string name="press_again_exit">再按一次退出</string>
+
+    <string name="dialog_confirm">确认</string>
+    <string name="waiting">请稍后&#8230;</string>
+    <string name="operation_ing">处理中,请稍候&#8230;</string>
+
+    <string name="location_ing">地图定位中&#8230;</string>
+    <string name="location_fail">定位失败，请打开位置信息重试</string>
+    <string name="location_error">获取不到经纬度，请稍后重试</string>
+    <string name="location_Permissions_tip">启用蓝牙需要定位权限</string>
+    <string name="title_activity_data_list">DataListActivity</string>
+
+    <string name="titl_data">监控数据</string>
+    <string name="time_3h">3小时</string>
+    <string name="time_6h">6小时</string>
+    <string name="time_1d">1天</string>
+
+    <string-array name="array_title">
+        <item>Andorid O Developer Preview</item>
+        <item>Build for a Multi-Screen World</item>
+        <item>Build Beautiful Apps</item>
+    </string-array>
+
+    <string-array name="array_content">
+        <item>An early look at the next version of Android for testing, development, and feedback. Get your apps ready for Android O!</item>
+        <item>Android runs on billions of handheld devices around the world, and it now supports these exciting, new form-factors.</item>
+        <item>Resources to get you started with designing and developing for Android.</item>
+    </string-array>
+</resources>
