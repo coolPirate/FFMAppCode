@@ -1,15 +1,32 @@
 package ffm.geok.com.ui.fragment.home;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -18,36 +35,49 @@ import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.Projection;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.BitmapDescriptor;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.MultiPointItem;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.TileOverlay;
 import com.amap.api.maps.model.TileOverlayOptions;
 import com.amap.api.maps.model.TileProvider;
 import com.amap.api.maps.model.UrlTileProvider;
+import com.amap.api.maps.model.animation.Animation;
+import com.amap.api.maps.model.animation.RotateAnimation;
 import com.orhanobut.logger.Logger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ffm.geok.com.R;
 import ffm.geok.com.base.BaseMainFragment;
 import ffm.geok.com.global.XApplication;
+import ffm.geok.com.javagen.FireDateEntityDao;
+import ffm.geok.com.model.FireDateEntity;
 import ffm.geok.com.presenter.IMapLocationPresenter;
 import ffm.geok.com.presenter.MapLocationPresenter;
 import ffm.geok.com.uitls.ConstantUtils;
+import ffm.geok.com.uitls.Convert;
+import ffm.geok.com.uitls.DBUtils;
+import ffm.geok.com.uitls.L;
+import ffm.geok.com.uitls.NavigationUtils;
 import ffm.geok.com.uitls.StringUtils;
 import ffm.geok.com.uitls.ToastUtils;
 import ffm.geok.com.widget.dialog.DialogUtils;
 
 
-public class MapFragment extends BaseMainFragment implements LocationSource, Toolbar.OnMenuItemClickListener {
+public class MapFragment extends BaseMainFragment implements LocationSource, Toolbar.OnMenuItemClickListener,View.OnClickListener {
 
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.map)
     MapView mMapView;
     @BindView(R.id.googleMap)
@@ -64,6 +94,8 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
 
     private TileOverlay tileOverlay;
 
+    private Dialog inputDialog = null;
+
     public static MapFragment newInstance() {
         return new MapFragment();
     }
@@ -77,11 +109,14 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+        ButterKnife.bind(this,view);
 
         initView(view, savedInstanceState);
-        initListener();
+        initListener(view);
+        initMaker();
 
         //unbinder = ButterKnife.bind(this, view);
+        //ButterKnife.bind(this,view);
         return view;
     }
 
@@ -96,12 +131,12 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         mapLocationPresenter = new MapLocationPresenter(getContext(), locationCallBack);
         mapLocationPresenter.initAMap(getActivity());
 
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        /*mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
 
         mToolbar.setTitle(R.string.home);
         initToolbarNav(mToolbar, true);
         mToolbar.inflateMenu(R.menu.home);
-        mToolbar.setOnMenuItemClickListener(this);
+        mToolbar.setOnMenuItemClickListener(this);*/
 
 
         //设置显示定位按钮 并且可以点击
@@ -116,6 +151,32 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         aMap.setMyLocationEnabled(true);
         settings.setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_CENTER);
 
+    }
+
+    private void initMaker() {
+        //初始化新增数据marker
+        List<FireDateEntity> fireDateEntityList = DBUtils.getInstance().queryAllBySingleWhereConditions(FireDateEntity.class, FireDateEntityDao.Properties.See.eq("1"));
+        int cnt=fireDateEntityList.size();
+        L.i("Marker数", Integer.toString(cnt));
+        for (int i = 0; i < fireDateEntityList.size(); i++) {
+            FireDateEntity fireDateEntity = fireDateEntityList.get(i);
+            Double lgtd = fireDateEntity.getLon();
+
+            Double lttd = fireDateEntity.getLat();
+            if (lgtd == null && lttd == null) continue;
+            LatLng latLng = new LatLng(lttd, lgtd);
+            TextView textView = new TextView(getActivity().getApplicationContext());
+            textView.setBackgroundResource(R.mipmap.marker2);     //通过View获取BitmapDescriptor对象
+            BitmapDescriptor markerIcon = BitmapDescriptorFactory
+                    .fromView(textView);
+            Marker marker = aMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(fireDateEntity.getId())
+                    .snippet(fireDateEntity.getCreateTime())
+                    .icon(markerIcon)
+                    .draggable(false));
+            //marker.showInfoWindow();
+        }
     }
 
     @Override
@@ -177,7 +238,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         }
     };
 
-    private void initListener() {
+    private void initListener(View view) {
         googleMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,9 +271,123 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
             }
         });
 
+        // 定义海量点点击事件
+
+        /*AMap.OnMultiPointClickListener multiPointClickListener = new AMap.OnMultiPointClickListener() {
+            // 海量点中某一点被点击时回调的接口
+            // 返回 true 则表示接口已响应事件，否则返回false
+            @Override
+            public boolean onPointClick(MultiPointItem pointItem) {
+                //ToastUtils.showShortMsg(MainActivity.this,"clicked!");
+                LatLng latLng = pointItem.getLatLng();
+                Double lg = latLng.longitude;
+                Double lt = latLng.latitude;
+
+                TextView textView = new TextView(getActivity().getApplicationContext());
+                textView.setBackgroundResource(R.mipmap.marker2);     //通过View获取BitmapDescriptor对象
+                BitmapDescriptor markerIcon = BitmapDescriptorFactory
+                        .fromView(textView);
+
+                clearMarkers();
+
+                Marker marker = aMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .icon(markerIcon)
+                        .draggable(false));
+                marker.setObject(ConstantUtils.mapLocation.MapMakerVisible);
+
+                //initDialogParams();
+                return false;
+
+            }
+        };
+        aMap.setOnMultiPointClickListener(multiPointClickListener);*/
+
+        aMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                marker.setInfoWindowEnable(false);
+
+                TextView textView = new TextView(getActivity().getApplicationContext());
+                textView.setBackgroundResource(R.mipmap.marker);     //通过View获取BitmapDescriptor对象
+                BitmapDescriptor markerIcon = BitmapDescriptorFactory
+                        .fromView(textView);
+                marker.setIcon(markerIcon);
+
+                //旋转动画
+                /*Animation animation = new RotateAnimation(marker.getRotateAngle(),marker.getRotateAngle()+180,0,0,0);
+                long duration = 1000L;
+                animation.setDuration(duration);
+                animation.setInterpolator(new LinearInterpolator());
+                marker.setAnimation(animation);
+                marker.startAnimation();*/
+
+                jumpPoint(marker);
+
+                initDialogParams(marker.getTitle());
+                return false;
+            }
+        });
+
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
 
     }
 
+    private void clearMarkers() {
+        //获取地图上所有Marker
+        List<Marker> mapScreenMarkers = aMap.getMapScreenMarkers();
+        for (int i = 0; i < mapScreenMarkers.size(); i++) {
+            Marker marker = mapScreenMarkers.get(i);
+            if (marker.getObject().equals(ConstantUtils.mapLocation.MapMakerVisible)) {
+                marker.remove();//移除当前Marker
+            }
+        }
+        aMap.reloadMap();//刷新地图
+    }
+
+    private void initDialogParams(String id) {
+        FireDateEntity fireDateEntity=(FireDateEntity)DBUtils.getInstance().queryAllBySingleWhereConditions(FireDateEntity.class, FireDateEntityDao.Properties.Id.eq(id)).get(0);
+        inputDialog = DialogUtils.getDialog(getActivity(), R.layout.layout_dialog_briefinfo);
+        /*修改默认窗口高度*/
+        Window dialogWindow = inputDialog.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        dialogWindow.setGravity(Gravity.BOTTOM);
+        Display d = dialogWindow.getWindowManager().getDefaultDisplay(); // 为获取屏幕宽、高
+        lp.width = (int) (d.getWidth() * 0.9); // 高度设置为屏幕的0.8
+        lp.height = (int) (d.getHeight() * 0.3); // 高度设置
+        dialogWindow.setAttributes(lp); // 设置生效
+//        content.setText("当前坐标：\n经度："+latLng.longitude+"\n纬度："+latLng.latitude);
+        TextView lng = (TextView) inputDialog.findViewById(R.id.tv_project_Lng);
+        lng.setText(String.valueOf(fireDateEntity.getLat()));
+        setEditTextReadOnly(lng);
+        TextView lat = (TextView) inputDialog.findViewById(R.id.tv_project_lat);
+        lat.setText(String.valueOf(fireDateEntity.getLon()));
+        setEditTextReadOnly(lat);
+        TextView name = (TextView) inputDialog.findViewById(R.id.tv_project_name);
+        name.setText(String.valueOf(fireDateEntity.getProvince()+fireDateEntity.getCity()+fireDateEntity.getCounty()));
+        setEditTextReadOnly(name);
+        TextView time = (TextView) inputDialog.findViewById(R.id.tv_project_time);
+        time.setText(String.valueOf(fireDateEntity.getFindTime()));
+        setEditTextReadOnly(time);
+
+        ImageView closeBtn = (ImageView) inputDialog.findViewById(R.id.img_btn_close);
+        closeBtn.setOnClickListener(this);
+
+    }
+
+    public static void setEditTextReadOnly(TextView view){
+        //view.setTextColor(R.color.color_blue);   //设置只读时的文字颜色
+        if (view instanceof android.widget.EditText){
+            view.setCursorVisible(false);      //设置输入框中的光标不可见
+            view.setFocusable(false);           //无焦点
+            view.setFocusableInTouchMode(false);     //触摸时也得不到焦点
+        }
+    }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -243,5 +418,49 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
     @Override
     public void deactivate() {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.img_btn_close:
+                if (null != inputDialog) {
+                    inputDialog.dismiss();
+                }
+                break;
+        }
+
+    }
+
+    /**
+     * marker点击时跳动一下
+     */
+    public void jumpPoint(final Marker marker) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = aMap.getProjection();
+        final LatLng markerLatlng = marker.getPosition();
+        Point markerPoint = proj.toScreenLocation(markerLatlng);
+        markerPoint.offset(0, -100);
+        final LatLng startLatLng = proj.fromScreenLocation(markerPoint);
+        final long duration = 1500;
+
+        final Interpolator interpolator = new BounceInterpolator();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * markerLatlng.longitude + (1 - t)
+                        * startLatLng.longitude;
+                double lat = t * markerLatlng.latitude + (1 - t)
+                        * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+                if (t < 1.0) {
+                    handler.postDelayed(this, 16);
+                }
+            }
+        });
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import ffm.geok.com.helper.RetrofitHelper;
 import ffm.geok.com.helper.RetrofitService;
 import ffm.geok.com.javagen.Book;
+import ffm.geok.com.model.FireDateEntity;
 import rx.Observable;
 
 public class DataManager {
@@ -12,7 +13,7 @@ public class DataManager {
     public DataManager(Context context){
         this.mRetrofitService = RetrofitHelper.getInstance(context).getServer();
     }
-    public Observable<Book> getSearchBooks(String name, String tag, int start, int count){
-        return mRetrofitService.getSearchBooks(name,tag,start,count);
+    public Observable<FireDateEntity> getSearchBooks(String startTime, String endTime){
+        return mRetrofitService.getSearchFires(startTime,endTime);
     }
 }

@@ -5,7 +5,12 @@ public interface ConstantUtils {
         String LOGIN_NAME = "username";                                                             //登录名
         String LOGIN_PASSWORD = "password";                                                         //登录密码
         String LoginModel = "loginModel";                                                           //登录信息
-        String isLoadSPData = "isLoadSPData";
+        String RefreshDataStatus = "RefreshDataStatus";                                             //刷新数据状态
+        String IS_SYNCHRO_NO = "0";                                                                 //未同步数据标识
+        String IS_SYNCHRO_UPDATE = "1";                                                             //已修改待同步数据标识
+        int ThumbnailSize = 100;                                                                    //多媒体缩略图默认大小
+        int ThumbnailMargin = 10;                                                                   //多媒体缩略图默认边距
+        String ProjectDetial = "ProjectDetial";                                                     //工程详情
     }
 
     interface mapLocation {
@@ -26,6 +31,22 @@ public interface ConstantUtils {
         public static final String ADCD = "adcd";
         public static final String EWNM = "ewnm";
         public static final String YEAR = "year";
+        public static final String ST = "st";
+        public static final String ET = "et";
+    }
+
+    interface FIRES_LABELS {
+        String CITY = "城市名称";
+        String COUNTY="县名称";
+        String CREATETIME="开始时间";
+        String FINDTIME="发现时间";
+        String LAT="纬度";
+        String LON="经度";
+        String PROVINCE="省份";
+        String SATELLITE="卫星名称";
+        String TYPE="类型";
+        String UPDATETIME="更新时间";
+
     }
 
 

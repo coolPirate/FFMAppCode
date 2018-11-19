@@ -19,11 +19,11 @@ public class SPManager {
         getSharedPreferences().edit().putString(ConstantUtils.RequestTag.ADCD, ADCD).commit();
     }
 
-    public static boolean isLoadSPData() {
+    /*public static boolean isLoadSPData() {
         return getSharedPreferences().getBoolean(ConstantUtils.global.isLoadSPData, false);
     }
 
     public static void setLoadSPData(boolean loadSPData) {
         getSharedPreferences().edit().putBoolean(ConstantUtils.global.isLoadSPData, loadSPData).commit();
-    }
+    }*/
 }

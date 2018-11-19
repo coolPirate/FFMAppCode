@@ -1,6 +1,10 @@
 package ffm.geok.com.ui.activity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,14 +17,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import ffm.geok.com.R;
 import ffm.geok.com.base.BaseMainFragment;
 import ffm.geok.com.base.MySupportActivity;
 import ffm.geok.com.base.MySupportFragment;
+import ffm.geok.com.javagen.BaseDao;
+import ffm.geok.com.model.FireDateEntity;
+import ffm.geok.com.presenter.IProjectPresenter;
+import ffm.geok.com.presenter.ProjectPresenter;
 import ffm.geok.com.ui.fragment.account.LoginFragment;
 import ffm.geok.com.ui.fragment.data.DataFragment;
 import ffm.geok.com.ui.fragment.home.HomeFragment;
-import ffm.geok.com.ui.fragment.home.MapFragment;
+import ffm.geok.com.ui.fragment.home.HomeTabFragment;
+import ffm.geok.com.uitls.ConstantUtils;
+import ffm.geok.com.uitls.DBUtils;
+import ffm.geok.com.uitls.L;
+import ffm.geok.com.uitls.NavigationUtils;
+import ffm.geok.com.uitls.SPManager;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -39,16 +54,26 @@ public class MainActivity extends MySupportActivity
     private TextView mTvName;   // NavigationView上的名字
     private ImageView mImgNav;  // NavigationView上的头像
 
+    private IProjectPresenter firesPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MySupportFragment fragment = findFragment(MapFragment.class);
+        MySupportFragment fragment = findFragment(HomeTabFragment.class);
         if (fragment == null) {
-            loadRootFragment(R.id.fl_container, MapFragment.newInstance());
+            loadRootFragment(R.id.fl_container, HomeTabFragment.newInstance());
         }
+
         initView();
+        initListener();
+        initData();
+
+    }
+
+    private void initData(){
+        firesPresenter.getFiresList("2018-11-10","2019-11-19");
     }
 
     private void initView() {
@@ -58,7 +83,8 @@ public class MainActivity extends MySupportActivity
 //        mDrawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        //TODO
+        /*mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
         mNavigationView.setCheckedItem(R.id.nav_home);
 
@@ -76,6 +102,46 @@ public class MainActivity extends MySupportActivity
                     }
                 }, 250);
             }
+        });*/
+    }
+
+    private void initListener(){
+        //火点信息保存数据库
+        firesPresenter=new ProjectPresenter(this, new IProjectPresenter.ProjectCallback() {
+            @Override
+            public void onFiresListSuccess(List<FireDateEntity> fireDateEntityList) {
+                //插入操作耗时
+                DBUtils.getInstance().getmDaoSession().runInTx(() -> {
+                    for (FireDateEntity ewellsEntity : fireDateEntityList) {
+                        try {
+                            DBUtils.getInstance().getmDaoSession().insertOrReplace(ewellsEntity);
+
+                        } catch (Exception e) {
+                            L.e(e.toString());
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onFiresListFail(String error) {
+
+            }
+
+            @Override
+            public void onSaveSampleInfoSucdess() {
+
+            }
+
+            @Override
+            public void onSaveSampleInfoFail(String error) {
+
+            }
+
+            @Override
+            public void onFiresListSuccess(String responseString) {
+
+            }
         });
     }
 
@@ -88,7 +154,8 @@ public class MainActivity extends MySupportActivity
 
             // 主页的Fragment
             if (topFragment instanceof BaseMainFragment) {
-                mNavigationView.setCheckedItem(R.id.nav_home);
+                //TODO
+                //mNavigationView.setCheckedItem(R.id.nav_home);
             }
 
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
@@ -120,6 +187,32 @@ public class MainActivity extends MySupportActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Dialog alertDialog = new AlertDialog.Builder(this).
+                    setTitle("提示").
+                    setMessage("您确定注销用户吗？").
+                    setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO Auto-generated method stub
+                            /*Bundle bundle = new Bundle();
+                            bundle.putInt(ConstantUtils.global.IS_AutoLogin, ConstantUtils.global.autoLoginValue);
+                            NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
+                            SharedPreferences.Editor editor = SPManager.getSharedPreferences().edit();
+                            editor.clear().commit();*/
+                            finish();
+                        }
+                    }).
+                    setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO Auto-generated method stub
+                            return;
+                        }
+                    }).
+                    create();
+            alertDialog.show();
             return true;
         }
 
@@ -141,7 +234,7 @@ public class MainActivity extends MySupportActivity
 
                 if (id == R.id.nav_home) {
 
-                    MapFragment fragment = findFragment(MapFragment.class);
+                    HomeTabFragment fragment = findFragment(HomeTabFragment.class);
                     Bundle newBundle = new Bundle();
                     newBundle.putString("from", "From:" + topFragment.getClass().getSimpleName());
                     fragment.putNewBundle(newBundle);
@@ -150,7 +243,7 @@ public class MainActivity extends MySupportActivity
                 } else if (id == R.id.nav_data) {
                     DataFragment fragment = findFragment(DataFragment.class);
                     if (fragment == null) {
-                        myHome.startWithPopTo(DataFragment.newInstance(), MapFragment.class, false);
+                        myHome.startWithPopTo(DataFragment.newInstance(), HomeTabFragment.class, false);
                     } else {
                         // 如果已经在栈内,则以SingleTask模式start
                         myHome.start(fragment, SupportFragment.SINGLETASK);
@@ -161,7 +254,7 @@ public class MainActivity extends MySupportActivity
                         myHome.startWithPopTo(ShopFragment.newInstance(), HomeFragment.class, false);
                     } else {
                         // 如果已经在栈内,则以SingleTask模式start,也可以用popTo
-//                        start(fragment, SupportFragment.SINGLETASK);
+                        start(fragment, SupportFragment.SINGLETASK);
                         myHome.popTo(ShopFragment.class, false);
                     }
                 }*/ else if (id == R.id.nav_login) {
@@ -175,9 +268,10 @@ public class MainActivity extends MySupportActivity
 
     @Override
     public void onOpenDrawer() {
-        if (!mDrawer.isDrawerOpen(GravityCompat.START)) {
+        //TODO
+        /*if (!mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.openDrawer(GravityCompat.START);
-        }
+        }*/
 
     }
 

@@ -34,7 +34,7 @@ public class RetrofitHelper {
 
     private void resetApp() {
         mRetrofit = new Retrofit.Builder()
-                .baseUrl("https://api.douban.com/v2/")
+                .baseUrl("http://115.47.143.57:9010/fpms/mobile/")
                 .client(client)
                 .addConverterFactory(factory)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

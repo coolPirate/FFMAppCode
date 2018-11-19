@@ -26,11 +26,47 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.AppBarOverlay"
-        parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="transparentFrameWindowStyle" parent="android:style/Theme.Dialog">
         <item name="android:windowBackground">@drawable/dialog_choose_bg</item>
+    </style>
+
+    <!--仿ios搜索框-->
+    <style name="StyleEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_search_bar</item>
+        <item name="android:drawablePadding">15dp</item>
+        <item name="android:drawableStart">@mipmap/icon_search</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColorHint">@color/gray_white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="input_type_left">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/color_shallow</item>
+        <item name="android:padding">@dimen/dp_5</item>
+        <item name="android:layout_margin">@dimen/dp_5</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/sp_12</item>
+    </style>
+
+    <style name="input_type_right">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/color_shallow</item>
+        <item name="android:padding">@dimen/dp_5</item>
+        <item name="android:layout_margin">@dimen/dp_5</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/boderline_corner</item>
+        <item name="android:textSize">@dimen/sp_12</item>
     </style>
 
 </resources>

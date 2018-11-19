@@ -62,7 +62,7 @@ public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItem
         mTitles = getResources().getStringArray(R.array.array_title);
         mContents = getResources().getStringArray(R.array.array_content);
 
-        mToolbar.setTitle(R.string.home);
+        mToolbar.setTitle(R.string.app_name);
         initToolbarNav(mToolbar, true);
         mToolbar.inflateMenu(R.menu.home);
         mToolbar.setOnMenuItemClickListener(this);

@@ -28,7 +28,7 @@ import ffm.geok.com.uitls.NavigationUtils;
 import okhttp3.OkHttpClient;
 
 public class XApplication extends MultiDexApplication {
-    private static final String TagStr = "ntsl";
+    private static final String TagStr = "ffm";
     private static XApplication application;
     private static Context mContext;
     private Map<String,Object> map = new HashMap<String, Object>();

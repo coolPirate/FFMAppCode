@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_white"
+    android:layout_marginTop="@dimen/dp_5"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/input_type_left"
+            android:text="@string/address" />
+
+        <TextView
+            android:id="@+id/tv_project_loc"
+            style="@style/input_type_right"
+            tools:text="@string/projectLocation" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/input_type_left"
+            android:text="@string/create_time" />
+
+        <TextView
+            android:id="@+id/tv_project_time"
+            style="@style/input_type_right"
+            tools:text="@string/create_time" />
+    </LinearLayout>
+</LinearLayout>

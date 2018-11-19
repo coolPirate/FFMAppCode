@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/boderline_corner"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="@dimen/dp_10"
+            tools:text="简要信息"
+            android:text="简要信息"
+            android:gravity="center"
+            android:textColor="@color/color_deep"
+            android:textSize="@dimen/sp_20"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_title"
+            android:background="@color/separator_line"/>
+        <ImageView
+            android:id="@+id/img_btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/icon_clear"/>
+    </RelativeLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_10"
+                    android:text="经度:"
+                    android:textColor="@color/color_shallow"
+                    android:textSize="@dimen/sp_16"/>
+
+                <TextView
+                    android:id="@+id/tv_project_Lng"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/boderline_corner"
+                    android:padding="@dimen/dp_10"
+                    android:text="工程经度"
+                    android:textColor="@color/color_deep"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_10"
+                    android:text="纬度:"
+                    android:textColor="@color/color_shallow"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:id="@+id/tv_project_lat"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/boderline_corner"
+                    android:padding="@dimen/dp_10"
+                    android:layout_gravity="right"
+                    android:textColor="@color/color_deep"
+                    android:textSize="@dimen/sp_16"
+                    tools:text="工程经度" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/separator_line"/>
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:text="地         址:"
+                android:textColor="@color/color_shallow"
+                android:textSize="@dimen/sp_16"/>
+            <EditText
+                android:id="@+id/tv_project_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/boderline_corner"
+                android:padding="@dimen/dp_10"
+                tools:text="火点地址"
+                android:hint="请录入火点地址"
+                android:textColor="@color/color_deep"
+                android:textSize="@dimen/sp_16"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/separator_line"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_10"
+                    android:text="发生时间:"
+                    android:textColor="@color/color_shallow"
+                    android:textSize="@dimen/sp_16"/>
+                <EditText
+                    android:id="@+id/tv_project_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/boderline_corner"
+                    android:padding="@dimen/dp_10"
+                    tools:text="发生时间"
+                    android:hint="请录入发生时间"
+                    android:textColor="@color/color_deep"
+                    android:textSize="@dimen/sp_16"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/separator_line"/>
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_10"
+                    android:text="经度:"
+                    android:textColor="@color/color_shallow"
+                    android:textSize="@dimen/sp_20"/>
+
+                <TextView
+                    android:id="@+id/tv_project_Lng"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/boderline_corner"
+                    android:padding="@dimen/dp_10"
+                    android:text="工程经度"
+                    android:textColor="@color/color_deep"
+                    android:textSize="@dimen/sp_20" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/separator_line"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_10"
+                    android:text="纬度:"
+                    android:textColor="@color/color_shallow"
+                    android:textSize="@dimen/sp_20" />
+
+                <TextView
+                    android:id="@+id/tv_project_lat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/boderline_corner"
+                    android:padding="@dimen/dp_10"
+                    android:textColor="@color/color_deep"
+                    android:textSize="@dimen/sp_20"
+                    tools:text="工程经度" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/separator_line"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_10"
+                    android:text="地址:"
+                    android:textColor="@color/color_shallow"
+                    android:textSize="@dimen/sp_20"/>
+                <EditText
+                    android:id="@+id/tv_project_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/boderline_corner"
+                    android:padding="@dimen/dp_10"
+                    tools:text="火点地址"
+                    android:hint="请录入火点地址"
+                    android:textColor="@color/color_deep"
+                    android:textSize="@dimen/sp_20"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/separator_line"/>-->
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

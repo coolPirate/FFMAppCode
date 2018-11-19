@@ -1,13 +1,13 @@
 package ffm.geok.com.helper;
 
 import ffm.geok.com.javagen.Book;
+import ffm.geok.com.model.FireDateEntity;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
 
 public interface RetrofitService {
-    @GET("book/search")
-    Observable<Book> getSearchBooks(@Query("q") String name,
-                                    @Query("tag") String tag, @Query("start") int start,
-                                    @Query("count") int count);
+    @GET("/getfire?")
+    Observable<FireDateEntity> getSearchFires(@Query("st") String name,
+                                              @Query("et") String tag);
 }
