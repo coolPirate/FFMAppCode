@@ -132,7 +132,7 @@ public class ProjectPresenter implements IProjectPresenter {
                 if (TextUtils.isEmpty(adcd) && !TextUtils.isEmpty(projectName)) {
                     queryBuilder.where(FireDateEntityDao.Properties.County.like("%" + projectName + "%"));
                 }
-                fireDateEntityList = queryBuilder.offset(pageNumber * 20).limit(pageSize).orderAsc(FireDateEntityDao.Properties.CreateTime).list();
+                fireDateEntityList = queryBuilder.offset(pageNumber * 20).limit(pageSize).orderDesc(FireDateEntityDao.Properties.CreateTime).list();
                 //fireDateEntityList=DBUtils.getInstance().queryAll(FireDateEntity.class);
                 L.i("List1",String.valueOf(fireDateEntityList.size()));
 
@@ -145,7 +145,6 @@ public class ProjectPresenter implements IProjectPresenter {
             L.e("查询失败："+e.toString());
             mCallbace.onFiresListFail(e.toString());
         }
-
     }
 
     @Override

@@ -64,9 +64,9 @@ public class DataFragment extends BaseMainFragment {
         mViewPager.setAdapter(new DataFragmentAdapter(getChildFragmentManager(), getString(R.string.time_3h), getString(R.string.time_6h), getString(R.string.time_1d)));
         mTabLayout.setupWithViewPager(mViewPager);
 
-        QBadgeView badgeView = new QBadgeView(getContext());
+        /*QBadgeView badgeView = new QBadgeView(getContext());
         badgeView.bindTarget(getTabView(0));
-        badgeView.setBadgeNumber(10);
+        badgeView.setBadgeNumber(10);*/
 
     }
 

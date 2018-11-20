@@ -16,8 +16,6 @@
     <ffm.geok.com.ui.view.CustomViewPager
         android:id="@+id/cViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        ></ffm.geok.com.ui.view.CustomViewPager>
-
+        android:layout_height="match_parent"></ffm.geok.com.ui.view.CustomViewPager>
 
 </RelativeLayout>
