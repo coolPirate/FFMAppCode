@@ -64,7 +64,7 @@ public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItem
 
         mToolbar.setTitle(R.string.app_name);
         initToolbarNav(mToolbar, true);
-        mToolbar.inflateMenu(R.menu.home);
+        mToolbar.inflateMenu(R.menu.main);
         mToolbar.setOnMenuItemClickListener(this);
 
         mAdapter = new HomeAdapter(_mActivity);

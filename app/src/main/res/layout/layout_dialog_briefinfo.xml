@@ -55,7 +55,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp_10"
-                    android:text="经度:"
+                    android:text="纬度:"
                     android:textColor="@color/color_shallow"
                     android:textSize="@dimen/sp_16"/>
 
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/boderline_corner"
                     android:padding="@dimen/dp_10"
-                    android:text="工程经度"
+                    android:text="工程纬度"
                     android:textColor="@color/color_deep"
                     android:textSize="@dimen/sp_16" />
 
@@ -75,7 +75,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp_10"
-                    android:text="纬度:"
+                    android:text="经度:"
                     android:textColor="@color/color_shallow"
                     android:textSize="@dimen/sp_16" />
 

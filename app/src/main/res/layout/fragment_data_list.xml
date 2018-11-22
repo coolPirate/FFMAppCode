@@ -26,7 +26,7 @@
                 style="@style/StyleEditText"
                 android:layout_marginLeft="@dimen/dp_5"
                 android:layout_marginRight="@dimen/dp_5"
-                android:hint="请输入工程名称" />
+                android:hint="请输入搜索地址" />
         </LinearLayout>
 
         <android.support.v4.widget.SwipeRefreshLayout

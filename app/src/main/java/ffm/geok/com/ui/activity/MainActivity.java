@@ -17,6 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import ffm.geok.com.R;
@@ -33,6 +37,7 @@ import ffm.geok.com.ui.fragment.home.HomeFragment;
 import ffm.geok.com.ui.fragment.home.HomeTabFragment;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.DBUtils;
+import ffm.geok.com.uitls.DateUtils;
 import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.NavigationUtils;
 import ffm.geok.com.uitls.SPManager;
@@ -61,20 +66,41 @@ public class MainActivity extends MySupportActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MySupportFragment fragment = findFragment(HomeTabFragment.class);
-        if (fragment == null) {
-            loadRootFragment(R.id.fl_container, HomeTabFragment.newInstance());
-        }
-
         initView();
         initListener();
         initData();
 
+        MySupportFragment fragment = findFragment(HomeTabFragment.class);
+        if (fragment == null) {
+            loadRootFragment(R.id.fl_container, HomeTabFragment.newInstance());
+        }
     }
 
     private void initData(){
-        firesPresenter.getFiresList("2018-11-10","2019-11-19");
+        String curDateStr=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
+        String st=getDateStr(curDateStr,5);
+        L.i("Date","ST："+curDateStr+" ET"+st);
+
+        //firesPresenter.getFiresList("2018-11-10","2019-11-19");
+        firesPresenter.getFiresList(st,curDateStr);
     }
+
+    //Day:日期字符串例如 2015-3-10  Num:需要减少的天数例如 7
+    public static String getDateStr(String day,int Num) {
+        SimpleDateFormat df = new SimpleDateFormat(DateUtils.pattern_full);
+        Date nowDate = null;
+        try {
+            nowDate = df.parse(day);
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        } //如果需要向后计算日期 -改为+
+        Date newDate2 = new Date(nowDate.getTime() - (long)Num * 24 * 60 * 60 * 1000);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateUtils.pattern_full);
+        String dateOk = simpleDateFormat.format(newDate2);
+        return dateOk;
+    }
+
 
     private void initView() {
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -187,32 +213,7 @@ public class MainActivity extends MySupportActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Dialog alertDialog = new AlertDialog.Builder(this).
-                    setTitle("提示").
-                    setMessage("您确定注销用户吗？").
-                    setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // TODO Auto-generated method stub
-                            /*Bundle bundle = new Bundle();
-                            bundle.putInt(ConstantUtils.global.IS_AutoLogin, ConstantUtils.global.autoLoginValue);
-                            NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
-                            SharedPreferences.Editor editor = SPManager.getSharedPreferences().edit();
-                            editor.clear().commit();*/
-                            finish();
-                        }
-                    }).
-                    setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // TODO Auto-generated method stub
-                            return;
-                        }
-                    }).
-                    create();
-            alertDialog.show();
             return true;
         }
 
@@ -241,13 +242,15 @@ public class MainActivity extends MySupportActivity
 
                     myHome.start(fragment, SupportFragment.SINGLETASK);
                 } else if (id == R.id.nav_data) {
-                    DataFragment fragment = findFragment(DataFragment.class);
+                    //
+                    NavigationUtils.getInstance().jumpTo(DataListActivity.class,null,false);
+                    /*DataFragment fragment = findFragment(DataFragment.class);
                     if (fragment == null) {
                         myHome.startWithPopTo(DataFragment.newInstance(), HomeTabFragment.class, false);
                     } else {
                         // 如果已经在栈内,则以SingleTask模式start
                         myHome.start(fragment, SupportFragment.SINGLETASK);
-                    }
+                    }*/
                 }/* else if (id == R.id.nav_shop) {
                     ShopFragment fragment = findFragment(ShopFragment.class);
                     if (fragment == null) {

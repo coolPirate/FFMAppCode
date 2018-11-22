@@ -155,7 +155,8 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
 
     private void initMaker() {
         //初始化新增数据marker
-        List<FireDateEntity> fireDateEntityList = DBUtils.getInstance().queryAllBySingleWhereConditions(FireDateEntity.class, FireDateEntityDao.Properties.See.eq("1"));
+        //List<FireDateEntity> fireDateEntityList = DBUtils.getInstance().queryAllBySingleWhereConditions(FireDateEntity.class, FireDateEntityDao.Properties.See.eq("1"));
+        List<FireDateEntity> fireDateEntityList=DBUtils.getInstance().queryAll(FireDateEntity.class);
         int cnt=fireDateEntityList.size();
         L.i("Marker数", Integer.toString(cnt));
         for (int i = 0; i < fireDateEntityList.size(); i++) {

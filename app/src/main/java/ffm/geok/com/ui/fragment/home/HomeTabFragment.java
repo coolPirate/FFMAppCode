@@ -1,9 +1,12 @@
 package ffm.geok.com.ui.fragment.home;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -47,7 +50,7 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mToolbar.setTitle(R.string.homeName);
         initToolbarNav(mToolbar, true);
-        mToolbar.inflateMenu(R.menu.home);
+        mToolbar.inflateMenu(R.menu.main);
         mToolbar.setOnMenuItemClickListener(this);
 
 
@@ -72,6 +75,37 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Dialog alertDialog = new AlertDialog.Builder(getContext()).
+                    setTitle("提示").
+                    setMessage("您确定注销用户吗？").
+                    setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO Auto-generated method stub
+                            /*Bundle bundle = new Bundle();
+                            bundle.putInt(ConstantUtils.global.IS_AutoLogin, ConstantUtils.global.autoLoginValue);
+                            NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
+                            SharedPreferences.Editor editor = SPManager.getSharedPreferences().edit();
+                            editor.clear().commit();
+                            finish();*/
+                        }
+                    }).
+                    setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO Auto-generated method stub
+                            return;
+                        }
+                    }).
+                    create();
+            alertDialog.show();
+            return true;
+        }
+
         return false;
     }
 }

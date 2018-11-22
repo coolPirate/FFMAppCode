@@ -6,4 +6,5 @@
         android:id="@+id/action_anim"
         android:title="@string/action_settings"
         app:showAsAction="ifRoom"/>
+
 </menu>
