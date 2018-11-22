@@ -9,6 +9,7 @@ public interface IProjectPresenter {
     void getFiresList(String adcd);
     void getFiresList(String startTime,String endTime);
     void getFiresList(String adcd, String projectNmae, int pageSize, int pageNumber);
+    void getFiresList(String time,String adcd, String projectNmae, int pageSize, int pageNumber);
     void saveSampleProjectInfo(InputInfoModel infomodel);
 
     interface ProjectCallback {

@@ -11,6 +11,7 @@ public interface ConstantUtils {
         int ThumbnailSize = 100;                                                                    //多媒体缩略图默认大小
         int ThumbnailMargin = 10;                                                                   //多媒体缩略图默认边距
         String ProjectDetial = "ProjectDetial";                                                     //工程详情
+        int Notification_ID=11;
     }
 
     interface mapLocation {

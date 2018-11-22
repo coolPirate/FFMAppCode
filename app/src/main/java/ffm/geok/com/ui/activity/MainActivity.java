@@ -1,7 +1,11 @@
 package ffm.geok.com.ui.activity;
 
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -60,6 +64,7 @@ public class MainActivity extends MySupportActivity
     private ImageView mImgNav;  // NavigationView上的头像
 
     private IProjectPresenter firesPresenter;
+    private NotificationManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,28 +82,17 @@ public class MainActivity extends MySupportActivity
     }
 
     private void initData(){
+        loadData();
+    }
+
+    private void loadData(){
+        //获取当前及以前5天的数据
         String curDateStr=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
-        String st=getDateStr(curDateStr,5);
+        String st=DateUtils.getDateStr(curDateStr,5);
         L.i("Date","ST："+curDateStr+" ET"+st);
 
         //firesPresenter.getFiresList("2018-11-10","2019-11-19");
         firesPresenter.getFiresList(st,curDateStr);
-    }
-
-    //Day:日期字符串例如 2015-3-10  Num:需要减少的天数例如 7
-    public static String getDateStr(String day,int Num) {
-        SimpleDateFormat df = new SimpleDateFormat(DateUtils.pattern_full);
-        Date nowDate = null;
-        try {
-            nowDate = df.parse(day);
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
-        } //如果需要向后计算日期 -改为+
-        Date newDate2 = new Date(nowDate.getTime() - (long)Num * 24 * 60 * 60 * 1000);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DateUtils.pattern_full);
-        String dateOk = simpleDateFormat.format(newDate2);
-        return dateOk;
     }
 
 
@@ -110,7 +104,7 @@ public class MainActivity extends MySupportActivity
         toggle.syncState();
 
         //TODO
-        /*mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
         mNavigationView.setCheckedItem(R.id.nav_home);
 
@@ -128,7 +122,7 @@ public class MainActivity extends MySupportActivity
                     }
                 }, 250);
             }
-        });*/
+        });
     }
 
     private void initListener(){
@@ -181,7 +175,7 @@ public class MainActivity extends MySupportActivity
             // 主页的Fragment
             if (topFragment instanceof BaseMainFragment) {
                 //TODO
-                //mNavigationView.setCheckedItem(R.id.nav_home);
+                mNavigationView.setCheckedItem(R.id.nav_home);
             }
 
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
@@ -262,6 +256,8 @@ public class MainActivity extends MySupportActivity
                     }
                 }*/ else if (id == R.id.nav_login) {
                     goLogin();
+                }else  if(id==R.id.nav_send){
+
                 }
             }
         }, 300);
@@ -272,10 +268,16 @@ public class MainActivity extends MySupportActivity
     @Override
     public void onOpenDrawer() {
         //TODO
-        /*if (!mDrawer.isDrawerOpen(GravityCompat.START)) {
+        if (!mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.openDrawer(GravityCompat.START);
-        }*/
+        }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
     }
 
     @Override
@@ -284,6 +286,27 @@ public class MainActivity extends MySupportActivity
     }
 
     private void goLogin() {
-        start(LoginFragment.newInstance());
+        showNotification();
+        //start(LoginFragment.newInstance());
+    }
+
+    private void showNotification() {
+        // TODO Auto-generated method stub
+        Notification.Builder builder=new Notification.Builder(this);
+        builder.setSmallIcon(R.mipmap.ic_launcher);//设置图标
+        builder.setTicker("通知来啦");//手机状态栏的提示
+        builder.setContentTitle("我是通知标题");//设置标题
+        builder.setContentText("我是通知内容");//设置通知内容
+        builder.setWhen(System.currentTimeMillis());//设置通知时间
+        Intent intent=new Intent(this,MainActivity.class);
+        PendingIntent pendingIntent=PendingIntent.getActivity(this, 0, intent, 0);
+        builder.setContentIntent(pendingIntent);//点击后的意图
+        builder.setDefaults(Notification.DEFAULT_LIGHTS);//设置指示灯
+        builder.setDefaults(Notification.DEFAULT_SOUND);//设置提示声音
+        builder.setDefaults(Notification.DEFAULT_VIBRATE);//设置震动
+        builder.setAutoCancel(true);
+        Notification notification=builder.build();//4.1以上，以下要用getNotification()
+        manager = (NotificationManager) this.getSystemService(this.NOTIFICATION_SERVICE);
+        manager.notify(ConstantUtils.global.Notification_ID, notification);
     }
 }

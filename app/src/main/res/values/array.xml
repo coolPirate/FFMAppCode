@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="timeSpinner">
+        <item>当前1小时</item>
+        <item>当前3小时</item>
+        <item>当前5小时</item>
+        <item>当前24小时</item>
+    </string-array>
+</resources>

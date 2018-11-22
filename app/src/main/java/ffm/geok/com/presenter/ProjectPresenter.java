@@ -148,6 +148,40 @@ public class ProjectPresenter implements IProjectPresenter {
     }
 
     @Override
+    public void getFiresList(String time, String adcd, String projectName, int pageSize, int pageNumber) {
+        //测试从本地查询
+        try {
+            List<FireDateEntity> fireDateEntityList = null;
+            FireDateEntityDao fireDateEntityDao = (FireDateEntityDao) DBUtils.getInstance().getDao(FireDateEntity.class);
+            if (null != fireDateEntityDao) {
+                QueryBuilder queryBuilder = fireDateEntityDao.queryBuilder();
+                queryBuilder.where(FireDateEntityDao.Properties.CreateTime.ge(time));
+                if (!TextUtils.isEmpty(adcd) && TextUtils.isEmpty(projectName)) {
+                    //如果是查询乡镇数据，需要截取后3位做模糊查询
+                    /*if (adcd.endsWith("000")) {
+                        adcd = adcd.substring(0, adcd.length() - 3);
+                    }
+                    queryBuilder.where(FireDateEntityDao.Properties.Adcd.like("%" + adcd + "%"));*/
+                }
+                if (TextUtils.isEmpty(adcd) && !TextUtils.isEmpty(projectName)) {
+                    queryBuilder.where(FireDateEntityDao.Properties.County.like("%" + projectName + "%"));
+                }
+                fireDateEntityList = queryBuilder.offset(pageNumber * 20).limit(pageSize).orderDesc(FireDateEntityDao.Properties.CreateTime).list();
+                //fireDateEntityList=DBUtils.getInstance().queryAll(FireDateEntity.class);
+                L.i("List1",String.valueOf(fireDateEntityList.size()));
+
+                if (null != fireDateEntityList) {
+                    mCallbace.onFiresListSuccess(fireDateEntityList);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            L.e("查询失败："+e.toString());
+            mCallbace.onFiresListFail(e.toString());
+        }
+    }
+
+    @Override
     public void saveSampleProjectInfo(InputInfoModel infomodel) {
 
     }

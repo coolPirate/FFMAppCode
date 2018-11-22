@@ -77,6 +77,8 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+
+
             Dialog alertDialog = new AlertDialog.Builder(getContext()).
                     setTitle("提示").
                     setMessage("您确定注销用户吗？").
@@ -108,4 +110,6 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
 
         return false;
     }
+
+
 }
