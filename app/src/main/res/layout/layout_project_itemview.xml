@@ -18,8 +18,13 @@
 
         <TextView
             android:id="@+id/tv_project_loc"
-            style="@style/input_type_right"
+            style="@style/input_type"
             tools:text="@string/projectLocation" />
+
+        <!--<TextView
+            android:id="@+id/tv_project_loc"
+            style="@style/input_type_right"
+            tools:text="@string/projectLocation" />-->
     </LinearLayout>
 
     <LinearLayout
@@ -33,7 +38,7 @@
 
         <TextView
             android:id="@+id/tv_project_time"
-            style="@style/input_type_right"
+            style="@style/input_type"
             tools:text="@string/create_time" />
     </LinearLayout>
 </LinearLayout>

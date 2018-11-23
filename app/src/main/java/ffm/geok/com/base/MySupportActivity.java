@@ -17,7 +17,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * 展示自定制的MySupportActivity，不继承SupportActivity
  * Created by YoKey on 17/6/24.
  */
-public class MySupportActivity extends AppCompatActivity implements ISupportActivity {
+public abstract class MySupportActivity extends AppCompatActivity implements ISupportActivity {
     final SupportActivityDelegate mDelegate = new SupportActivityDelegate(this);
 
     @Override
@@ -192,4 +192,6 @@ public class MySupportActivity extends AppCompatActivity implements ISupportActi
     public <T extends ISupportFragment> T findFragment(Class<T> fragmentClass) {
         return SupportHelper.findFragment(getSupportFragmentManager(), fragmentClass);
     }
+
+    protected abstract void OnDestory();
 }

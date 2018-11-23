@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -66,6 +67,10 @@ public class MainActivity extends MySupportActivity
     private IProjectPresenter firesPresenter;
     private NotificationManager manager;
 
+    private Handler mHandler;
+    private Runnable mRunnable;
+    private int timeInterval;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +87,14 @@ public class MainActivity extends MySupportActivity
     }
 
     private void initData(){
+        //间隔时间 15分钟
+        timeInterval=1*60*1000;
+        //定时启动线程(执行的线程,时间毫秒)
+        mHandler.postDelayed(mRunnable,timeInterval);
+
         loadData();
+
+        //
     }
 
     private void loadData(){
@@ -123,6 +135,19 @@ public class MainActivity extends MySupportActivity
                 }, 250);
             }
         });
+
+        mHandler=new Handler();
+
+        mRunnable=new Runnable(){
+
+            @Override
+            public void run() {
+
+                showNotification();
+               // loadData();
+
+            }
+        };
     }
 
     private void initListener(){
@@ -281,6 +306,13 @@ public class MainActivity extends MySupportActivity
     }
 
     @Override
+    protected void OnDestory(){
+        //移除Handler中的线程
+        mHandler.removeCallbacks(mRunnable);
+
+    }
+
+    @Override
     public void onLoginSuccess(String account) {
 
     }
@@ -295,8 +327,8 @@ public class MainActivity extends MySupportActivity
         Notification.Builder builder=new Notification.Builder(this);
         builder.setSmallIcon(R.mipmap.ic_launcher);//设置图标
         builder.setTicker("通知来啦");//手机状态栏的提示
-        builder.setContentTitle("我是通知标题");//设置标题
-        builder.setContentText("我是通知内容");//设置通知内容
+        builder.setContentTitle("火点数据更新");//设置标题
+        builder.setContentText("有新数据来啦！");//设置通知内容
         builder.setWhen(System.currentTimeMillis());//设置通知时间
         Intent intent=new Intent(this,MainActivity.class);
         PendingIntent pendingIntent=PendingIntent.getActivity(this, 0, intent, 0);
