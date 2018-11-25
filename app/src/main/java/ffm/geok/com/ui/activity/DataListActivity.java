@@ -61,6 +61,11 @@ public class DataListActivity extends MySupportActivity {
         initData();
     }
 
+    @Override
+    protected void OnDestory() {
+
+    }
+
     private void initViews() {
         /*setSupportActionBar(mtoolBar);
         ActionBar actionBar = getSupportActionBar();

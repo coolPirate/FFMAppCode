@@ -54,6 +54,11 @@ public class ProjectDetialActivity extends MySupportActivity {
 
     }
 
+    @Override
+    protected void OnDestory() {
+
+    }
+
     /**
      * 初始化参数
      *

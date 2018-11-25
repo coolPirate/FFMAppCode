@@ -100,8 +100,8 @@ public class ProjectPresenter implements IProjectPresenter {
                         L.d("test", "请求成功：" + responseString);
                         /*List<FireDateEntity> list = Convert.fromJson(responseString, new TypeToken<List<FireDateEntity>>() {
                         }.getType());// line 6
-                        L.json(new Gson().toJson(list));
-                        mCallbace.onFiresListSuccess(responseString);*/
+                        L.json(new Gson().toJson(list));*/
+                        mCallbace.onFiresListSuccess(responseString);
                     }
 
                     @Override

@@ -143,8 +143,8 @@ public class MainActivity extends MySupportActivity
             @Override
             public void run() {
 
-                showNotification();
-               // loadData();
+                //showNotification();
+                loadData();
 
             }
         };
@@ -160,6 +160,7 @@ public class MainActivity extends MySupportActivity
                     for (FireDateEntity ewellsEntity : fireDateEntityList) {
                         try {
                             DBUtils.getInstance().getmDaoSession().insertOrReplace(ewellsEntity);
+                            showNotification();
 
                         } catch (Exception e) {
                             L.e(e.toString());
