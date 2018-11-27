@@ -13,6 +13,7 @@ import com.lzy.okgo.model.Response;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import ffm.geok.com.R;
@@ -24,6 +25,7 @@ import ffm.geok.com.model.ResponseModel;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.Convert;
 import ffm.geok.com.uitls.DBUtils;
+import ffm.geok.com.uitls.DateUtils;
 import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.ServerUrl;
 
@@ -34,6 +36,7 @@ import ffm.geok.com.uitls.ServerUrl;
 public class ProjectPresenter implements IProjectPresenter {
     private Activity mActivity;
     private ProjectCallback mCallbace;
+    private List<FireDateEntity> fireDateEntityList=null;
     public ProjectPresenter(Activity activity, ProjectCallback callback) {
         this.mActivity = activity;
         this.mCallbace = callback;
@@ -69,7 +72,7 @@ public class ProjectPresenter implements IProjectPresenter {
     }
 
     @Override
-    public void getFiresList(String startTime, String endTime) {
+    public List<FireDateEntity> getFiresList(String startTime, String endTime) {
         OkGo.<String>get(ServerUrl.Fires_list)
                 .tag(this)
                 .params(ConstantUtils.RequestTag.ST, startTime)
@@ -86,7 +89,11 @@ public class ProjectPresenter implements IProjectPresenter {
                                 String responseData = responseModel.getData();
                                 Collection<FireDateEntity> list = Convert.fromJsonFormat(responseData,
                                         new TypeToken<Collection<FireDateEntity>>() {}.getType());
+                                L.i("okgo","list0"+list.size());
+                                fireDateEntityList=(List<FireDateEntity>) list;
                                 mCallbace.onFiresListSuccess((List<FireDateEntity>) list);
+
+                                if(fireDateEntityList.size()==0) return;
                             } else {
                                 mCallbace.onFiresListFail(mActivity.getString(R.string.requestdata_error));
                             }
@@ -111,7 +118,7 @@ public class ProjectPresenter implements IProjectPresenter {
                         mCallbace.onFiresListFail(response.message());
                     }
                 });
-
+        return fireDateEntityList;
     }
 
     @Override
@@ -148,10 +155,12 @@ public class ProjectPresenter implements IProjectPresenter {
     }
 
     @Override
-    public void getFiresList(String time, String adcd, String projectName, int pageSize, int pageNumber) {
+    public List<FireDateEntity> getFiresList(String time, String adcd, String projectName, int pageSize, int pageNumber) {
         //测试从本地查询
         try {
             List<FireDateEntity> fireDateEntityList = null;
+            List<FireDateEntity> fireDateEntityList1=null;
+            Date timeDate=DateUtils.String2Date(time,DateUtils.pattern_full);
             FireDateEntityDao fireDateEntityDao = (FireDateEntityDao) DBUtils.getInstance().getDao(FireDateEntity.class);
             if (null != fireDateEntityDao) {
                 QueryBuilder queryBuilder = fireDateEntityDao.queryBuilder();
@@ -169,15 +178,26 @@ public class ProjectPresenter implements IProjectPresenter {
                 fireDateEntityList = queryBuilder.offset(pageNumber * 20).limit(pageSize).orderDesc(FireDateEntityDao.Properties.CreateTime).list();
                 //fireDateEntityList=DBUtils.getInstance().queryAll(FireDateEntity.class);
                 L.i("List1",String.valueOf(fireDateEntityList.size()));
+                for(int i=0;i<fireDateEntityList.size();i++){
+                    FireDateEntity entity=fireDateEntityList.get(i);
+                    Date dt=DateUtils.String2Date(entity.getCreateTime(),DateUtils.pattern_full);
 
-                if (null != fireDateEntityList) {
+                    if(dt.after(timeDate)){
+                        fireDateEntityList1.add(entity);
+                    }
+
+                }
+
+                if (null != fireDateEntityList1) {
                     mCallbace.onFiresListSuccess(fireDateEntityList);
                 }
             }
+            return fireDateEntityList1;
         } catch (Exception e) {
             e.printStackTrace();
             L.e("查询失败："+e.toString());
             mCallbace.onFiresListFail(e.toString());
+            return null;
         }
     }
 

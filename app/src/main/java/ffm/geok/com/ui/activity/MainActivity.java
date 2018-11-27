@@ -87,14 +87,10 @@ public class MainActivity extends MySupportActivity
     }
 
     private void initData(){
-        //间隔时间 15分钟
-        timeInterval=1*60*1000;
-        //定时启动线程(执行的线程,时间毫秒)
-        mHandler.postDelayed(mRunnable,timeInterval);
 
         loadData();
 
-        //
+        mHandler.postDelayed(mRunnable,1000);
     }
 
     private void loadData(){
@@ -105,6 +101,19 @@ public class MainActivity extends MySupportActivity
 
         //firesPresenter.getFiresList("2018-11-10","2019-11-19");
         firesPresenter.getFiresList(st,curDateStr);
+    }
+
+    private void updateData(){
+        //获取当前及15分钟的数据
+        String curDateStr=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
+        String st=DateUtils.getDateMinStr(curDateStr,15);
+
+        List<FireDateEntity> list=firesPresenter.getFiresList(st,curDateStr);
+        L.i("DateCur","当前："+curDateStr+" 15分钟"+st);
+        L.i("list","cnt:"+list.size());
+        if(list.size()>0){
+            //showNotification();
+        }
     }
 
 
@@ -137,15 +146,17 @@ public class MainActivity extends MySupportActivity
         });
 
         mHandler=new Handler();
-
+        //间隔时间 15分钟
+        timeInterval=1*60*1000;
         mRunnable=new Runnable(){
 
             @Override
             public void run() {
-
+                updateData();
+                L.i("RUNN",DateUtils.Date2String(new Date(),DateUtils.pattern_full));
                 //showNotification();
-                loadData();
-
+                //定时启动线程(执行的线程,时间毫秒)
+                mHandler.postDelayed(this,timeInterval);
             }
         };
     }
@@ -155,12 +166,17 @@ public class MainActivity extends MySupportActivity
         firesPresenter=new ProjectPresenter(this, new IProjectPresenter.ProjectCallback() {
             @Override
             public void onFiresListSuccess(List<FireDateEntity> fireDateEntityList) {
+                L.i("DBUTIL",String.valueOf(fireDateEntityList.size()));
+                if(fireDateEntityList.size()>0)
+                {
+                    showNotification();
+                }
                 //插入操作耗时
                 DBUtils.getInstance().getmDaoSession().runInTx(() -> {
                     for (FireDateEntity ewellsEntity : fireDateEntityList) {
                         try {
                             DBUtils.getInstance().getmDaoSession().insertOrReplace(ewellsEntity);
-                            showNotification();
+                            //showNotification();
 
                         } catch (Exception e) {
                             L.e(e.toString());
@@ -303,7 +319,7 @@ public class MainActivity extends MySupportActivity
     @Override
     protected void onResume() {
         super.onResume();
-        loadData();
+        //updateData();
     }
 
     @Override
@@ -319,7 +335,6 @@ public class MainActivity extends MySupportActivity
     }
 
     private void goLogin() {
-        showNotification();
         //start(LoginFragment.newInstance());
     }
 

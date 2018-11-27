@@ -279,7 +279,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         projectListAdapter.changeMoreStatus(ProjectListAdapter.LOADING_MORE);
         pageNumber++;
         isRefresh = false;
-        projectPresenter.getFiresList(queryAdcd, queryProjectName, pageSize, pageNumber);
+        projectPresenter.getFiresList(_time, queryProjectName, pageSize, pageNumber);
         //projectPresenter.getFiresList(_time,queryAdcd, queryProjectName, pageSize, pageNumber);
     }
 
@@ -356,7 +356,8 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
                     _time=DateUtils.getDateHourStr(_time,24);
                     break;
             }
-
+            List<FireDateEntity> list=projectPresenter.getFiresList(_time,queryAdcd,queryProjectName, pageSize, pageNumber);
+            //projectListAdapter.setDataList(list);
             onLoadmore();
         }
 
