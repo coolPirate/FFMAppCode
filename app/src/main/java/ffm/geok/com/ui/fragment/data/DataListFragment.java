@@ -62,8 +62,6 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
     SwipeRefreshLayout mSwiperefreshlayout;
     @BindView(R.id.ll_empty)
     FrameLayout llEmpty;
-    @BindView(R.id.timeSpinner)
-    Spinner timeSpinner;
 
 
     private LinearLayoutManager linearLayoutManager;
@@ -169,7 +167,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
 
             }
         });
-        //spinner
+        /*//spinner
         //将可选内容与ArrayAdapter连接起来
         adapter=ArrayAdapter.createFromResource(mContext, R.array.timeSpinner, android.R.layout.simple_spinner_item);
         //adapter=ArrayAdapter.createFromResource(mContext, R.array.timeSpinner, android.R.layout.select_dialog_item);
@@ -179,7 +177,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         timeSpinner.setAdapter(adapter);
         //设置默认值
         timeSpinner.setVisibility(View.VISIBLE);
-        timeSpinner.setGravity(Gravity.CENTER_HORIZONTAL);
+        timeSpinner.setGravity(Gravity.CENTER_HORIZONTAL);*/
 
         //加载数据
         onRefresh();
@@ -193,9 +191,9 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
             onRefresh();
         });
 
+        /*//添加事件Spinner事件监听
         //添加事件Spinner事件监听
-        //添加事件Spinner事件监听
-        timeSpinner.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
+        timeSpinner.setOnItemSelectedListener(new SpinnerXMLSelectedListener());*/
 
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -21,11 +21,11 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <Spinner
+            <!--<Spinner
                 android:id="@+id/timeSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:entries="@array/timeSpinner"></Spinner>
+                android:entries="@array/timeSpinner"></Spinner>-->
 
             <ffm.geok.com.widget.editview.SearchEditText
                 android:id="@+id/tv_project_name"

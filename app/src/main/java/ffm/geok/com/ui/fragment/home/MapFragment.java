@@ -167,7 +167,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
             if (lgtd == null && lttd == null) continue;
             LatLng latLng = new LatLng(lttd, lgtd);
             TextView textView = new TextView(getActivity().getApplicationContext());
-            textView.setBackgroundResource(R.mipmap.marker2);     //通过View获取BitmapDescriptor对象
+            textView.setBackgroundResource(R.mipmap.marker);     //通过View获取BitmapDescriptor对象
             BitmapDescriptor markerIcon = BitmapDescriptorFactory
                     .fromView(textView);
             Marker marker = aMap.addMarker(new MarkerOptions()
@@ -310,7 +310,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
                 marker.setInfoWindowEnable(false);
 
                 TextView textView = new TextView(getActivity().getApplicationContext());
-                textView.setBackgroundResource(R.mipmap.marker);     //通过View获取BitmapDescriptor对象
+                textView.setBackgroundResource(R.mipmap.marker3);     //通过View获取BitmapDescriptor对象
                 BitmapDescriptor markerIcon = BitmapDescriptorFactory
                         .fromView(textView);
                 marker.setIcon(markerIcon);
