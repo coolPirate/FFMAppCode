@@ -23,7 +23,9 @@ import ffm.geok.com.R;
 import ffm.geok.com.adapter.ProjeceDetialAdapter;
 import ffm.geok.com.base.MySupportActivity;
 import ffm.geok.com.model.InputInfoModel;
+import ffm.geok.com.model.Message;
 import ffm.geok.com.uitls.ConstantUtils;
+import ffm.geok.com.uitls.RxBus;
 
 public class ProjectDetialActivity extends MySupportActivity {
     protected Context mContext;
@@ -91,6 +93,7 @@ public class ProjectDetialActivity extends MySupportActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //添加分割线
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+
 
     }
 

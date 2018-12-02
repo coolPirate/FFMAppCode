@@ -13,7 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [amap_apikey: "b77f14c8f241fd38a0abe306694e3e9f"]
+        manifestPlaceholders = [amap_apikey: "8dbbadf710611e84a9d183337df760af"]
     }
     sourceSets {
         main {

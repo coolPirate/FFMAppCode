@@ -70,6 +70,7 @@ public class MainActivity extends MySupportActivity
     private Handler mHandler;
     private Runnable mRunnable;
     private int timeInterval;
+    private int isfirst=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +168,7 @@ public class MainActivity extends MySupportActivity
             @Override
             public void onFiresListSuccess(List<FireDateEntity> fireDateEntityList) {
                 L.i("DBUTIL",String.valueOf(fireDateEntityList.size()));
-                if(fireDateEntityList.size()>0)
+                if(fireDateEntityList.size()>0&&isfirst!=0)
                 {
                     showNotification();
                 }

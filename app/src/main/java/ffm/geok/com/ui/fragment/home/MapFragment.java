@@ -52,6 +52,8 @@ import com.amap.api.maps.model.animation.Animation;
 import com.amap.api.maps.model.animation.RotateAnimation;
 import com.orhanobut.logger.Logger;
 
+import org.mozilla.javascript.regexp.SubString;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -63,6 +65,7 @@ import ffm.geok.com.base.BaseMainFragment;
 import ffm.geok.com.global.XApplication;
 import ffm.geok.com.javagen.FireDateEntityDao;
 import ffm.geok.com.model.FireDateEntity;
+import ffm.geok.com.model.Message;
 import ffm.geok.com.presenter.IMapLocationPresenter;
 import ffm.geok.com.presenter.MapLocationPresenter;
 import ffm.geok.com.uitls.ConstantUtils;
@@ -70,9 +73,12 @@ import ffm.geok.com.uitls.Convert;
 import ffm.geok.com.uitls.DBUtils;
 import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.NavigationUtils;
+import ffm.geok.com.uitls.RxBus;
 import ffm.geok.com.uitls.StringUtils;
 import ffm.geok.com.uitls.ToastUtils;
 import ffm.geok.com.widget.dialog.DialogUtils;
+import rx.Observable;
+import rx.functions.Action1;
 
 
 public class MapFragment extends BaseMainFragment implements LocationSource, Toolbar.OnMenuItemClickListener,View.OnClickListener {
@@ -95,6 +101,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
     private TileOverlay tileOverlay;
 
     private Dialog inputDialog = null;
+    Observable<Message> observableMarker;//数据更新
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -360,7 +367,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         dialogWindow.setGravity(Gravity.BOTTOM);
         Display d = dialogWindow.getWindowManager().getDefaultDisplay(); // 为获取屏幕宽、高
         lp.width = (int) (d.getWidth() * 0.9); // 高度设置为屏幕的0.8
-        lp.height = (int) (d.getHeight() * 0.3); // 高度设置
+        lp.height = (int) (d.getHeight() * 0.2); // 高度设置
         dialogWindow.setAttributes(lp); // 设置生效
 //        content.setText("当前坐标：\n经度："+latLng.longitude+"\n纬度："+latLng.latitude);
         TextView lng = (TextView) inputDialog.findViewById(R.id.tv_project_Lng);
@@ -419,6 +426,35 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
     @Override
     public void deactivate() {
 
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        L.i("LATLON","lat1:");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
+        L.i("LATLON","lat:");
+
+        observableMarker = RxBus.get().register("DataSelected", Message.class);
+        observableMarker.subscribe(new Action1<Message>() {
+            @Override
+            public void call(Message message) {
+                String latlonStr=message.getMsgContent();
+                Double lat=Double.valueOf(latlonStr.substring(0,latlonStr.indexOf(",")));
+                Double lon=Double.valueOf(latlonStr.substring(latlonStr.indexOf(","),latlonStr.length()));
+                L.i("LATLON","lat:"+lat+"Lon"+lon);
+                LatLng marker1 = new LatLng(lat, lon);
+                //设置中心点和缩放比例
+                aMap.moveCamera(CameraUpdateFactory.changeLatLng(marker1));
+                aMap.moveCamera(CameraUpdateFactory.zoomTo(12));
+                L.d("你传递的消息code = " + message.getMsgCode() + "消息content = " + message.getMsgContent());
+            }
+        });
     }
 
     @Override

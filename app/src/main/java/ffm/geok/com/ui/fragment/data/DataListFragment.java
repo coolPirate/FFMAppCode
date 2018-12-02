@@ -234,6 +234,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
 
         observable = RxBus.get().register(ConstantUtils.global.RefreshDataStatus, Message.class);
 
+
     }
 
 
@@ -291,6 +292,8 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(ConstantUtils.global.ProjectDetial, sourceData);
                 NavigationUtils.getInstance().jumpTo(ProjectDetialActivity.class, bundle, false);
+                //地图更新
+                RxBus.get().post("DataSelected",new Message(1000, String.valueOf(fireDateEntity.getLat())+","+String.valueOf(fireDateEntity.getLon())));
             }
         }
 
