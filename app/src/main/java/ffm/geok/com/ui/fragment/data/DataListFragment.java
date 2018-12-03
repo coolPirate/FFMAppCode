@@ -80,7 +80,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
     private int lastVisibleItem = -1;
     private String _startTime = "2018-11-10";
     private String _endTime = "2019-11-19";
-    private ArrayAdapter adapter;;
+    private ArrayAdapter adapter;
 
     private ArrayList<InputInfoModel> sourceData = new ArrayList<InputInfoModel>(); //录入模板
 
@@ -296,7 +296,6 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
                 RxBus.get().post("DataSelected",new Message(1000, String.valueOf(fireDateEntity.getLat())+","+String.valueOf(fireDateEntity.getLon())));
             }
         }
-
     }
 
     private void initInputIaCEwellsTemplate(FireDateEntity fireDateEntity) {
@@ -357,7 +356,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
                     _time=DateUtils.getDateHourStr(_time,24);
                     break;
             }
-            List<FireDateEntity> list=projectPresenter.getFiresList(_time,queryAdcd,queryProjectName, pageSize, pageNumber);
+            projectPresenter.getFiresList(_time,queryAdcd,queryProjectName, pageSize, pageNumber);
             //projectListAdapter.setDataList(list);
             onLoadmore();
         }

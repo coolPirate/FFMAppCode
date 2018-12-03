@@ -7,9 +7,9 @@ import ffm.geok.com.model.InputInfoModel;
 
 public interface IProjectPresenter {
     void getFiresList(String adcd);
-    List<FireDateEntity> getFiresList(String startTime,String endTime);
+    void getFiresList(String startTime,String endTime);
     void getFiresList(String adcd, String projectNmae, int pageSize, int pageNumber);
-    List<FireDateEntity> getFiresList(String time,String adcd, String projectNmae, int pageSize, int pageNumber);
+    void getFiresList(String time,String adcd, String projectNmae, int pageSize, int pageNumber);
     void saveSampleProjectInfo(InputInfoModel infomodel);
 
     interface ProjectCallback {

@@ -109,12 +109,8 @@ public class MainActivity extends MySupportActivity
         String curDateStr=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
         String st=DateUtils.getDateMinStr(curDateStr,15);
 
-        List<FireDateEntity> list=firesPresenter.getFiresList(st,curDateStr);
-        L.i("DateCur","当前："+curDateStr+" 15分钟"+st);
-        L.i("list","cnt:"+list.size());
-        if(list.size()>0){
-            //showNotification();
-        }
+        firesPresenter.getFiresList(st,curDateStr);
+
     }
 
 
@@ -278,17 +274,17 @@ public class MainActivity extends MySupportActivity
                     fragment.putNewBundle(newBundle);
 
                     myHome.start(fragment, SupportFragment.SINGLETASK);
-                } else if (id == R.id.nav_data) {
+                } /*else if (id == R.id.nav_data) {
                     //
                     NavigationUtils.getInstance().jumpTo(DataListActivity.class,null,false);
-                    /*DataFragment fragment = findFragment(DataFragment.class);
+                    DataFragment fragment = findFragment(DataFragment.class);
                     if (fragment == null) {
                         myHome.startWithPopTo(DataFragment.newInstance(), HomeTabFragment.class, false);
                     } else {
                         // 如果已经在栈内,则以SingleTask模式start
                         myHome.start(fragment, SupportFragment.SINGLETASK);
-                    }*/
-                }/* else if (id == R.id.nav_shop) {
+                    }
+                } else if (id == R.id.nav_shop) {
                     ShopFragment fragment = findFragment(ShopFragment.class);
                     if (fragment == null) {
                         myHome.startWithPopTo(ShopFragment.newInstance(), HomeFragment.class, false);
@@ -336,7 +332,7 @@ public class MainActivity extends MySupportActivity
     }
 
     private void goLogin() {
-        //start(LoginFragment.newInstance());
+        start(LoginFragment.newInstance());
     }
 
     private void showNotification() {

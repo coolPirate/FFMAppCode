@@ -56,6 +56,7 @@ import org.mozilla.javascript.regexp.SubString;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -65,9 +66,14 @@ import ffm.geok.com.base.BaseMainFragment;
 import ffm.geok.com.global.XApplication;
 import ffm.geok.com.javagen.FireDateEntityDao;
 import ffm.geok.com.model.FireDateEntity;
+import ffm.geok.com.model.InputInfoModel;
+import ffm.geok.com.model.InputInfoModelPattern;
+import ffm.geok.com.model.InputInfoModelType;
 import ffm.geok.com.model.Message;
+import ffm.geok.com.model.VerificationType;
 import ffm.geok.com.presenter.IMapLocationPresenter;
 import ffm.geok.com.presenter.MapLocationPresenter;
+import ffm.geok.com.ui.activity.ProjectDetialActivity;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.Convert;
 import ffm.geok.com.uitls.DBUtils;
@@ -102,6 +108,8 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
 
     private Dialog inputDialog = null;
     Observable<Message> observableMarker;//数据更新
+    private ArrayList<InputInfoModel> sourceData = new ArrayList<InputInfoModel>(); //录入模板
+
 
     public static MapFragment newInstance() {
         return new MapFragment();
@@ -317,7 +325,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
                 marker.setInfoWindowEnable(false);
 
                 TextView textView = new TextView(getActivity().getApplicationContext());
-                textView.setBackgroundResource(R.mipmap.marker3);     //通过View获取BitmapDescriptor对象
+                textView.setBackgroundResource(R.mipmap.marker2);     //通过View获取BitmapDescriptor对象
                 BitmapDescriptor markerIcon = BitmapDescriptorFactory
                         .fromView(textView);
                 marker.setIcon(markerIcon);
@@ -361,6 +369,21 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
     private void initDialogParams(String id) {
         FireDateEntity fireDateEntity=(FireDateEntity)DBUtils.getInstance().queryAllBySingleWhereConditions(FireDateEntity.class, FireDateEntityDao.Properties.Id.eq(id)).get(0);
         inputDialog = DialogUtils.getDialog(getActivity(), R.layout.layout_dialog_briefinfo);
+        View view=inputDialog.findViewById(R.id.dialog_message);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != fireDateEntity) {
+                    sourceData.clear();
+                    initInputIaCEwellsTemplate(fireDateEntity);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(ConstantUtils.global.ProjectDetial, sourceData);
+                    NavigationUtils.getInstance().jumpTo(ProjectDetialActivity.class, bundle, false);
+                }
+
+            }
+        });
+
         /*修改默认窗口高度*/
         Window dialogWindow = inputDialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
@@ -385,6 +408,44 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
 
         ImageView closeBtn = (ImageView) inputDialog.findViewById(R.id.img_btn_close);
         closeBtn.setOnClickListener(this);
+
+    }
+
+    private void initInputIaCEwellsTemplate(FireDateEntity fireDateEntity) {
+        InputInfoModel infomodel = null;
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.CREATETIME, InputInfoModelType.INPUT, "请输入开始时间", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel.setInputResultText(String.valueOf(fireDateEntity.getCreateTime()));
+        sourceData.add(infomodel);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.FINDTIME, InputInfoModelType.INPUT, "请输入发现时间", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel.setInputResultText(String.valueOf(fireDateEntity.getFindTime()));
+        sourceData.add(infomodel);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.UPDATETIME, InputInfoModelType.INPUT, "请输入更新时间", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel.setInputResultText(String.valueOf(fireDateEntity.getUpdateTime()));
+        sourceData.add(infomodel);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.PROVINCE, InputInfoModelType.INPUT, "请输入省份", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel.setInputResultText(StringUtils.isEmptyString(fireDateEntity.getProvince()));
+        sourceData.add(infomodel);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.CITY, InputInfoModelType.INPUT, "请输入城市", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel.setInputResultText(StringUtils.isEmptyString(fireDateEntity.getCity()));
+        sourceData.add(infomodel);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.COUNTY, InputInfoModelType.INPUT, "请输入县名称", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel.setInputResultText(StringUtils.isEmptyString(fireDateEntity.getCounty()));
+        sourceData.add(infomodel);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.LAT, InputInfoModelType.INPUT, "请输入纬度", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel.setInputResultText(StringUtils.isEmptyString(String.valueOf(fireDateEntity.getLat())));
+        sourceData.add(infomodel);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.LON, InputInfoModelType.INPUT, "请输入经度", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel.setInputResultText(StringUtils.isEmptyString(String.valueOf(fireDateEntity.getLon())));
+        sourceData.add(infomodel);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.SATELLITE, InputInfoModelType.INPUT, "请输入卫星名称", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel.setInputResultText(StringUtils.isEmptyString(fireDateEntity.getSatellite()));
+        sourceData.add(infomodel);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.TYPE, InputInfoModelType.INPUT, "请输入类型", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel.setInputResultText(StringUtils.isEmptyString(fireDateEntity.getType()));
+        sourceData.add(infomodel);
+        /*infomodel = new InputInfomodel(ConstantUtils.IA_C_MEDIA_LABELS.Media, InputInfoModelType.Multi_Media, "请选择多媒体", null, null, VerificationType.request, 0, 0, InputInfoModelPattern.normal);
+        infomodel.setMultiMedia(getMultiMediaByObjID(iaCEwellsEntity.getPid()));
+        sourceData.add(infomodel);*/
 
     }
 
@@ -416,6 +477,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
     public void onDestroyView() {
         super.onDestroyView();
         //unbinder.unbind();
+        RxBus.get().unregister("DataSelected",observableMarker);
     }
 
     @Override
@@ -444,15 +506,16 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         observableMarker.subscribe(new Action1<Message>() {
             @Override
             public void call(Message message) {
+                L.d("你传递的消息code = " + message.getMsgCode() + "消息content = " + message.getMsgContent());
+
                 String latlonStr=message.getMsgContent();
                 Double lat=Double.valueOf(latlonStr.substring(0,latlonStr.indexOf(",")));
-                Double lon=Double.valueOf(latlonStr.substring(latlonStr.indexOf(","),latlonStr.length()));
+                Double lon=Double.valueOf(latlonStr.substring(latlonStr.indexOf(",")+1,latlonStr.length()));
                 L.i("LATLON","lat:"+lat+"Lon"+lon);
                 LatLng marker1 = new LatLng(lat, lon);
                 //设置中心点和缩放比例
                 aMap.moveCamera(CameraUpdateFactory.changeLatLng(marker1));
                 aMap.moveCamera(CameraUpdateFactory.zoomTo(12));
-                L.d("你传递的消息code = " + message.getMsgCode() + "消息content = " + message.getMsgContent());
             }
         });
     }

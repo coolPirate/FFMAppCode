@@ -8,10 +8,10 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/home" />
-        <item
+        <!--<item
             android:id="@+id/nav_data"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="Gallery" />-->
     </group>
 
     <item android:title="Communicate">
@@ -19,11 +19,11 @@
             <item
                 android:id="@+id/nav_login"
                 android:icon="@drawable/ic_menu_share"
-                android:title="login" />
-            <item
+                android:title="登录" />
+            <!--<item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="Send" />-->
         </menu>
     </item>
 

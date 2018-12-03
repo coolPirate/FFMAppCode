@@ -72,7 +72,7 @@ public class ProjectPresenter implements IProjectPresenter {
     }
 
     @Override
-    public List<FireDateEntity> getFiresList(String startTime, String endTime) {
+    public void getFiresList(String startTime, String endTime) {
         OkGo.<String>get(ServerUrl.Fires_list)
                 .tag(this)
                 .params(ConstantUtils.RequestTag.ST, startTime)
@@ -118,7 +118,6 @@ public class ProjectPresenter implements IProjectPresenter {
                         mCallbace.onFiresListFail(response.message());
                     }
                 });
-        return fireDateEntityList;
     }
 
     @Override
@@ -155,7 +154,7 @@ public class ProjectPresenter implements IProjectPresenter {
     }
 
     @Override
-    public List<FireDateEntity> getFiresList(String time, String adcd, String projectName, int pageSize, int pageNumber) {
+    public void getFiresList(String time, String adcd, String projectName, int pageSize, int pageNumber) {
         //测试从本地查询
         try {
             List<FireDateEntity> fireDateEntityList = null;
@@ -192,12 +191,10 @@ public class ProjectPresenter implements IProjectPresenter {
                     mCallbace.onFiresListSuccess(fireDateEntityList);
                 }
             }
-            return fireDateEntityList1;
         } catch (Exception e) {
             e.printStackTrace();
             L.e("查询失败："+e.toString());
             mCallbace.onFiresListFail(e.toString());
-            return null;
         }
     }
 
