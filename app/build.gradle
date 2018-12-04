@@ -65,6 +65,7 @@ dependencies {
     implementation rootProject.ext.dependencies["swipeback"]
     implementation rootProject.ext.dependencies["flycoTab"]
     implementation rootProject.ext.dependencies["badgeview"]
+    implementation rootProject.ext.dependencies["switchBtn"]
     //network
     implementation rootProject.ext.dependencies["gson"]
     implementation rootProject.ext.dependencies["okgo"]

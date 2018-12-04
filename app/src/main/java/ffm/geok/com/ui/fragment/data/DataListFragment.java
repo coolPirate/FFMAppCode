@@ -291,6 +291,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
                 initInputIaCEwellsTemplate(fireDateEntity);
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(ConstantUtils.global.ProjectDetial, sourceData);
+                bundle.putString(ConstantUtils.global.ProjectEntityId, fireDateEntity.getId());
                 NavigationUtils.getInstance().jumpTo(ProjectDetialActivity.class, bundle, false);
                 //地图更新
                 RxBus.get().post("DataSelected",new Message(1000, String.valueOf(fireDateEntity.getLat())+","+String.valueOf(fireDateEntity.getLon())));
@@ -327,9 +328,9 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.SATELLITE, InputInfoModelType.INPUT, "请输入卫星名称", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
         infomodel.setInputResultText(StringUtils.isEmptyString(fireDateEntity.getSatellite()));
         sourceData.add(infomodel);
-        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.TYPE, InputInfoModelType.INPUT, "请输入类型", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        /*infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.TYPE, InputInfoModelType.INPUT, "请输入类型", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
         infomodel.setInputResultText(StringUtils.isEmptyString(fireDateEntity.getType()));
-        sourceData.add(infomodel);
+        sourceData.add(infomodel);*/
         /*infomodel = new InputInfomodel(ConstantUtils.IA_C_MEDIA_LABELS.Media, InputInfoModelType.Multi_Media, "请选择多媒体", null, null, VerificationType.request, 0, 0, InputInfoModelPattern.normal);
         infomodel.setMultiMedia(getMultiMediaByObjID(iaCEwellsEntity.getPid()));
         sourceData.add(infomodel);*/

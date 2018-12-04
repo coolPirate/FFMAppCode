@@ -24,4 +24,6 @@
     <color name="gray_white">#ffcccccc</color>
     <!--separator line-->
     <color name="separator_line">#c1c1c1</color>
+    <!-- 标题背景颜色 -->
+    <color name="act_title_bg">#3578ed</color>
 </resources>

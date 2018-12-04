@@ -1,5 +1,6 @@
 package ffm.geok.com.widget.editview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -23,6 +24,7 @@ import static android.support.v4.content.ContextCompat.getDrawable;
  *
  * 仿Ios搜索框
  */
+@SuppressLint("AppCompatCustomView")
 public class SearchEditText extends EditText implements View.OnFocusChangeListener, View.OnKeyListener {
     private static final String TAG = SearchEditText.class.getSimpleName();
     private Drawable drawableClear,drawableLeft;

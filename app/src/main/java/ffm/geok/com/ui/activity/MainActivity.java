@@ -122,11 +122,11 @@ public class MainActivity extends MySupportActivity
         toggle.syncState();
 
         //TODO
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        /*mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
-        mNavigationView.setCheckedItem(R.id.nav_home);
+        mNavigationView.setCheckedItem(R.id.nav_home);*/
 
-        LinearLayout llNavHeader = (LinearLayout) mNavigationView.getHeaderView(0);
+        /*LinearLayout llNavHeader = (LinearLayout) mNavigationView.getHeaderView(0);
         mTvName = (TextView) llNavHeader.findViewById(R.id.tv_name);
         mImgNav = (ImageView) llNavHeader.findViewById(R.id.img_nav);
         llNavHeader.setOnClickListener(new View.OnClickListener() {
@@ -140,11 +140,11 @@ public class MainActivity extends MySupportActivity
                     }
                 }, 250);
             }
-        });
+        });*/
 
         mHandler=new Handler();
         //间隔时间 15分钟
-        timeInterval=1*60*1000;
+        timeInterval=5*60*1000;
         mRunnable=new Runnable(){
 
             @Override
@@ -214,7 +214,7 @@ public class MainActivity extends MySupportActivity
             // 主页的Fragment
             if (topFragment instanceof BaseMainFragment) {
                 //TODO
-                mNavigationView.setCheckedItem(R.id.nav_home);
+                //mNavigationView.setCheckedItem(R.id.nav_home);
             }
 
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
@@ -295,9 +295,9 @@ public class MainActivity extends MySupportActivity
                     }
                 }*/ else if (id == R.id.nav_login) {
                     goLogin();
-                }else  if(id==R.id.nav_send){
+                }/*else  if(id==R.id.nav_send){
 
-                }
+                }*/
             }
         }, 300);
 
@@ -307,9 +307,9 @@ public class MainActivity extends MySupportActivity
     @Override
     public void onOpenDrawer() {
         //TODO
-        if (!mDrawer.isDrawerOpen(GravityCompat.START)) {
+        /*if (!mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.openDrawer(GravityCompat.START);
-        }
+        }*/
 
     }
 
