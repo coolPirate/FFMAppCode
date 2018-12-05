@@ -50,7 +50,7 @@ public class ShowImagesActivity extends AppCompatActivity implements View.OnClic
     private ImageViewPagerAdapter imageViewPagerAdapter;
     private RxPermissions mRxPermissions;
     public static final int REQUEST_CODE_SELECT = 100;
-    public static final int maxImgCount = 9;
+    public static final int maxImgCount = 5;
     private ArrayList<ImageItem> images;
 
     @Override
@@ -103,8 +103,8 @@ public class ShowImagesActivity extends AppCompatActivity implements View.OnClic
 
     private void initViews() {
         //布局渲染完了之后，才能setSupportActionBar
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
+        /*mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);*/
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);

@@ -1,6 +1,7 @@
 package ffm.geok.com.ui.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +11,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.lzy.imagepicker.ImagePicker;
@@ -18,25 +21,32 @@ import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.view.CropImageView;
 import com.orhanobut.logger.Logger;
-import com.suke.widget.SwitchButton;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ffm.geok.com.R;
 import ffm.geok.com.adapter.BaseInfoImageAdapter;
-import ffm.geok.com.adapter.ProjectVertifyAdapter;
-import ffm.geok.com.model.InputInfoModel;
+import ffm.geok.com.javagen.FireCheckEntityDao;
+import ffm.geok.com.javagen.FireMediaEntityDao;
+import ffm.geok.com.model.FireCheckEntity;
+import ffm.geok.com.model.FireMediaEntity;
 import ffm.geok.com.model.ShowImage;
+import ffm.geok.com.presenter.DataSynchronizationPresenter;
+import ffm.geok.com.presenter.IDataSynchronizationPresenter;
 import ffm.geok.com.uitls.ConstantUtils;
+import ffm.geok.com.uitls.DBUtils;
 import ffm.geok.com.uitls.GlideImageLoader;
 import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.NavigationUtils;
 import ffm.geok.com.uitls.StringUtils;
 import ffm.geok.com.uitls.ToastUtils;
+import ffm.geok.com.uitls.ToolUtils;
+import ffm.geok.com.widget.dialog.DialogUtils;
 
 import static com.lzy.imagepicker.ImagePicker.REQUEST_CODE_PREVIEW;
 import static ffm.geok.com.adapter.ProjectVertifyAdapter.Multi_Media_IMAGES;
@@ -46,25 +56,31 @@ import static ffm.geok.com.ui.activity.ShowImagesActivity.maxImgCount;
 
 public class projectVertifyActivity extends AppCompatActivity {
 
-    @BindView(R.id.switch_button)
-    SwitchButton switchButton;
     @BindView(R.id.edt_multext)
     EditText edtMultext;
     @BindView(R.id.imgs_recyclerview)
     RecyclerView imgsRecyclerview;
     @BindView(R.id.btn_upload)
     TextView btnUpload;
+    @BindView(R.id.confirmor)
+    EditText confirmor;
+    @BindView(R.id.switch_button)
+    Switch switchButton;
+
 
     private BaseInfoImageAdapter imageAdapter = null;
     private RxPermissions mRxPermissions;
-    private Context mContext=getBaseContext();
+    private Context mContext = projectVertifyActivity.this;
     private String imageFilesName = "";//保存拍照图片名字
-    private ProjectVertifyAdapter mAdapter;
-    private ArrayList<InputInfoModel> sourceData = new ArrayList<InputInfoModel>(); //录入模板
     private ArrayList<ImageItem> images;
-    private InputInfoModel currentInputModel;
     private final String split_flag = "___";
     private final String imagesOnSaveInstanceState = "takePhotos";    //保存拍照图片名字key
+    private IDataSynchronizationPresenter dataSynchronizationPresenter;
+    private ProgressDialog mProgressDialog = null;
+
+    private FireCheckEntity fireCheckEntity = new FireCheckEntity();
+    ;
+    private String entityId;
 
 
     @Override
@@ -73,24 +89,43 @@ public class projectVertifyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_project_vertify);
         ButterKnife.bind(this);
 
-        initData();
+        Bundle bundle = getIntent().getExtras();
+        entityId = bundle.getString(ConstantUtils.global.ProjectEntityId);
+
         initView();
+        initData();
         initListener();
     }
 
-    private void initData(){
+    private void initData() {
+        List<FireCheckEntity> fireCheckEntityList= DBUtils.getInstance().queryAllBySingleWhereConditions(FireCheckEntity.class,FireCheckEntityDao.Properties.Fireid.eq(entityId));
+        if(fireCheckEntityList.size()>0){
+            FireCheckEntity fireCheckEntityOld=fireCheckEntityList.get(0);
+            if(fireCheckEntityOld.getIsfire()=="是"){
+                switchButton.setChecked(false);
+            }else {
+                switchButton.setChecked(true);
+            }
+            if(null!=fireCheckEntityOld.getConfirmor()){
+                confirmor.setText(fireCheckEntityOld.getConfirmor());
+            }
+            if(null!=fireCheckEntityOld.getRemark()){
+                edtMultext.setText(fireCheckEntityOld.getRemark());
+            }
+        }
 
+        List<FireMediaEntity> fireMediaEntityList=DBUtils.getInstance().queryAllBySingleWhereConditions(FireMediaEntity.class,FireMediaEntityDao.Properties.Fireid.eq(entityId));
+        if(fireMediaEntityList.size()>0){
+            /*for (FireMediaEntity entity:fireMediaEntityList) {
+                ImageItem image = new ImageItem();
+                image.name=entity.getFname();
+                image.path=entity.getFpath();
+                images.add(image);
+            }*/
+        }
     }
 
-    private void  initView(){
-        switchButton.setChecked(true);
-        switchButton.isChecked();
-        switchButton.toggle();     //switch state
-        switchButton.toggle(false);//switch without animation
-        switchButton.setShadowEffect(true);//disable shadow effect
-        switchButton.setEnabled(false);//disable button
-        switchButton.setEnableEffect(false);//disable the switch animation
-
+    private void initView() {
         imageAdapter = new BaseInfoImageAdapter(mContext);
         imgsRecyclerview.setAdapter(imageAdapter);
         imgsRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
@@ -98,26 +133,24 @@ public class projectVertifyActivity extends AppCompatActivity {
         /*解决滑动冲突*/
         imgsRecyclerview.setNestedScrollingEnabled(false);
 
+        mRxPermissions = new RxPermissions(this);
+
         initImagePicker();
-
-
-        // 初始化自定义的适配器
-        mAdapter = new ProjectVertifyAdapter(this);
-        // 设置数据源
-        mAdapter.setDataList(sourceData);
-        // 为mRecyclerView设置适配器
-        imgsRecyclerview.setAdapter(mAdapter);
-        //初始化ImageAdapter
-        imageAdapter = new BaseInfoImageAdapter(mContext);
 
 
     }
 
-    private void initListener(){
-        switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+    private void initListener() {
+        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                //TODO do your job
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    fireCheckEntity.setIsfire("否");
+                    switchButton.setSwitchTextAppearance(mContext,R.style.s_true);
+                }else {
+                    fireCheckEntity.setIsfire("是");
+                    switchButton.setSwitchTextAppearance(mContext,R.style.s_false);
+                }
             }
         });
 
@@ -155,6 +188,48 @@ public class projectVertifyActivity extends AppCompatActivity {
             }
         });
 
+        confirmor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                fireCheckEntity.setConfirmor(String.valueOf(confirmor.getText()));
+            }
+        });
+
+        dataSynchronizationPresenter = new DataSynchronizationPresenter(this, new IDataSynchronizationPresenter.DataSynchronizationCallback() {
+            @Override
+            public void onNotNecessarySyn() {
+                DialogUtils.closeProgressDialogObject(mProgressDialog);
+                ToastUtils.showShortMsg(mContext, "数据无需同步");
+            }
+
+            @Override
+            public void onSynchronizationSuccess() {
+                DialogUtils.closeProgressDialogObject(mProgressDialog);
+                ToastUtils.showShortMsg(mContext, "数据同步成功");
+            }
+
+            @Override
+            public void onSynchronizationFail(String errorMsg) {
+                DialogUtils.closeProgressDialogObject(mProgressDialog);
+                ToastUtils.showShortMsg(mContext, "数据同步失败:" + errorMsg);
+                L.e(errorMsg);
+            }
+        });
+
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //保存本地
+                assembleProgectData();
+
+                //上传服务器
+                mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
+                //dataSynchronizationPresenter.dataSynchronization();
+                L.i("Upload", "上报完成");
+                finish();
+            }
+        });
+
     }
 
     /**
@@ -172,6 +247,48 @@ public class projectVertifyActivity extends AppCompatActivity {
         imagePicker.setFocusHeight(800);                      //裁剪框的高度。单位像素（圆形自动取宽高最小值）
         imagePicker.setOutPutX(1000);                         //保存文件的宽度。单位像素
         imagePicker.setOutPutY(1000);                         //保存文件的高度。单位像素
+    }
+
+    private void assembleProgectData() {
+        String projectPid = ToolUtils.generateUUID();
+        fireCheckEntity.setId(projectPid);
+        fireCheckEntity.setFireid(entityId);
+        fireCheckEntity.setConfirmor(confirmor.getText().toString());
+        fireCheckEntity.setModitime(ToolUtils.getSystemDate());
+        fireCheckEntity.setRemark(String.valueOf(edtMultext.getText()));
+        if (null != fireCheckEntity) {
+            DBUtils.getInstance().getmDaoSession().insertOrReplace(fireCheckEntity);
+        }
+
+        //保存多媒体
+        FireMediaEntity fireMediaEntity = new FireMediaEntity();
+        File imageFile = null;
+        for (ImageItem imageItem : images) {
+            imageFile = new File(imageItem.path);
+            fireMediaEntity = new FireMediaEntity();
+            fireMediaEntity.setAdcd("");
+            fireMediaEntity.setFireid(entityId);
+            fireMediaEntity.setObjtp("");
+            fireMediaEntity.setModitime(ToolUtils.getSystemDate());
+            fireMediaEntity.setFname(imageFile.getName());
+            fireMediaEntity.setFpath(imageFile.getAbsolutePath());
+            String takePicTime = imageFile.getName().substring(imageFile.getName().lastIndexOf("_") + 1, imageFile.getName().lastIndexOf("."));
+            fireMediaEntity.setPtime(takePicTime);
+            fireMediaEntity.setPid(ToolUtils.generateUUID());
+            fireMediaEntity.setMultitype(ConstantUtils.global.MultiType_JPG);
+            /*新增本地多媒体记录*/
+            try {
+                DBUtils.getInstance().getmDaoSession().insertOrReplace(fireMediaEntity);
+            } catch (Exception e) {
+                L.e(e.toString());
+            }
+            L.d("新增一条多媒体记录成功");
+        }
+
+    }
+
+    private void upLoadData() {
+
     }
 
     @Override
@@ -236,7 +353,7 @@ public class projectVertifyActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         try {
             if (savedInstanceState != null) {
-                imageFilesName = savedInstanceState.getString(imagesOnSaveInstanceState,"");
+                imageFilesName = savedInstanceState.getString(imagesOnSaveInstanceState, "");
                 L.d("onRestoreInstanceState = " + imageFilesName);
                 if (null == imageAdapter) {
                     imageAdapter = new BaseInfoImageAdapter(mContext);

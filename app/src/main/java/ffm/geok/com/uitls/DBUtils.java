@@ -10,14 +10,20 @@ import java.util.Map;
 
 import ffm.geok.com.javagen.BaseDao;
 import ffm.geok.com.javagen.DaoSession;
+import ffm.geok.com.javagen.FireCheckEntityDao;
 import ffm.geok.com.javagen.FireDateEntityDao;
+import ffm.geok.com.javagen.FireMediaEntityDao;
+import ffm.geok.com.model.FireCheckEntity;
 import ffm.geok.com.model.FireDateEntity;
+import ffm.geok.com.model.FireMediaEntity;
 import ffm.geok.com.presenter.DBDao;
 
 public class DBUtils<T> implements DBDao<T> {
     private static DBUtils dbUtils;
     private DaoSession mDaoSession;
     private FireDateEntityDao fireDateEntityDao;
+    private FireCheckEntityDao fireCheckEntityDao;
+    private FireMediaEntityDao fireMediaEntityDao;
 
     private static Map<String, AbstractDao> daoMap = null;
     public DBUtils() {
@@ -31,10 +37,14 @@ public class DBUtils<T> implements DBDao<T> {
                     dbUtils = new DBUtils();
                     dbUtils.mDaoSession = BaseDao.getDaoSession();
                     dbUtils.fireDateEntityDao = dbUtils.mDaoSession.getFireDateEntityDao();
+                    dbUtils.fireCheckEntityDao = dbUtils.mDaoSession.getFireCheckEntityDao();
+                    dbUtils.fireMediaEntityDao = dbUtils.mDaoSession.getFireMediaEntityDao();
 
                     /*将Dao信息存入Map*/
                     daoMap = new HashMap<String, AbstractDao>();
                     daoMap.put(FireDateEntityDao.class.getName(), dbUtils.fireDateEntityDao);
+                    daoMap.put(FireCheckEntityDao.class.getName(), dbUtils.fireCheckEntityDao);
+                    daoMap.put(FireMediaEntity.class.getName(), dbUtils.fireMediaEntityDao);
 
                 }
             }

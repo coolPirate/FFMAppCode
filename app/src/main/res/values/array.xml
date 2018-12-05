@@ -6,4 +6,11 @@
         <item>当前5小时</item>
         <item>当前24小时</item>
     </string-array>
+    <declare-styleable name="AutoButton">
+        <attr name="textOn" format="string"/>
+        <attr name="textOff" format="string"/>
+        <attr name="textSize_ab" format="dimension"/>
+        <attr name="bg_bitmap" format="reference"/>
+        <attr name="btn_bitmap" format="reference"/>
+    </declare-styleable>
 </resources>

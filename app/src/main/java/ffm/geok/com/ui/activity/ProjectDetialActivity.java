@@ -41,7 +41,6 @@ public class ProjectDetialActivity extends MySupportActivity {
 
     private ArrayList<InputInfoModel> sourceData = null; //录入模板
     private String entityId;
-    private FireDateEntity fireDateEntity;
     private ProjeceDetialAdapter mProjeceListAdapter;
     private LinearLayoutManager linearLayoutManager;
 
@@ -54,9 +53,9 @@ public class ProjectDetialActivity extends MySupportActivity {
         steepStatusBar();
 
         Bundle bundle = getIntent().getExtras();
+
         sourceData = bundle.getParcelableArrayList(ConstantUtils.global.ProjectDetial);
         entityId=bundle.getString(ConstantUtils.global.ProjectEntityId);
-        fireDateEntity= (FireDateEntity) DBUtils.getInstance().queryAllBySingleWhereConditions(FireDateEntity.class,FireDateEntityDao.Properties.Id.eq(entityId)).get(0);
 
         initData();
         initViews();
@@ -131,8 +130,7 @@ public class ProjectDetialActivity extends MySupportActivity {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(ConstantUtils.global.ProjectDetial, sourceData);
-                bundle.putParcelableArrayList(ConstantUtils.global.ProjectVertify, sourceData);
+                bundle.putString(ConstantUtils.global.ProjectEntityId, entityId);
                 NavigationUtils.getInstance().jumpTo(projectVertifyActivity.class,bundle,false);
             }
         });

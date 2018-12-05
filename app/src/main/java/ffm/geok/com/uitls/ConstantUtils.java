@@ -13,7 +13,8 @@ public interface ConstantUtils {
         String ProjectDetial = "ProjectDetial";                                                     //工程详情
         String ProjectEntityId="ProjectEntityId";
         int Notification_ID=11;
-        String ProjectVertify = "ProjectVertify";                                                     //核查
+        String ProjectVertify = "ProjectVertify";                                                   //核查
+        String MultiType_JPG = ".jpg";                                                              //jpg多媒体类型
     }
 
     interface mapLocation {

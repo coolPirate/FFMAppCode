@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.db.DBUtils;
 import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
@@ -16,10 +15,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ffm.geok.com.manager.DialogCallback;
+import ffm.geok.com.model.FireCheckEntity;
+import ffm.geok.com.model.FireMediaEntity;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.Convert;
+import ffm.geok.com.uitls.DBUtils;
 import ffm.geok.com.uitls.DateUtils;
 import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.ServerUrl;
@@ -47,42 +50,42 @@ public class DataSynchronizationPresenter implements IDataSynchronizationPresent
          * 2、机电井关联的多媒体数据及关联的多媒体文件
          * */
 
-        /*boolean result = false;
+        boolean result = false;
         zipName = Date2String(new Date(), DateUtils.pattern_timestamp) + "_synData.zip";
         File foder = getDirFile();
         try {
             StringBuffer sbMsg = new StringBuffer();
             JSONObject jsonObject = new JSONObject();
-            List<IaCEwellsEntity> iaCEwellsEntityList = DBUtils.getInstance().queryAllSynchroData(IaCEwellsEntity.class);
-            if (null != iaCEwellsEntityList && iaCEwellsEntityList.size() > 0) {
-                String ia_c_ewells = Convert.toJson(iaCEwellsEntityList);
-                jsonObject.put("ia_c_ewells", ia_c_ewells);
+            List<FireCheckEntity> fireCheckEntityList = DBUtils.getInstance().queryAllSynchroData(FireCheckEntity.class);
+            if (null != fireCheckEntityList && fireCheckEntityList.size() > 0) {
+                String fire_Check = Convert.toJson(fireCheckEntityList);
+                jsonObject.put("fire_check", fire_Check);
             }
-            List<IaCMediaEntity> iaCMediaEntityList = DBUtils.getInstance().queryAllSynchroData(IaCMediaEntity.class);
-            if (null != iaCMediaEntityList && iaCMediaEntityList.size() > 0) {
-                String ia_c_media = Convert.toJson(iaCMediaEntityList);
-                jsonObject.put("ia_c_media", ia_c_media);
+            List<FireMediaEntity> fireMediaEntityList = DBUtils.getInstance().queryAllSynchroData(FireMediaEntity.class);
+            if (null != fireMediaEntityList && fireMediaEntityList.size() > 0) {
+                String fire_media = Convert.toJson(fireMediaEntityList);
+                jsonObject.put("fire_media", fire_media);
                 File mediaFile = null;
-                *//*遍历多媒体数据，拷贝到同步目录下压缩*//*
-                boolean copyResult = copyMdeiaFiles(iaCMediaEntityList, foder);
+                //遍历多媒体数据，拷贝到同步目录下压缩
+                boolean copyResult = copyMdeiaFiles(fireMediaEntityList, foder);
                 if (!copyResult) {
                     mSynchronizationCallback.onSynchronizationFail(sbMsg.toString());
                     return;
                 }
             }
-            List<IAChannelEntity> iaChannelEntityList=DBUtils.getInstance().queryAll(IAChannelEntity.class);
+            /*List<IAChannelEntity> iaChannelEntityList=DBUtils.getInstance().queryAll(IAChannelEntity.class);
             if(null!=iaChannelEntityList&&iaChannelEntityList.size()>0){
                 String ia_c_channel=Convert.toJson(iaChannelEntityList);
                 jsonObject.put("ia_c_channel",ia_c_channel);
-            }
+            }*/
             if (TextUtils.isEmpty(jsonObject.toString()) || "{}".equals(jsonObject.toString())) {
                 mSynchronizationCallback.onNotNecessarySyn();
                 return;
             } else {
                 boolean exportJsonresult = exportJsonDataToFile(jsonObject, foder);
-                *//*如果json导出成功*//*
+                //如果json导出成功
                 if (exportJsonresult) {
-                    *//*进行图片/json文件压缩*//*
+                    //进行图片/json文件压缩
                     result = zipSynData(foder);
                 } else {
                     result = false;
@@ -110,9 +113,9 @@ public class DataSynchronizationPresenter implements IDataSynchronizationPresent
                             public void onSuccess(Response<String> response) {
                                 String responseString = response.body();
                                 L.d("dataSynchronization", "请求成功：" + responseString);
-                                *//*更新本地数据状态为已同步*//*
+                                //更新本地数据状态为已同步
                                 synchronizedLocalData();
-                                *//*通知界面已成功*//*
+                                //通知界面已成功
                                 mSynchronizationCallback.onSynchronizationSuccess();
                             }
 
@@ -129,7 +132,7 @@ public class DataSynchronizationPresenter implements IDataSynchronizationPresent
             }
         } else {
             mSynchronizationCallback.onSynchronizationFail("");
-        }*/
+        }
     }
 
     /**
@@ -218,11 +221,11 @@ public class DataSynchronizationPresenter implements IDataSynchronizationPresent
      * @param
      * @return
      */
-    /*private boolean copyMdeiaFiles(List<IaCMediaEntity> iaCMediaEntityList, File foder) {
+    private boolean copyMdeiaFiles(List<FireMediaEntity> iaCMediaEntityList, File foder) {
         boolean result = false;
         StringBuffer sbMsg = new StringBuffer();
         File mediaFile;
-        for (IaCMediaEntity iaCMediaEntity : iaCMediaEntityList) {
+        for (FireMediaEntity iaCMediaEntity : iaCMediaEntityList) {
             if (!TextUtils.isEmpty(iaCMediaEntity.getFpath())) {
                 mediaFile = new File(iaCMediaEntity.getFpath());
                 if (mediaFile.exists()) {
@@ -258,7 +261,7 @@ public class DataSynchronizationPresenter implements IDataSynchronizationPresent
             }
         }
         return result;
-    }*/
+    }
 
     /*获取操作根目录文件*/
     @NonNull
