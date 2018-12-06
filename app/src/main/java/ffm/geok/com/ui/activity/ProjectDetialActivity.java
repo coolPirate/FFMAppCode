@@ -84,7 +84,7 @@ public class ProjectDetialActivity extends MySupportActivity {
      * @return
      */
     private void initData() {
-        toolbar.setTitle("工程详情");
+        toolbar.setTitle("火点详情");
 
         mProjeceListAdapter = new ProjeceDetialAdapter(mContext);
         //设置布局管理器

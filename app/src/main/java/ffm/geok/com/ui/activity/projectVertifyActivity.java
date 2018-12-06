@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -69,6 +70,7 @@ public class projectVertifyActivity extends AppCompatActivity {
 
 
     private BaseInfoImageAdapter imageAdapter = null;
+    private LayoutInflater mLayoutInflater;
     private RxPermissions mRxPermissions;
     private Context mContext = projectVertifyActivity.this;
     private String imageFilesName = "";//保存拍照图片名字
@@ -116,22 +118,28 @@ public class projectVertifyActivity extends AppCompatActivity {
 
         List<FireMediaEntity> fireMediaEntityList=DBUtils.getInstance().queryAllBySingleWhereConditions(FireMediaEntity.class,FireMediaEntityDao.Properties.Fireid.eq(entityId));
         if(fireMediaEntityList.size()>0){
-            /*for (FireMediaEntity entity:fireMediaEntityList) {
-                ImageItem image = new ImageItem();
-                image.name=entity.getFname();
-                image.path=entity.getFpath();
-                images.add(image);
-            }*/
+            File itemFile = null;
+            List<File> mediaFiles = new ArrayList<File>();
+            for (FireMediaEntity entity:fireMediaEntityList) {
+                itemFile = new File(entity.getFpath());
+                if (itemFile.exists()) {
+                    mediaFiles.add(itemFile);
+                }
+            }
+
         }
     }
 
     private void initView() {
+        mLayoutInflater = LayoutInflater.from(mContext);
+
         imageAdapter = new BaseInfoImageAdapter(mContext);
         imgsRecyclerview.setAdapter(imageAdapter);
         imgsRecyclerview.setLayoutManager(new GridLayoutManager(mContext, 3));
         imgsRecyclerview.setHasFixedSize(true);
         /*解决滑动冲突*/
         imgsRecyclerview.setNestedScrollingEnabled(false);
+
 
         mRxPermissions = new RxPermissions(this);
 
@@ -224,7 +232,7 @@ public class projectVertifyActivity extends AppCompatActivity {
 
                 //上传服务器
                 mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
-                //dataSynchronizationPresenter.dataSynchronization();
+                dataSynchronizationPresenter.dataSynchronization();
                 L.i("Upload", "上报完成");
                 finish();
             }
