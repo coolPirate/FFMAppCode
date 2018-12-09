@@ -76,7 +76,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
     private String queryAdcd = "";
     private int pageSize = 10;
     private String queryProjectName = "";
-    private String _time;
+    //private String _time;
     private int lastVisibleItem = -1;
     private String _startTime = "2018-11-10";
     private String _endTime = "2019-11-19";
@@ -229,10 +229,12 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
 
     private void initData() {
         //当前时间
-        _time=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
+        //_time=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
         tvProjectName.clearFocus();
 
         observable = RxBus.get().register(ConstantUtils.global.RefreshDataStatus, Message.class);
+
+        onRefresh();
 
 
     }
@@ -278,7 +280,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         projectListAdapter.changeMoreStatus(ProjectListAdapter.LOADING_MORE);
         pageNumber++;
         isRefresh = false;
-        projectPresenter.getFiresList(_time, queryProjectName, pageSize, pageNumber);
+        projectPresenter.getFiresList(queryAdcd, queryProjectName, pageSize, pageNumber);
         //projectPresenter.getFiresList(_time,queryAdcd, queryProjectName, pageSize, pageNumber);
     }
 
@@ -337,34 +339,4 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
 
     }
 
-    //使用XML形式操作
-    class SpinnerXMLSelectedListener implements AdapterView.OnItemSelectedListener {
-        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-                                   long arg3) {
-            String timeSelectedStr= (String) adapter.getItem(arg2);
-            String curTime=DateUtils.Date2String(new Date(),DateUtils.pattern_full);;
-            switch (timeSelectedStr){
-                case "当前1小时":
-                    _time=DateUtils.getDateHourStr(_time,1);
-                    break;
-                case "当前3小时":
-                    _time=DateUtils.getDateHourStr(_time,3);
-                    break;
-                case "当前5小时":
-                    _time=DateUtils.getDateHourStr(_time,5);
-                    break;
-                case "当前24小时":
-                    _time=DateUtils.getDateHourStr(_time,24);
-                    break;
-            }
-            projectPresenter.getFiresList(_time,queryAdcd,queryProjectName, pageSize, pageNumber);
-            //projectListAdapter.setDataList(list);
-            onLoadmore();
-        }
-
-        public void onNothingSelected(AdapterView<?> arg0) {
-
-        }
-
-    }
 }
