@@ -2,6 +2,7 @@ package ffm.geok.com.ui.fragment.home;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -18,7 +19,11 @@ import butterknife.ButterKnife;
 import ffm.geok.com.R;
 import ffm.geok.com.adapter.HomeTabFragmentAdapter;
 import ffm.geok.com.base.BaseMainFragment;
+import ffm.geok.com.ui.activity.LoginActivity;
 import ffm.geok.com.ui.view.CustomViewPager;
+import ffm.geok.com.uitls.ConstantUtils;
+import ffm.geok.com.uitls.NavigationUtils;
+import ffm.geok.com.uitls.SPManager;
 
 
 public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuItemClickListener {
@@ -87,12 +92,12 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // TODO Auto-generated method stub
-                            /*Bundle bundle = new Bundle();
+                            Bundle bundle = new Bundle();
                             bundle.putInt(ConstantUtils.global.IS_AutoLogin, ConstantUtils.global.autoLoginValue);
                             NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
                             SharedPreferences.Editor editor = SPManager.getSharedPreferences().edit();
                             editor.clear().commit();
-                            finish();*/
+                            NavigationUtils.getInstance().jumpTo(LoginActivity.class,bundle,false);
                         }
                     }).
                     setNegativeButton("取消", new DialogInterface.OnClickListener() {

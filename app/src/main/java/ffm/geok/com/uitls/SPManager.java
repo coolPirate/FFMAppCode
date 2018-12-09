@@ -19,6 +19,21 @@ public class SPManager {
         getSharedPreferences().edit().putString(ConstantUtils.RequestTag.ADCD, ADCD).commit();
     }
 
+    public static String getUserName(){
+        return getSharedPreferences().getString(ConstantUtils.global.LOGIN_NAME, "");
+    }
+
+    public static void setUserName(String userName) {
+        getSharedPreferences().edit().putString(ConstantUtils.global.LOGIN_NAME, userName).commit();
+    }
+
+    public static String getPassword(){
+        return getSharedPreferences().getString(ConstantUtils.global.LOGIN_PASSWORD, "");
+    }
+
+    public static void setPassword(String password) {
+        getSharedPreferences().edit().putString(ConstantUtils.global.LOGIN_PASSWORD, password).commit();
+    }
     /*public static boolean isLoadSPData() {
         return getSharedPreferences().getBoolean(ConstantUtils.global.isLoadSPData, false);
     }

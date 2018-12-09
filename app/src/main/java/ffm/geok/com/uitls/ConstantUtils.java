@@ -4,6 +4,8 @@ public interface ConstantUtils {
     interface global{
         String LOGIN_NAME = "username";                                                             //登录名
         String LOGIN_PASSWORD = "password";                                                         //登录密码
+        String LOGIN_TURE="__login";
+        String LOGIN_JAX="__ajax";
         String LoginModel = "loginModel";                                                           //登录信息
         String RefreshDataStatus = "RefreshDataStatus";                                             //刷新数据状态
         String IS_SYNCHRO_NO = "0";                                                                 //未同步数据标识
@@ -15,6 +17,8 @@ public interface ConstantUtils {
         int Notification_ID=11;
         String ProjectVertify = "ProjectVertify";                                                   //核查
         String MultiType_JPG = ".jpg";                                                              //jpg多媒体类型
+        String IS_AutoLogin="autoLogin";
+        int autoLoginValue=40;
     }
 
     interface mapLocation {

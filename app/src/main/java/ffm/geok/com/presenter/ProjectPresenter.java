@@ -27,6 +27,7 @@ import ffm.geok.com.uitls.Convert;
 import ffm.geok.com.uitls.DBUtils;
 import ffm.geok.com.uitls.DateUtils;
 import ffm.geok.com.uitls.L;
+import ffm.geok.com.uitls.SPManager;
 import ffm.geok.com.uitls.ServerUrl;
 
 /**
@@ -77,6 +78,7 @@ public class ProjectPresenter implements IProjectPresenter {
                 .tag(this)
                 .params(ConstantUtils.RequestTag.ST, startTime)
                 .params(ConstantUtils.RequestTag.ET, endTime)
+                .params(ConstantUtils.RequestTag.ADCD, SPManager.getADCD())
                 .execute(new DialogCallback(mActivity) {
 
                     @Override

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,7 +71,6 @@ public class projectVertifyActivity extends AppCompatActivity {
 
 
     private BaseInfoImageAdapter imageAdapter = null;
-    private LayoutInflater mLayoutInflater;
     private RxPermissions mRxPermissions;
     private Context mContext = projectVertifyActivity.this;
     private String imageFilesName = "";//保存拍照图片名字
@@ -100,9 +100,11 @@ public class projectVertifyActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        //默认是火点
+        fireCheckEntity.setIsfire("是");
         List<FireCheckEntity> fireCheckEntityList= DBUtils.getInstance().queryAllBySingleWhereConditions(FireCheckEntity.class,FireCheckEntityDao.Properties.Fireid.eq(entityId));
         if(fireCheckEntityList.size()>0){
-            FireCheckEntity fireCheckEntityOld=fireCheckEntityList.get(0);
+            /*FireCheckEntity fireCheckEntityOld=fireCheckEntityList.get(0);
             if(fireCheckEntityOld.getIsfire()=="是"){
                 switchButton.setChecked(false);
             }else {
@@ -113,25 +115,24 @@ public class projectVertifyActivity extends AppCompatActivity {
             }
             if(null!=fireCheckEntityOld.getRemark()){
                 edtMultext.setText(fireCheckEntityOld.getRemark());
-            }
+            }*/
         }
 
         List<FireMediaEntity> fireMediaEntityList=DBUtils.getInstance().queryAllBySingleWhereConditions(FireMediaEntity.class,FireMediaEntityDao.Properties.Fireid.eq(entityId));
         if(fireMediaEntityList.size()>0){
-            File itemFile = null;
+            /*File itemFile = null;
             List<File> mediaFiles = new ArrayList<File>();
             for (FireMediaEntity entity:fireMediaEntityList) {
                 itemFile = new File(entity.getFpath());
                 if (itemFile.exists()) {
                     mediaFiles.add(itemFile);
                 }
-            }
+            }*/
 
         }
     }
 
     private void initView() {
-        mLayoutInflater = LayoutInflater.from(mContext);
 
         imageAdapter = new BaseInfoImageAdapter(mContext);
         imgsRecyclerview.setAdapter(imageAdapter);
@@ -152,7 +153,7 @@ public class projectVertifyActivity extends AppCompatActivity {
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if(!isChecked){
                     fireCheckEntity.setIsfire("否");
                     switchButton.setSwitchTextAppearance(mContext,R.style.s_true);
                 }else {
@@ -214,6 +215,7 @@ public class projectVertifyActivity extends AppCompatActivity {
             public void onSynchronizationSuccess() {
                 DialogUtils.closeProgressDialogObject(mProgressDialog);
                 ToastUtils.showShortMsg(mContext, "数据同步成功");
+                finish();
             }
 
             @Override
@@ -233,8 +235,9 @@ public class projectVertifyActivity extends AppCompatActivity {
                 //上传服务器
                 mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
                 dataSynchronizationPresenter.dataSynchronization();
+                ToastUtils.showShortMsg(projectVertifyActivity.this,"上报完成");
                 L.i("Upload", "上报完成");
-                finish();
+
             }
         });
 
@@ -384,4 +387,5 @@ public class projectVertifyActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }

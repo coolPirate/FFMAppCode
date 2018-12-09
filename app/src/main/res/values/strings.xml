@@ -64,6 +64,7 @@
     <string name="title_activity_show_images">ShowImagesActivity</string>
 
     <string name="camera_Permissions_tip">启用开启拍照权限</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 
 </resources>

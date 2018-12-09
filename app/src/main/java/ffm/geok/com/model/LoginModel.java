@@ -8,6 +8,10 @@ public class LoginModel {
 
     private String adcd;
 
+    public LoginModel(String adcd) {
+        adcd=adcd;
+    }
+
     public String getAdcd() {
         return adcd;
     }
@@ -15,4 +19,6 @@ public class LoginModel {
     public void setAdcd(String adcd) {
         this.adcd = adcd;
     }
+
+
 }

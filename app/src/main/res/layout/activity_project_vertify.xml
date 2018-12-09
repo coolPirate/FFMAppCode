@@ -23,6 +23,7 @@
             android:paddingLeft="60dp"
             android:switchMinWidth="10dp"
             android:checked="true"
+            android:showText="true"
             android:textOn="是"
             android:textOff="否"
             android:layout_width="wrap_content"
@@ -88,7 +89,5 @@
             android:textAlignment="center"/>
 
     </LinearLayout>
-
-
 
 </LinearLayout>

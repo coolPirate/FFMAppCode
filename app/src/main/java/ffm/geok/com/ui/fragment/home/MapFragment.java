@@ -33,6 +33,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.CoordinateConverter;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.Projection;
@@ -50,6 +51,7 @@ import com.amap.api.maps.model.TileProvider;
 import com.amap.api.maps.model.UrlTileProvider;
 import com.amap.api.maps.model.animation.Animation;
 import com.amap.api.maps.model.animation.RotateAnimation;
+import com.autonavi.amap.mapcore.DPoint;
 import com.orhanobut.logger.Logger;
 
 import org.mozilla.javascript.regexp.SubString;
@@ -78,6 +80,7 @@ import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.Convert;
 import ffm.geok.com.uitls.DBUtils;
 import ffm.geok.com.uitls.L;
+import ffm.geok.com.uitls.MapConverter;
 import ffm.geok.com.uitls.NavigationUtils;
 import ffm.geok.com.uitls.RxBus;
 import ffm.geok.com.uitls.StringUtils;
@@ -181,12 +184,17 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
             Double lttd = fireDateEntity.getLat();
             if (lgtd == null && lttd == null) continue;
             LatLng latLng = new LatLng(lttd, lgtd);
+            L.i("LATLNG",latLng.latitude+"......"+latLng.longitude);
+
+
+            LatLng desLatLng = MapConverter.transformFromWGSToGCJ(latLng);
+            L.i("LATLNG111",desLatLng.latitude+"......"+desLatLng.longitude);
             TextView textView = new TextView(getActivity().getApplicationContext());
             textView.setBackgroundResource(R.mipmap.marker4);     //通过View获取BitmapDescriptor对象
             BitmapDescriptor markerIcon = BitmapDescriptorFactory
                     .fromView(textView);
             Marker marker = aMap.addMarker(new MarkerOptions()
-                    .position(latLng)
+                    .position(desLatLng)
                     .title(fireDateEntity.getId())
                     .snippet(fireDateEntity.getCreateTime())
                     .icon(markerIcon)
@@ -378,6 +386,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
                     initInputIaCEwellsTemplate(fireDateEntity);
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList(ConstantUtils.global.ProjectDetial, sourceData);
+                    bundle.putString(ConstantUtils.global.ProjectEntityId, fireDateEntity.getId());
                     NavigationUtils.getInstance().jumpTo(ProjectDetialActivity.class, bundle, false);
                 }
 
