@@ -19,6 +19,7 @@ public interface ConstantUtils {
         String MultiType_JPG = ".jpg";                                                              //jpg多媒体类型
         String IS_AutoLogin="autoLogin";
         int autoLoginValue=40;
+        String DataUpdate="dataUpdate";                                                             //数据更新
     }
 
     interface mapLocation {

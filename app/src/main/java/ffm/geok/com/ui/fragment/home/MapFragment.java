@@ -67,6 +67,7 @@ import ffm.geok.com.R;
 import ffm.geok.com.base.BaseMainFragment;
 import ffm.geok.com.global.XApplication;
 import ffm.geok.com.javagen.FireDateEntityDao;
+import ffm.geok.com.model.FireCheckEntity;
 import ffm.geok.com.model.FireDateEntity;
 import ffm.geok.com.model.InputInfoModel;
 import ffm.geok.com.model.InputInfoModelPattern;
@@ -110,7 +111,8 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
     private TileOverlay tileOverlay;
 
     private Dialog inputDialog = null;
-    Observable<Message> observableMarker;//数据更新
+    Observable<Message> observableMarker;//地图中心
+    Observable<Message> observableMarker2;//地图中心
     private ArrayList<InputInfoModel> sourceData = new ArrayList<InputInfoModel>(); //录入模板
 
 
@@ -169,6 +171,8 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         aMap.setMyLocationEnabled(true);
         settings.setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_CENTER);
 
+        observableMarker2 = RxBus.get().register(ConstantUtils.global.DataUpdate, Message.class);
+
     }
 
     private void initMaker() {
@@ -176,7 +180,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         //List<FireDateEntity> fireDateEntityList = DBUtils.getInstance().queryAllBySingleWhereConditions(FireDateEntity.class, FireDateEntityDao.Properties.See.eq("1"));
         List<FireDateEntity> fireDateEntityList=DBUtils.getInstance().queryAll(FireDateEntity.class);
         int cnt=fireDateEntityList.size();
-        L.i("Marker数", Integer.toString(cnt));
+        L.i("Marker数", String.valueOf(cnt));
         for (int i = 0; i < fireDateEntityList.size(); i++) {
             FireDateEntity fireDateEntity = fireDateEntityList.get(i);
             Double lgtd = fireDateEntity.getLon();
@@ -360,6 +364,14 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
             }
         });
 
+        observableMarker2.subscribe(new Action1<Message>() {
+            @Override
+            public void call(Message message) {
+                clearMarkers();
+                initMaker();
+            }
+        });
+
     }
 
     private void clearMarkers() {
@@ -487,6 +499,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         super.onDestroyView();
         //unbinder.unbind();
         RxBus.get().unregister("DataSelected",observableMarker);
+        RxBus.get().unregister("DataSelected",observableMarker2);
     }
 
     @Override
@@ -509,7 +522,6 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
     public void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
-        L.i("LATLON","lat:");
 
         observableMarker = RxBus.get().register("DataSelected", Message.class);
         observableMarker.subscribe(new Action1<Message>() {

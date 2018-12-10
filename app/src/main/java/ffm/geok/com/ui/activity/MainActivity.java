@@ -34,6 +34,7 @@ import ffm.geok.com.base.MySupportActivity;
 import ffm.geok.com.base.MySupportFragment;
 import ffm.geok.com.javagen.BaseDao;
 import ffm.geok.com.model.FireDateEntity;
+import ffm.geok.com.model.Message;
 import ffm.geok.com.presenter.IProjectPresenter;
 import ffm.geok.com.presenter.ProjectPresenter;
 import ffm.geok.com.ui.fragment.account.LoginFragment;
@@ -45,6 +46,7 @@ import ffm.geok.com.uitls.DBUtils;
 import ffm.geok.com.uitls.DateUtils;
 import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.NavigationUtils;
+import ffm.geok.com.uitls.RxBus;
 import ffm.geok.com.uitls.SPManager;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragment;
@@ -107,7 +109,7 @@ public class MainActivity extends MySupportActivity
     private void updateData(){
         //获取当前及15分钟的数据
         String curDateStr=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
-        String st=DateUtils.getDateMinStr(curDateStr,15);
+        String st=DateUtils.getDateMinStr(curDateStr,5);
 
         firesPresenter.getFiresList(st,curDateStr);
 
@@ -143,7 +145,7 @@ public class MainActivity extends MySupportActivity
         });*/
 
         mHandler=new Handler();
-        //间隔时间 15分钟
+        //间隔时间 5分钟
         timeInterval=5*60*1000;
         mRunnable=new Runnable(){
 
@@ -154,6 +156,7 @@ public class MainActivity extends MySupportActivity
                 //showNotification();
                 //定时启动线程(执行的线程,时间毫秒)
                 mHandler.postDelayed(this,timeInterval);
+                isfirst++;
             }
         };
     }
@@ -164,8 +167,9 @@ public class MainActivity extends MySupportActivity
             @Override
             public void onFiresListSuccess(List<FireDateEntity> fireDateEntityList) {
                 L.i("DBUTIL",String.valueOf(fireDateEntityList.size()));
-                if(fireDateEntityList.size()>0&&isfirst!=0)
+                if(fireDateEntityList.size()>0&&isfirst>1)
                 {
+                    L.i("DBUTIL111",String.valueOf(fireDateEntityList.size()+"isfirst:"+isfirst));
                     showNotification();
                 }
                 //插入操作耗时
@@ -180,6 +184,7 @@ public class MainActivity extends MySupportActivity
                         }
                     }
                 });
+                RxBus.get().post(ConstantUtils.global.DataUpdate,new Message(1000, ""));
             }
 
             @Override

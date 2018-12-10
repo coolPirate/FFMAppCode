@@ -106,6 +106,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         initView();
         initData();
         initListener();
+        onRefresh();
 
         //unbinder = ButterKnife.bind(this, view);
         //ButterKnife.bind(this,view);
