@@ -131,9 +131,14 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         View view = inflater.inflate(R.layout.fragment_map, container, false);
         ButterKnife.bind(this,view);
 
+        observableMarker = RxBus.get().register("DataSelected", Message.class);
+        observableMarker2 = RxBus.get().register(ConstantUtils.global.DataUpdate, Message.class);
+
         initView(view, savedInstanceState);
         initListener(view);
         initMaker();
+
+
 
         //unbinder = ButterKnife.bind(this, view);
         //ButterKnife.bind(this,view);
@@ -171,7 +176,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         aMap.setMyLocationEnabled(true);
         settings.setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_CENTER);
 
-        observableMarker2 = RxBus.get().register(ConstantUtils.global.DataUpdate, Message.class);
+
 
     }
 
@@ -523,7 +528,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         super.onResume();
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
 
-        observableMarker = RxBus.get().register("DataSelected", Message.class);
+
         observableMarker.subscribe(new Action1<Message>() {
             @Override
             public void call(Message message) {

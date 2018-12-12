@@ -1,5 +1,6 @@
 package ffm.geok.com.ui.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.NavigationUtils;
 import ffm.geok.com.uitls.SPManager;
 import ffm.geok.com.uitls.ToastUtils;
+import ffm.geok.com.uitls.ToolUtils;
 import ffm.geok.com.widget.editview.CancelEditText;
 
 public class LoginActivity extends AppCompatActivity {
@@ -114,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             case R.id.btn_login:
                 //NavigationUtils.getInstance().jumpTo(MainActivity.class,null,true);
+                ToolUtils.hideSoftInput((Activity) mContext);
                 loginname = loginName.getText().toString();
                 if (TextUtils.isEmpty(loginname)) {
                     ToastUtils.showShortMsg(mContext, "请输入用户名");

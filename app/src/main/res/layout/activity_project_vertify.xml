@@ -15,21 +15,23 @@
             style="@style/input_type_left"
             android:textSize="@dimen/sp_16"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:text="是否火点" />
 
         <Switch
             android:id="@+id/switch_button"
-            android:layout_gravity="center"
-            android:paddingLeft="60dp"
             android:switchMinWidth="10dp"
+            android:gravity="center"
+            android:layout_marginRight="120dp"
             android:checked="true"
             android:showText="true"
             android:textOn="是"
             android:textOff="否"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="100"
             android:thumb="@drawable/thumb"
-            android:track="@drawable/track" />
+            android:track="@drawable/track"
+            android:layout_width="wrap_content" />
 
     </LinearLayout>
 
@@ -58,15 +60,19 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp_20"
             android:text="核查信息："
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
             android:textSize="@dimen/sp_16"/>
 
         <EditText
             android:id="@+id/edt_multext"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_90"
-            android:padding="@dimen/dp_5"
             android:minLines="5"
             android:gravity="top"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_5"
             android:background="@drawable/order_edt_note_bg"
             android:textColor="@color/color_black"
             android:textSize="@dimen/sp_14"/>
@@ -79,13 +85,10 @@
             android:id="@+id/btn_upload"
             android:gravity="bottom"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_margin="10dp"
-            android:layout_weight="9"
+            android:layout_height="wrap_content"
             android:background="#D9D9D9"
             android:text="上报"
-            android:textSize="@dimen/dp_20"
+            android:textSize="@dimen/dp_25"
             android:textAlignment="center"/>
 
     </LinearLayout>
