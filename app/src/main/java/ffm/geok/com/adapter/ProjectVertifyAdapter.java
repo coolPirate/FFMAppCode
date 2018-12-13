@@ -21,6 +21,7 @@ import ffm.geok.com.model.ShowImage;
 import ffm.geok.com.ui.activity.ShowImagesActivity;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.ImageUtils;
+import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.NavigationUtils;
 
 import static ffm.geok.com.model.InputInfoModelType.Date;

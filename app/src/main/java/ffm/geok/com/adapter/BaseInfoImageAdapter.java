@@ -14,6 +14,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import java.io.File;
 
 import ffm.geok.com.R;
+import ffm.geok.com.ui.activity.ShowImagesActivity;
+import ffm.geok.com.uitls.L;
 
 public class BaseInfoImageAdapter extends BaseRecyclerViewAdapter<File> {
     private LayoutInflater mLayoutInflater;
@@ -50,8 +52,8 @@ public class BaseInfoImageAdapter extends BaseRecyclerViewAdapter<File> {
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final ViewHolder viewHolder = (ViewHolder) holder;
         final int mPosition = viewHolder.getAdapterPosition();
-        if (mPosition == getItemCount() - 1) {//数据的最后一条（显示的添加图片的那个按钮）
-            viewHolder.ivPic.setImageDrawable(mContext.getResources().getDrawable(R.drawable.selector_image_add));
+        if (mPosition == getItemCount()-1 ) {//数据的最后一条（显示的添加图片的那个按钮）
+                viewHolder.ivPic.setImageDrawable(mContext.getResources().getDrawable(R.drawable.selector_image_add));
             if (mOnPicClickListener != null) {
                 setItemListener(viewHolder, mPosition);
             }

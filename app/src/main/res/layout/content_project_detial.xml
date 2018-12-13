@@ -22,12 +22,12 @@
             android:gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_margin="10dp"
-            android:background="#D9D9D9"
+            android:layout_margin="@dimen/dp_40"
+            android:background="@drawable/textview_round_border"
             android:text="核查"
             android:layout_gravity="center"
             android:textSize="@dimen/dp_25"
+            android:textColor="@color/color_white"
             android:textAlignment="center"/>
     </LinearLayout>
 

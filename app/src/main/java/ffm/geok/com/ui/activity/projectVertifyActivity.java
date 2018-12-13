@@ -6,13 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -68,7 +69,8 @@ public class projectVertifyActivity extends AppCompatActivity {
     EditText confirmor;
     @BindView(R.id.switch_button)
     Switch switchButton;
-
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     private BaseInfoImageAdapter imageAdapter = null;
     private RxPermissions mRxPermissions;
@@ -88,6 +90,7 @@ public class projectVertifyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_project_vertify);
         ButterKnife.bind(this);
 
@@ -102,8 +105,8 @@ public class projectVertifyActivity extends AppCompatActivity {
     private void initData() {
         //默认是火点
         fireCheckEntity.setIsfire("是");
-        List<FireCheckEntity> fireCheckEntityList= DBUtils.getInstance().queryAllBySingleWhereConditions(FireCheckEntity.class,FireCheckEntityDao.Properties.Fireid.eq(entityId));
-        if(fireCheckEntityList.size()>0){
+        List<FireCheckEntity> fireCheckEntityList = DBUtils.getInstance().queryAllBySingleWhereConditions(FireCheckEntity.class, FireCheckEntityDao.Properties.Fireid.eq(entityId));
+        if (fireCheckEntityList.size() > 0) {
             /*FireCheckEntity fireCheckEntityOld=fireCheckEntityList.get(0);
             if(fireCheckEntityOld.getIsfire()=="是"){
                 switchButton.setChecked(false);
@@ -118,8 +121,8 @@ public class projectVertifyActivity extends AppCompatActivity {
             }*/
         }
 
-        List<FireMediaEntity> fireMediaEntityList=DBUtils.getInstance().queryAllBySingleWhereConditions(FireMediaEntity.class,FireMediaEntityDao.Properties.Fireid.eq(entityId));
-        if(fireMediaEntityList.size()>0){
+        List<FireMediaEntity> fireMediaEntityList = DBUtils.getInstance().queryAllBySingleWhereConditions(FireMediaEntity.class, FireMediaEntityDao.Properties.Fireid.eq(entityId));
+        if (fireMediaEntityList.size() > 0) {
             /*File itemFile = null;
             List<File> mediaFiles = new ArrayList<File>();
             for (FireMediaEntity entity:fireMediaEntityList) {
@@ -133,6 +136,14 @@ public class projectVertifyActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        toolbar.setTitle("火点信息核查");
+        //布局渲染完了之后，才能setSupportActionBar
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         imageAdapter = new BaseInfoImageAdapter(mContext);
         imgsRecyclerview.setAdapter(imageAdapter);
@@ -153,12 +164,12 @@ public class projectVertifyActivity extends AppCompatActivity {
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isChecked){
+                if (!isChecked) {
                     fireCheckEntity.setIsfire("否");
-                    switchButton.setSwitchTextAppearance(mContext,R.style.s_true);
-                }else {
+                    switchButton.setSwitchTextAppearance(mContext, R.style.s_true);
+                } else {
                     fireCheckEntity.setIsfire("是");
-                    switchButton.setSwitchTextAppearance(mContext,R.style.s_false);
+                    switchButton.setSwitchTextAppearance(mContext, R.style.s_false);
                 }
             }
         });
@@ -235,7 +246,7 @@ public class projectVertifyActivity extends AppCompatActivity {
                 //上传服务器
                 mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
                 dataSynchronizationPresenter.dataSynchronization();
-                ToastUtils.showShortMsg(projectVertifyActivity.this,"上报完成");
+                ToastUtils.showShortMsg(projectVertifyActivity.this, "上报完成");
                 L.i("Upload", "上报完成");
 
             }

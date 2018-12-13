@@ -116,7 +116,6 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             case R.id.btn_login:
                 //NavigationUtils.getInstance().jumpTo(MainActivity.class,null,true);
-                ToolUtils.hideSoftInput((Activity) mContext);
                 loginname = loginName.getText().toString();
                 if (TextUtils.isEmpty(loginname)) {
                     ToastUtils.showShortMsg(mContext, "请输入用户名");
@@ -128,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 loginPresenter.login(loginname, password);
+                ToolUtils.hideSoftInput((Activity) mContext);
                 break;
         }
     }
