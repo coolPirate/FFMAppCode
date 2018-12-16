@@ -21,7 +21,7 @@
     <application
         android:name=".global.XApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_lancher3"
+        android:icon="@mipmap/ic_lancher6"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_lancher"
         android:supportsRtl="true"
