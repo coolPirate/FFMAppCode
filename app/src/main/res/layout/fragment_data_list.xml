@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:background="@color/color_white"
             android:orientation="vertical">
 
             <!--<Spinner

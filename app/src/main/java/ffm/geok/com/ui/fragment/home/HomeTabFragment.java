@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -14,12 +14,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.next.easynavigation.view.EasyNavigationBar;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ffm.geok.com.R;
-import ffm.geok.com.adapter.HomeTabFragmentAdapter;
 import ffm.geok.com.base.BaseMainFragment;
 import ffm.geok.com.ui.activity.LoginActivity;
+import ffm.geok.com.ui.fragment.data.DataListFragment;
 import ffm.geok.com.ui.view.CustomViewPager;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.NavigationUtils;
@@ -31,10 +36,20 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.tab_layout)
-    TabLayout tabLayout;
+    /*@BindView(R.id.tab_layout)
+    TabLayout tabLayout;*/
     @BindView(R.id.cViewPager)
     CustomViewPager cViewPager;
+    @BindView(R.id.tab_navigationBar)
+    EasyNavigationBar tabNavigationBar;
+
+    private String[] tabText = {"地图", "", "数据"};
+    private List<Fragment> fragments = new ArrayList<>();
+    //未选中icon
+    private int[] normalIcon = {0, R.mipmap.icon_add, 0};
+    //选中时icon
+    private int[] selectIcon = {0, R.mipmap.icon_add, 0};
+
 
     public static HomeTabFragment newInstance() {
         return new HomeTabFragment();
@@ -58,9 +73,23 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
         mToolbar.inflateMenu(R.menu.main);
         mToolbar.setOnMenuItemClickListener(this);
 
+        fragments.add(MapFragment.newInstance());
+        fragments.add(DataListFragment.newInstance());
+
+        tabNavigationBar = view.findViewById(R.id.tab_navigationBar);
+        tabNavigationBar.titleItems(tabText)
+                .normalIconItems(normalIcon)
+                .selectIconItems(selectIcon)
+                .fragmentList(fragments)
+                .mode(EasyNavigationBar.MODE_ADD)
+                .fragmentManager(getChildFragmentManager())
+                .build();
 
 
-        TabLayout mTabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
+
+
+
+        /*TabLayout mTabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         CustomViewPager cViewPager=(CustomViewPager)view.findViewById(R.id.cViewPager);
         cViewPager.setScanScroll(false);
 
@@ -68,13 +97,14 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
         mTabLayout.addTab(mTabLayout.newTab());
 
         cViewPager.setAdapter(new HomeTabFragmentAdapter(getChildFragmentManager(), getString(R.string.title_map), getString(R.string.title_details)));
-        mTabLayout.setupWithViewPager(cViewPager);
+        mTabLayout.setupWithViewPager(cViewPager);*/
 
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        //null.unbind();
 
     }
 
@@ -97,7 +127,7 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                             NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
                             SharedPreferences.Editor editor = SPManager.getSharedPreferences().edit();
                             editor.clear().commit();
-                            NavigationUtils.getInstance().jumpTo(LoginActivity.class,bundle,false);
+                            NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
                         }
                     }).
                     setNegativeButton("取消", new DialogInterface.OnClickListener() {
