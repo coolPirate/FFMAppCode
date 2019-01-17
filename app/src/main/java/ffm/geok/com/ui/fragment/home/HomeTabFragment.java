@@ -23,12 +23,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ffm.geok.com.R;
 import ffm.geok.com.base.BaseMainFragment;
+import ffm.geok.com.ui.activity.FireAddActivity;
 import ffm.geok.com.ui.activity.LoginActivity;
 import ffm.geok.com.ui.fragment.data.DataListFragment;
 import ffm.geok.com.ui.view.CustomViewPager;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.NavigationUtils;
 import ffm.geok.com.uitls.SPManager;
+
+import static com.next.easynavigation.view.EasyNavigationBar.*;
 
 
 public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuItemClickListener {
@@ -43,12 +46,12 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
     @BindView(R.id.tab_navigationBar)
     EasyNavigationBar tabNavigationBar;
 
-    private String[] tabText = {"地图", "", "数据"};
+    private String[] tabText = {"地图", "上报", "数据"};
     private List<Fragment> fragments = new ArrayList<>();
     //未选中icon
-    private int[] normalIcon = {0, R.mipmap.icon_add, 0};
+    private int[] normalIcon = {R.mipmap.icon_map, R.mipmap.icon_add, R.mipmap.icon_data};
     //选中时icon
-    private int[] selectIcon = {0, R.mipmap.icon_add, 0};
+    private int[] selectIcon = {R.mipmap.icon_map, R.mipmap.icon_add, R.mipmap.icon_data};
 
 
     public static HomeTabFragment newInstance() {
@@ -81,9 +84,21 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                 .normalIconItems(normalIcon)
                 .selectIconItems(selectIcon)
                 .fragmentList(fragments)
-                .mode(EasyNavigationBar.MODE_ADD)
+                .mode(MODE_ADD)
                 .fragmentManager(getChildFragmentManager())
+                .onTabClickListener(new EasyNavigationBar.OnTabClickListener() {
+                    @Override
+                    public boolean onTabClickEvent(View view, int position) {
+                        if (position == 1) {
+                        //return true则拦截事件、不进行页面切换
+                            NavigationUtils.getInstance().jumpTo(FireAddActivity.class,null,false);
+                            return true;
+                        }
+                    return false;
+                    }
+                })
                 .build();
+
 
 
 

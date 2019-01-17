@@ -30,12 +30,19 @@ public class FireDateEntity {
     private String updateTime;
     @Property(nameInDb="SATELLITE")
     private String satellite;
+    @Property(nameInDb="USERNAME")
+    private String username;
+    @Property(nameInDb="DEM")
+    private String dem;
     @Property(nameInDb="SEE")
     private String see;
-    @Generated(hash = 507999251)
+    @Property(nameInDb="ADCD")
+    private String adcd;
+    @Generated(hash = 1180671757)
     public FireDateEntity(String id, String type, Double lat, Double lon,
             String province, String city, String county, String createTime,
-            String findTime, String updateTime, String satellite, String see) {
+            String findTime, String updateTime, String satellite, String username,
+            String dem, String see, String adcd) {
         this.id = id;
         this.type = type;
         this.lat = lat;
@@ -47,7 +54,10 @@ public class FireDateEntity {
         this.findTime = findTime;
         this.updateTime = updateTime;
         this.satellite = satellite;
+        this.username = username;
+        this.dem = dem;
         this.see = see;
+        this.adcd = adcd;
     }
     @Generated(hash = 750021700)
     public FireDateEntity() {
@@ -118,11 +128,28 @@ public class FireDateEntity {
     public void setSatellite(String satellite) {
         this.satellite = satellite;
     }
+    public String getUsername() {
+        return this.username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getDem() {
+        return this.dem;
+    }
+    public void setDem(String dem) {
+        this.dem = dem;
+    }
     public String getSee() {
         return this.see;
     }
     public void setSee(String see) {
         this.see = see;
     }
-    
+    public String getAdcd() {
+        return this.adcd;
+    }
+    public void setAdcd(String adcd) {
+        this.adcd = adcd;
+    }
 }

@@ -35,7 +35,10 @@ public class FireDateEntityDao extends AbstractDao<FireDateEntity, String> {
         public final static Property FindTime = new Property(8, String.class, "findTime", false, "FINDTIME");
         public final static Property UpdateTime = new Property(9, String.class, "updateTime", false, "UPDATETIME");
         public final static Property Satellite = new Property(10, String.class, "satellite", false, "SATELLITE");
-        public final static Property See = new Property(11, String.class, "see", false, "SEE");
+        public final static Property Username = new Property(11, String.class, "username", false, "USERNAME");
+        public final static Property Dem = new Property(12, String.class, "dem", false, "DEM");
+        public final static Property See = new Property(13, String.class, "see", false, "SEE");
+        public final static Property Adcd = new Property(14, String.class, "adcd", false, "ADCD");
     }
 
 
@@ -62,7 +65,10 @@ public class FireDateEntityDao extends AbstractDao<FireDateEntity, String> {
                 "\"FINDTIME\" TEXT," + // 8: findTime
                 "\"UPDATETIME\" TEXT," + // 9: updateTime
                 "\"SATELLITE\" TEXT," + // 10: satellite
-                "\"SEE\" TEXT);"); // 11: see
+                "\"USERNAME\" TEXT," + // 11: username
+                "\"DEM\" TEXT," + // 12: dem
+                "\"SEE\" TEXT," + // 13: see
+                "\"ADCD\" TEXT);"); // 14: adcd
     }
 
     /** Drops the underlying database table. */
@@ -130,9 +136,24 @@ public class FireDateEntityDao extends AbstractDao<FireDateEntity, String> {
             stmt.bindString(11, satellite);
         }
  
+        String username = entity.getUsername();
+        if (username != null) {
+            stmt.bindString(12, username);
+        }
+ 
+        String dem = entity.getDem();
+        if (dem != null) {
+            stmt.bindString(13, dem);
+        }
+ 
         String see = entity.getSee();
         if (see != null) {
-            stmt.bindString(12, see);
+            stmt.bindString(14, see);
+        }
+ 
+        String adcd = entity.getAdcd();
+        if (adcd != null) {
+            stmt.bindString(15, adcd);
         }
     }
 
@@ -195,9 +216,24 @@ public class FireDateEntityDao extends AbstractDao<FireDateEntity, String> {
             stmt.bindString(11, satellite);
         }
  
+        String username = entity.getUsername();
+        if (username != null) {
+            stmt.bindString(12, username);
+        }
+ 
+        String dem = entity.getDem();
+        if (dem != null) {
+            stmt.bindString(13, dem);
+        }
+ 
         String see = entity.getSee();
         if (see != null) {
-            stmt.bindString(12, see);
+            stmt.bindString(14, see);
+        }
+ 
+        String adcd = entity.getAdcd();
+        if (adcd != null) {
+            stmt.bindString(15, adcd);
         }
     }
 
@@ -220,7 +256,10 @@ public class FireDateEntityDao extends AbstractDao<FireDateEntity, String> {
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // findTime
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // updateTime
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // satellite
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // see
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // username
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // dem
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // see
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14) // adcd
         );
         return entity;
     }
@@ -238,7 +277,10 @@ public class FireDateEntityDao extends AbstractDao<FireDateEntity, String> {
         entity.setFindTime(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setUpdateTime(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setSatellite(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setSee(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setUsername(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setDem(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setSee(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setAdcd(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
      }
     
     @Override
