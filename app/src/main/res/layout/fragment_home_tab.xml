@@ -52,7 +52,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="bottom"
-            app:Easy_tabSelectColor="@color/color_black"
+            app:Easy_tabSelectColor="@color/color_green"
             app:Easy_addLayoutRule="RULE_CENTER"
             android:background="?attr/colorPrimary">
 

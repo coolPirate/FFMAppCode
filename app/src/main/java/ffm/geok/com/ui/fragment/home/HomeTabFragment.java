@@ -49,7 +49,7 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
     private String[] tabText = {"地图", "上报", "数据"};
     private List<Fragment> fragments = new ArrayList<>();
     //未选中icon
-    private int[] normalIcon = {R.mipmap.icon_map, R.mipmap.icon_add, R.mipmap.icon_data};
+    private int[] normalIcon = {R.mipmap.icon_map2, R.mipmap.icon_add, R.mipmap.icon_data2};
     //选中时icon
     private int[] selectIcon = {R.mipmap.icon_map, R.mipmap.icon_add, R.mipmap.icon_data};
 

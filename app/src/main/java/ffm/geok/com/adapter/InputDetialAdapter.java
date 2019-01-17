@@ -3,6 +3,7 @@ package ffm.geok.com.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -47,6 +48,7 @@ public class InputDetialAdapter extends BaseRecyclerViewAdapter {
     private static final int INPUTINFO_TYPE_Multi_INPUT = 5;    //双输入框类型
     public static final int Multi_Media_IMAGES = 6;             //多媒体文件
     private static final int INPUTINFO_TYPE_BUTTON = 7;    //按钮类型
+    private static final int INPUTINFO_TYPE_RELOC=8;//重定位
 
 
     private LayoutInflater mLayoutInflater;
@@ -98,7 +100,8 @@ public class InputDetialAdapter extends BaseRecyclerViewAdapter {
                     itemViewType = INPUTINFO_TYPE_Multi_INPUT;
                     break;
                 case Button:
-                    itemViewType=INPUTINFO_TYPE_BUTTON;
+                    itemViewType=INPUTINFO_TYPE_RELOC;
+                    break;
             }
         }
         return itemViewType == -1 ? super.getItemViewType(position) : itemViewType;
@@ -141,6 +144,10 @@ public class InputDetialAdapter extends BaseRecyclerViewAdapter {
             case INPUTINFO_TYPE_BUTTON:
                 view = mLayoutInflater.inflate(R.layout.layout_inputinfo_type_button, parent, false);
                 holder = new ViewHolder_BUTTON(view);
+                break;
+            case INPUTINFO_TYPE_RELOC:
+                view=mLayoutInflater.inflate(R.layout.layout_inputinfo_type_reloc,parent,false);
+                holder=new ViewHolder_Reloc(view);
                 break;
         }
         return holder;
@@ -292,6 +299,14 @@ public class InputDetialAdapter extends BaseRecyclerViewAdapter {
                     onItemOperationListener.OnItemOperation(v, position, "add_FeesRecords");
                 });
                 break;
+            case INPUTINFO_TYPE_RELOC:
+                ((ViewHolder_Reloc) holder).tv_label.setText(infomodel.getLable());
+                ((ViewHolder_Reloc) holder).tv_longitude.setText(String.valueOf(infomodel.getLatLng().longitude));
+                ((ViewHolder_Reloc) holder).tv_latitude.setText(String.valueOf(infomodel.getLatLng().latitude));
+                ((ViewHolder_Reloc) holder).btn_reloc.setOnClickListener(v -> {
+                    onItemOperationListener.OnItemOperation(v, position, "map_relocation");
+                });
+                break;
         }
     }
 
@@ -382,6 +397,23 @@ public class InputDetialAdapter extends BaseRecyclerViewAdapter {
             super(itemView);
             LinearLayout linearLayout = (LinearLayout) ((CardView) itemView).getChildAt(0);
             btn_label=(Button)linearLayout.getChildAt(0);
+        }
+    }
+
+    class ViewHolder_Reloc extends RecyclerView.ViewHolder {
+        TextView tv_label;
+        TextView tv_longitude; //经度
+        TextView tv_latitude;  //纬度
+        AppCompatImageButton btn_reloc;//重定位按钮
+
+        ViewHolder_Reloc(View itemView) {
+            super(itemView);
+            LinearLayout linearLayout = (LinearLayout) ((CardView) itemView).getChildAt(0);
+            tv_label = (TextView) linearLayout.getChildAt(0);
+            LinearLayout layout = (LinearLayout) linearLayout.getChildAt(1);
+            tv_longitude = (TextView) layout.getChildAt(0);
+            tv_latitude = (TextView) layout.getChildAt(1);
+            btn_reloc=(AppCompatImageButton)linearLayout.getChildAt(2);
         }
     }
 }

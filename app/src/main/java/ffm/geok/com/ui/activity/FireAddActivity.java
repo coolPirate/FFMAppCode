@@ -477,8 +477,9 @@ public class FireAddActivity extends MySupportActivity implements InputDetialAda
                     break;
                 case Button:
                     currentInfomodel = sourceData.get(position);
-                    if("add_FeesRecords".equals(input)){
-
+                    if("map_relocation".equals(input)){
+                        Intent intent=new Intent(this,MapLocationActivity.class);
+                        startActivityForResult(intent, ConstantUtils.mapLocation.LOCATION_LATLANG);
                     }
                     break;
             }
