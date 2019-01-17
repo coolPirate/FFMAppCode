@@ -55,6 +55,7 @@ public interface ConstantUtils {
         String SATELLITE="卫星名称";
         String TYPE="类型";
         String UPDATETIME="更新时间";
+        String USERNAME="上报人";
         String DEM="高程";
         String MEDIA="多媒体";
         String ADCD="行政区划";

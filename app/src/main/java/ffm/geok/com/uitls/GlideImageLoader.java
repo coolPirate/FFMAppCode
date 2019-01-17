@@ -9,7 +9,7 @@ import com.lzy.imagepicker.loader.ImageLoader;
 
 import java.io.File;
 
-public class GlideImageLoader implements ImageLoader {
+public class GlideImageLoader implements ImageLoader{
     private static GlideImageLoader imageLoaderUtil;
     public static GlideImageLoader getInstance() {
         if (null == imageLoaderUtil) {

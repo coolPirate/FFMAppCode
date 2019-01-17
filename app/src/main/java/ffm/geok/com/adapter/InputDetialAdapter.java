@@ -261,13 +261,13 @@ public class InputDetialAdapter extends BaseRecyclerViewAdapter {
                         }
                     }
                     //末位增加新增按钮
-                    ImageView addImage = new ImageView(mContext);
+                    /*ImageView addImage = new ImageView(mContext);
                     addImage.setLayoutParams(layoutParams);
                     addImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.selector_image_add));
                     addImage.setOnClickListener(v -> {
                         onItemOperationListener.OnItemOperation(v, position, "add_multi_media");
                     });
-                    ((ViewHolder_Multi_Media) holder).layout.addView(addImage);
+                    ((ViewHolder_Multi_Media) holder).layout.addView(addImage);*/
                 }else {
                     //末位增加新增按钮
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ConstantUtils.global.ThumbnailSize, ConstantUtils.global.ThumbnailSize);
