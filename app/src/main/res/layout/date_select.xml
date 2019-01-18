@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/pop_layout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#ffffff"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/act_title_bg"
+            android:padding="15dip" >
+
+            <TextView
+                android:id="@+id/btn_selectdate_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="取消"
+                android:textColor="@color/color_white"
+                android:textSize="18dip" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="选择时间"
+                android:textColor="#FFFFFF"
+                android:textSize="20dip" />
+
+            <TextView
+                android:id="@+id/btn_selectdate_finish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="完成"
+                android:textColor="#FFFFFF"
+                android:textSize="18dip" />
+        </RelativeLayout>
+
+        <ffm.geok.com.widget.dialog.DatePicker
+            android:id="@+id/datepicker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center" >
+        </ffm.geok.com.widget.dialog.DatePicker>
+    </LinearLayout>
+
+</RelativeLayout>

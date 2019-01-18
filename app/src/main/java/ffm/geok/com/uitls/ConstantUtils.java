@@ -27,6 +27,7 @@ public interface ConstantUtils {
         String LOCALCITY = "LOCALCITY";                                                             //当前定位城市
         String LATITUDE = "LATITUDE";                                                               //当前定位纬度
         String LONTITUDE = "LONTITUDE";                                                             //当前定位经度
+        String POINTADDRESS = "PointAddress";
         String TRADEADDRESS = "tradeAddress";
         int LOCATION_LATLANG=20;
         String MapMakerVisible="Visible";
@@ -59,6 +60,7 @@ public interface ConstantUtils {
         String DEM="高程";
         String MEDIA="多媒体";
         String ADCD="行政区划";
+        String LGTD_LTTD = "坐标";
 
     }
 

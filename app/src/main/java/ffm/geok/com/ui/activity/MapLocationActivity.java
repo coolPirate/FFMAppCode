@@ -24,15 +24,34 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ffm.geok.com.R;
+import ffm.geok.com.global.XApplication;
+import ffm.geok.com.manager.DialogCallback;
+import ffm.geok.com.model.AddressAttributes;
+import ffm.geok.com.model.AddressModel;
+import ffm.geok.com.model.AddressResults;
+import ffm.geok.com.model.FireDateEntity;
+import ffm.geok.com.model.LatLngEntity;
+import ffm.geok.com.model.LoginModel;
+import ffm.geok.com.model.ResponseModelAddress;
+import ffm.geok.com.model.ResponseModelLogin;
 import ffm.geok.com.uitls.ConstantUtils;
+import ffm.geok.com.uitls.Convert;
+import ffm.geok.com.uitls.GeoCoderUtil;
 import ffm.geok.com.uitls.L;
+import ffm.geok.com.uitls.ServerUrl;
 import ffm.geok.com.uitls.StringUtils;
 
 public class MapLocationActivity extends AppCompatActivity implements LocationSource, AMapLocationListener {
@@ -59,6 +78,7 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
     private boolean isFirstLoc = true;
 
     private LatLng targetLatLng;
+    private AddressModel address=new AddressModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,8 +140,31 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         locDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                /*GeoCoderUtil.getInstance(MapLocationActivity.this).geoAddress(new LatLngEntity(targetLatLng.latitude,targetLatLng.longitude), new GeoCoderUtil.GeoCoderAddressListener() {
+                    @Override
+                    public void onAddressResult(String result) {
+                        L.i("地址1",String.valueOf(targetLatLng.latitude));
+                        L.i("地址1",String.valueOf(targetLatLng.longitude));
+                        L.i("地址",result);
+
+                    }
+
+                    @Override
+                    public void onAddcodeResult(String code) {
+                        String adcd=code;
+                    }
+                });*/
+
+                try {
+                    getAmapByLngAndLat(targetLatLng.longitude,targetLatLng.latitude);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 Intent intent = new Intent();
+                L.i("AA",address.getCity());
                 intent.putExtra(ConstantUtils.mapLocation.Location, targetLatLng);
+                intent.putExtra(ConstantUtils.mapLocation.POINTADDRESS,address);
                 setResult(RESULT_OK, intent);//回传数据到主Activity
                 finish();
             }
@@ -131,6 +174,8 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         reLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //将地图移动到定位点
+                aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMap.getMyLocation().getLatitude(), aMap.getMyLocation().getLongitude())));
 
             }
         });
@@ -153,6 +198,8 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                 }
             }
         });
+
+
 
     }
 
@@ -250,5 +297,47 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
         mLocationClient.startLocation();
+    }
+
+    // 将经纬度getLng， getLat   通过getAmapByLngAndLat方法转换地址
+    public void getAmapByLngAndLat(Double getLng, Double getLat){
+        String geometry="{{\"x\":"+getLng+", \"y\":"+getLat+"}}";
+        L.i("GEOMETRY",geometry);
+        OkGo.<String>get(ServerUrl.Address)
+                .tag(this)
+                .params("returnGeometry", "false")
+                .params("f", "json")
+                .params("imageDisplay", "1434,366,96")
+                .params("sr", "4326")
+                .params("geometry", geometry)
+                .params("geometryType", "esriGeometryPoint")
+                .params("mapExtent", "111,26,113,24")
+                .params("tolerance", "3")
+                .params("layers", "all")
+                .params("tdsourcetag", "s_pcqq_aiomsg")
+                .execute(new DialogCallback(MapLocationActivity.this) {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String responseString = response.body();
+                        L.d("test11", "请求成功：" + responseString);
+                        ResponseModelAddress responseModel = Convert.fromJson(responseString,ResponseModelAddress.class);
+                        if (null != responseModel){
+                            AddressAttributes addressAttributes=responseModel.getResults().get(0).getAttributes();
+                            address.setAdcd(addressAttributes.getAdcd());
+                            address.setCity(addressAttributes.getCity());
+                            address.setCounty(addressAttributes.getCounty());
+                            address.setProviencd(addressAttributes.getProvince());
+                            L.e("Address",addressAttributes.getCity());
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        L.e("test", "请求失败：" + response.message());
+                    }
+                });
+
     }
 }

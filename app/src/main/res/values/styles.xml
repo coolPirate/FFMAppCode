@@ -32,6 +32,17 @@
         <item name="android:windowBackground">@drawable/dialog_choose_bg</item>
     </style>
 
+    <!--selectpicker弹出效果-->
+    <style name="popwin_anim_style">
+        <item name="android:windowEnterAnimation">@anim/menushow</item>
+        <item name="android:windowExitAnimation">@anim/menuhide</item>
+    </style>
+    <!--popmenu弹出效果-->
+    <style name="popmenu_anim_style">
+        <item name="android:windowEnterAnimation">@anim/menus_popup</item>
+        <item name="android:windowExitAnimation">@anim/menu_popdown</item>
+    </style>
+
     <!--仿ios搜索框-->
     <style name="StyleEditText">
         <item name="android:layout_width">match_parent</item>

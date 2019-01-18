@@ -301,8 +301,13 @@ public class InputDetialAdapter extends BaseRecyclerViewAdapter {
                 break;
             case INPUTINFO_TYPE_RELOC:
                 ((ViewHolder_Reloc) holder).tv_label.setText(infomodel.getLable());
-                ((ViewHolder_Reloc) holder).tv_longitude.setText(String.valueOf(infomodel.getLatLng().longitude));
-                ((ViewHolder_Reloc) holder).tv_latitude.setText(String.valueOf(infomodel.getLatLng().latitude));
+                if(infomodel.getLatLng()==null){
+                    ((ViewHolder_Reloc) holder).tv_longitude.setText("");
+                    ((ViewHolder_Reloc) holder).tv_latitude.setText("");
+                }else {
+                    ((ViewHolder_Reloc) holder).tv_longitude.setText(String.valueOf(infomodel.getLatLng().longitude));
+                    ((ViewHolder_Reloc) holder).tv_latitude.setText(String.valueOf(infomodel.getLatLng().latitude));
+                }
                 ((ViewHolder_Reloc) holder).btn_reloc.setOnClickListener(v -> {
                     onItemOperationListener.OnItemOperation(v, position, "map_relocation");
                 });

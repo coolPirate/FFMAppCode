@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.amap.api.maps.model.LatLng;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
 import com.lzy.imagepicker.ui.ImageGridActivity;
@@ -35,6 +36,7 @@ import ffm.geok.com.adapter.BaseInfoImageAdapter;
 import ffm.geok.com.adapter.InputDetialAdapter;
 import ffm.geok.com.adapter.ProjectVertifyAdapter;
 import ffm.geok.com.base.MySupportActivity;
+import ffm.geok.com.model.AddressModel;
 import ffm.geok.com.model.FireDateEntity;
 import ffm.geok.com.model.FireMediaEntity;
 import ffm.geok.com.model.InputInfoModel;
@@ -48,6 +50,7 @@ import ffm.geok.com.presenter.IDataSynchronizationPresenter;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.DBUtils;
 //import ffm.geok.com.uitls.GlideImageLoader;
+import ffm.geok.com.uitls.DateUtils;
 import ffm.geok.com.uitls.GlideImageLoader;
 import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.NavigationUtils;
@@ -56,6 +59,7 @@ import ffm.geok.com.uitls.StringUtils;
 import ffm.geok.com.uitls.ToastUtils;
 import ffm.geok.com.uitls.ToolUtils;
 import ffm.geok.com.widget.dialog.DialogUtils;
+import ffm.geok.com.widget.dialog.SelectDateWindow;
 
 
 import static ffm.geok.com.adapter.InputDetialAdapter.Multi_Media_IMAGES;
@@ -84,9 +88,15 @@ public class FireAddActivity extends MySupportActivity implements InputDetialAda
     private final String imagesOnSaveInstanceState = "takePhotos";    //保存拍照图片名字key
     private InputInfoModel currentInfomodel;
     private RxPermissions mRxPermissions;
+    private SelectDateWindow selectDateWindow;          //时间选择器
+    private String selectDateString;
+    private View currentSelectView;
 
     private ProgressDialog mProgressDialog = null;
     private IDataSynchronizationPresenter dataSynchronizationPresenter;
+
+    private LatLng relocLatlng;
+    private AddressModel address;
 
 
     @Override
@@ -97,6 +107,8 @@ public class FireAddActivity extends MySupportActivity implements InputDetialAda
         mContext=this;
         mRxPermissions = new RxPermissions(this);
 
+
+
         initViews();
         initData();
 
@@ -104,7 +116,7 @@ public class FireAddActivity extends MySupportActivity implements InputDetialAda
     }
 
     protected void initViews(){
-        initInputIaCEwellsTemplate();
+        initInputFireTemplate();
 
         //布局渲染完了之后，才能setSupportActionBar
         setSupportActionBar(mtoolBar);
@@ -168,44 +180,36 @@ public class FireAddActivity extends MySupportActivity implements InputDetialAda
 
     }
 
-    private void initInputIaCEwellsTemplate() {
+    private void initInputFireTemplate() {
         InputInfoModel infomodel = null;
-        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.FINDTIME, InputInfoModelType.INPUT, "请输入发现时间", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.FINDTIME, InputInfoModelType.Date, "发现时间", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
         sourceData.add(infomodel);
-        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.PROVINCE, InputInfoModelType.INPUT, "请输入省份", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.LGTD_LTTD, InputInfoModelType.Button, "经纬度", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
         sourceData.add(infomodel);
-        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.CITY, InputInfoModelType.INPUT, "请输入城市", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.PROVINCE, InputInfoModelType.INPUT, "省份", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
         sourceData.add(infomodel);
-        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.COUNTY, InputInfoModelType.INPUT, "请输入县名称", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.CITY, InputInfoModelType.INPUT, "城市", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
         sourceData.add(infomodel);
-        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.LAT, InputInfoModelType.INPUT, "请输入纬度", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
-        sourceData.add(infomodel);
-        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.LON, InputInfoModelType.INPUT, "请输入经度", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
+        infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.COUNTY, InputInfoModelType.INPUT, "县名称", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
         sourceData.add(infomodel);
         infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.USERNAME, InputInfoModelType.INPUT, "请输入上报人", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
         sourceData.add(infomodel);
         infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.MEDIA, InputInfoModelType.Multi_Media, "请选择多媒体",  VerificationType.request, 0, 0, InputInfoModelPattern.normal);
         sourceData.add(infomodel);
-        /*infomodel = new InputInfoModel(ConstantUtils.FIRES_LABELS.TYPE, InputInfoModelType.INPUT, "请输入类型", VerificationType.none, 1, Integer.MAX_VALUE, InputInfoModelPattern.normal);
-        infomodel.setInputResultText(StringUtils.isEmptyString(fireDateEntity.getType()));
-        sourceData.add(infomodel);*/
-        /*infomodel = new InputInfomodel(ConstantUtils.IA_C_MEDIA_LABELS.Media, InputInfoModelType.Multi_Media, "请选择多媒体", null, null, VerificationType.request, 0, 0, InputInfoModelPattern.normal);
-        infomodel.setMultiMedia(getMultiMediaByObjID(iaCEwellsEntity.getPid()));
-        sourceData.add(infomodel);*/
 
     }
 
     @OnClick({R.id.btn_submit})
     public void onClick(View view) {
         switch (view.getId()) {
-            /*case R.id.btn_selectdate_finish:
+            case R.id.btn_selectdate_finish:
                 selectDateWindow.dismiss();
                 selectDateString = selectDateWindow.datepicker.getDateString();
                 ((TextView) currentSelectView).setText(selectDateString);
                 L.d("selectDateString = " + DateUtils.dateStringFormat(selectDateString));
                 currentInfomodel.setResultDate(DateUtils.dateStringFormat(selectDateString));
                 break;
-            case R.id.btn_optionselect_finish:
+            /*case R.id.btn_optionselect_finish:
                 selectOptionsWindow.dismiss();
                 selectOptionsString = selectOptionsWindow.optionpicker.getOptions_string();
                 selectOptionsCode = selectOptionsWindow.optionpicker.getOptions_code_string();
@@ -431,6 +435,17 @@ public class FireAddActivity extends MySupportActivity implements InputDetialAda
                 }
                 mAdapter.notifyDataSetChanged();
             }
+        }else if(requestCode==ConstantUtils.mapLocation.LOCATION_LATLANG){
+            if(data==null) return;
+            Bundle bundle=data.getExtras();
+            relocLatlng=bundle.getParcelable(ConstantUtils.mapLocation.Location);
+            address=bundle.getParcelable(ConstantUtils.mapLocation.POINTADDRESS);
+            currentInfomodel.setLatLng(relocLatlng);
+            currentInfomodel=sourceData.get(2);
+            L.i("PP",address.getProviencd());
+            currentInfomodel.setInputResultText(address.getProviencd());
+            mAdapter.notifyDataSetChanged();
+
         }
     }
 
@@ -438,6 +453,7 @@ public class FireAddActivity extends MySupportActivity implements InputDetialAda
     public void OnItemOperation(View v, int position, String input) {
 
         if (position < sourceData.size()) {
+            currentSelectView = v;
             currentInfomodel = sourceData.get(position);
             L.i("curr",currentInfomodel.getLable());
             switch (currentInfomodel.getInputType()) {
