@@ -68,6 +68,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_fire_add">火点信息上传</string>
     <string name="title_activity_map_location">MapLocationActivity</string>
+    <string name="title_activity_fire_add2">FireAddActivity2</string>
 
 
 </resources>

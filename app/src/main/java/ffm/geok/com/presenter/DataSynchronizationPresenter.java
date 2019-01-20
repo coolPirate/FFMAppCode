@@ -18,9 +18,11 @@ import java.util.Date;
 import java.util.List;
 
 import ffm.geok.com.manager.DialogCallback;
+import ffm.geok.com.model.FireAddEntity;
 import ffm.geok.com.model.FireCheckEntity;
 import ffm.geok.com.model.FireDateEntity;
 import ffm.geok.com.model.FireMediaEntity;
+import ffm.geok.com.ui.activity.FireAddActivity;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.Convert;
 import ffm.geok.com.uitls.DBUtils;
@@ -62,9 +64,9 @@ public class DataSynchronizationPresenter implements IDataSynchronizationPresent
                 String fire_Check = Convert.toJson(fireCheckEntityList);
                 jsonObject.put("fire_check", fire_Check);
             }
-            List<FireDateEntity> fireDateEntityList = DBUtils.getInstance().queryAllSynchroData(FireDateEntity.class);
-            if (null != fireDateEntityList && fireDateEntityList.size() > 0) {
-                String fire_Main = Convert.toJson(fireCheckEntityList);
+            List<FireAddEntity> fireAddEntities = DBUtils.getInstance().queryAllSynchroData(FireAddEntity.class);
+            if (null != fireAddEntities && fireAddEntities.size() > 0) {
+                String fire_Main = Convert.toJson(fireAddEntities);
                 jsonObject.put("fire_Main", fire_Main);
             }
             List<FireMediaEntity> fireMediaEntityList = DBUtils.getInstance().queryAllSynchroData(FireMediaEntity.class);

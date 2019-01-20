@@ -116,6 +116,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
     private void initView() {
         projectListAdapter = new ProjectListAdapter(mContext);
         //防止数据不足一屏,默认不显示加载更多
+        projectListAdapter.changeMoreStatus(ProjectListAdapter.LOADING_MORE);
         projectListAdapter.changeMoreStatus(ProjectListAdapter.LOADED_MORE);
         //设置布局管理器
         linearLayoutManager = new LinearLayoutManager(mContext);

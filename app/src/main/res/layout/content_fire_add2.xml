@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.activity.FireAddActivity2"
+    tools:showIn="@layout/activity_fire_add2">
+
+    <LinearLayout
+        android:id="@+id/layout_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/input_type_left"
+                android:text="发现时间"
+                android:textSize="@dimen/sp_16"/>
+            <EditText
+                android:id="@+id/tv_findTime"
+                style="@style/input_type_right"
+                android:textSize="@dimen/sp_16"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/input_type_left"
+                android:gravity="center"
+                tools:text="经纬度"
+                android:text="经纬度"
+                android:textSize="@dimen/sp_16"
+                android:layout_width="84dp" />
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_lat"
+                    style="@style/input_type_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="经度"
+                    android:text="经度"/>
+                <TextView
+                    android:id="@+id/tv_lon"
+                    style="@style/input_type_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="纬度"
+                    android:text="纬度"/>
+            </LinearLayout>
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/btn_reLoc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:src="@mipmap/location_72px"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/input_type_left"
+                android:text="省份"
+                android:textSize="@dimen/sp_16"/>
+            <EditText
+                android:id="@+id/tv_province"
+                style="@style/input_type_right"
+                android:textSize="@dimen/sp_16"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/input_type_left"
+                android:text="城市"
+                android:textSize="@dimen/sp_16"/>
+            <EditText
+                android:id="@+id/tv_city"
+                style="@style/input_type_right"
+                android:textSize="@dimen/sp_16"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/input_type_left"
+                android:text="县城"
+                android:textSize="@dimen/sp_16"/>
+            <EditText
+                android:id="@+id/tv_county"
+                style="@style/input_type_right"
+                android:textSize="@dimen/sp_16"/>
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/imgs_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/btn_submit"
+            style="@style/ButtonStyleBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="保存" />
+
+    </LinearLayout>
+
+
+
+
+
+</ScrollView>

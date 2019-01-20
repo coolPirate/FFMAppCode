@@ -67,6 +67,10 @@
         <activity
             android:name=".ui.activity.MapLocationActivity"
             android:label="@string/title_activity_map_location"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.FireAddActivity2"
+            android:label="@string/title_activity_fire_add2"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

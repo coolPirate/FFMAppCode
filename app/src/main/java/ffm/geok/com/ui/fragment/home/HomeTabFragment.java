@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 import ffm.geok.com.R;
 import ffm.geok.com.base.BaseMainFragment;
 import ffm.geok.com.ui.activity.FireAddActivity;
+import ffm.geok.com.ui.activity.FireAddActivity2;
 import ffm.geok.com.ui.activity.LoginActivity;
 import ffm.geok.com.ui.fragment.data.DataListFragment;
 import ffm.geok.com.ui.view.CustomViewPager;
@@ -91,7 +92,7 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                     public boolean onTabClickEvent(View view, int position) {
                         if (position == 1) {
                         //return true则拦截事件、不进行页面切换
-                            NavigationUtils.getInstance().jumpTo(FireAddActivity.class,null,false);
+                            NavigationUtils.getInstance().jumpTo(FireAddActivity2.class,null,false);
                             return true;
                         }
                     return false;

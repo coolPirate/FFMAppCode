@@ -5,13 +5,18 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class AddressModel implements Parcelable {
+public class AddressModel implements Parcelable  {
     private String adcd;
     private String proviencd;
     private String city;
     private String county;
 
-    public AddressModel(Parcel in) {
+
+    public AddressModel() {
+
+    }
+
+    protected AddressModel(Parcel in) {
         adcd = in.readString();
         proviencd = in.readString();
         city = in.readString();
@@ -29,10 +34,6 @@ public class AddressModel implements Parcelable {
             return new AddressModel[size];
         }
     };
-
-    public AddressModel() {
-
-    }
 
     public String getAdcd() {
         return adcd;
@@ -73,11 +74,10 @@ public class AddressModel implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(adcd);
-        parcel.writeString(proviencd);
-        parcel.writeString(city);
-        parcel.writeString(county);
-
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(adcd);
+        dest.writeString(proviencd);
+        dest.writeString(city);
+        dest.writeString(county);
     }
 }

@@ -233,7 +233,6 @@ public class InputDetialAdapter extends BaseRecyclerViewAdapter {
                 });
                 break;
             case INPUTINFO_TYPE_Multi_Media:
-                ((ViewHolder_Multi_Media) holder).tv_label.setText(infomodel.getLable());
 
                 if (null != infomodel.getMultiMedia()) {
                     Bitmap bitmap = null;
@@ -370,13 +369,11 @@ public class InputDetialAdapter extends BaseRecyclerViewAdapter {
     }
 
     class ViewHolder_Multi_Media extends RecyclerView.ViewHolder {
-        TextView tv_label;
-        LinearLayout layout;
+        RecyclerView layout;
         ViewHolder_Multi_Media(View itemView) {
             super(itemView);
             LinearLayout linearLayout = (LinearLayout) ((CardView) itemView).getChildAt(0);
-            tv_label = (TextView) linearLayout.getChildAt(0);
-            layout = (LinearLayout) linearLayout.findViewById(R.id.id_gallery);
+            layout = (RecyclerView) linearLayout.findViewById(R.id.img_recyclerview);
         }
     }
 
