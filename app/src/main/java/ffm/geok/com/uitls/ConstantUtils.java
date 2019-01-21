@@ -20,6 +20,7 @@ public interface ConstantUtils {
         String IS_AutoLogin="autoLogin";
         int autoLoginValue=40;
         String DataUpdate="dataUpdate";                                                             //数据更新
+        String isLoadSPData = "isLoadSPData";
     }
 
     interface mapLocation {
@@ -35,6 +36,10 @@ public interface ConstantUtils {
         String POLYLINEISDEL="polyisdelete";
         int showDel=0;//显示删除按钮
         int notShowDel=1;//不显示删除按钮
+        String PROVINCE="province";
+        String CITY="city";
+        String COUNTY="county";
+        String ADCD="adcd";
     }
 
     interface RequestTag {

@@ -19,9 +19,9 @@
     <application
         android:name=".global.XApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_lancher6"
+        android:icon="@mipmap/icon_app"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_lancher"
+        android:roundIcon="@mipmap/icon_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 

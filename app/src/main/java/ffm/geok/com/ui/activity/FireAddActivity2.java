@@ -1,7 +1,6 @@
 package ffm.geok.com.ui.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -62,31 +63,33 @@ import static ffm.geok.com.ui.activity.ShowImagesActivity.REQUEST_CODE_SELECT;
 import static ffm.geok.com.ui.activity.ShowImagesActivity.SHOW_IMGES;
 import static ffm.geok.com.ui.activity.ShowImagesActivity.maxImgCount;
 
-public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker.OnSelectingListener,DatePicker.OnSelectingListener{
+public class FireAddActivity2 extends AppCompatActivity implements View.OnClickListener, OptionsPicker.OnSelectingListener, DatePicker.OnSelectingListener {
+
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tv_findTime)
     EditText tvFindTime;
+    @BindView(R.id.tv_lat)
+    TextView tvLat;
+    @BindView(R.id.tv_lon)
+    TextView tvLon;
+    @BindView(R.id.btn_reLoc)
+    AppCompatImageButton btnReLoc;
     @BindView(R.id.tv_province)
     EditText tvProvince;
     @BindView(R.id.tv_city)
     EditText tvCity;
     @BindView(R.id.tv_county)
     EditText tvCounty;
+    @BindView(R.id.tv_user)
+    EditText tvUser;
     @BindView(R.id.imgs_recyclerview)
     RecyclerView imgsRecyclerview;
-    @BindView(R.id.btn_submit)
-    TextView btnSubmit;
-    @BindView(R.id.btn_reLoc)
-    AppCompatImageButton btnReLoc;
-    @BindView(R.id.tv_lat)
-    TextView tvLat;
-    @BindView(R.id.tv_lon)
-    TextView tvLon;
     @BindView(R.id.layout_root)
     LinearLayout layoutRoot;
-
+    @BindView(R.id.btn_submit)
+    TextView btnSubmit;
     private BaseInfoImageAdapter imageAdapter = null;
     private RxPermissions mRxPermissions;
     private Context mContext = FireAddActivity2.this;
@@ -103,7 +106,7 @@ public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker
 
     private FireAddEntity fireAddEntity = new FireAddEntity();
     private LatLng relocLatlng;
-    private AddressModel address=new AddressModel();
+    private AddressModel address = new AddressModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +116,38 @@ public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker
 
         initView();
         initData();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // 这条表示加载菜单文件，第一个参数表示通过那个资源文件来创建菜单
+        // 第二个表示将菜单传入那个对象中。这里我们用Menu传入menu
+        // 这条语句一般系统帮我们创建好
+        getMenuInflater().inflate(R.menu.save, menu);
+        return true;
+    }
+
+    // 菜单的监听方法
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                //保存本地
+                assembleProgectData();
+
+                //上传服务器
+                mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
+                dataSynchronizationPresenter.dataSynchronization();
+                ToastUtils.showShortMsg(mContext, "上报完成");
+                L.i("Upload", "上报完成");
+
+                break;
+            default:
+                break;
+        }
+        return true;
 
     }
 
@@ -138,7 +173,6 @@ public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker
 
         initImagePicker();
 
-        //btnSubmit.setOnClickListener(this);
 
     }
 
@@ -148,7 +182,7 @@ public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker
             public void onClick(View v) {
                 hideAllWidow();
                 if (null == selectDateWindow) {
-                    selectDateWindow = new SelectDateWindow(FireAddActivity2.this, this, new DatePicker.OnSelectingListener() {
+                    selectDateWindow = new SelectDateWindow(FireAddActivity2.this, itemsOnClick, new DatePicker.OnSelectingListener() {
                         @Override
                         public void selected(boolean selected) {
                            /* hideAllWidow();
@@ -218,7 +252,7 @@ public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker
             @Override
             public void onSynchronizationSuccess() {
                 DialogUtils.closeProgressDialogObject(mProgressDialog);
-                ToastUtils.showShortMsg(mContext, "数据同步成功");
+                ToastUtils.showShortMsg(mContext, "数据上传成功");
                 finish();
             }
 
@@ -229,21 +263,6 @@ public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker
                 L.e(errorMsg);
             }
         });
-
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //保存本地
-                assembleProgectData();
-
-                //上传服务器
-                mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
-                dataSynchronizationPresenter.dataSynchronization();
-                ToastUtils.showShortMsg(mContext, "上报完成");
-                L.i("Upload", "上报完成");
-            }
-        });
-
 
     }
 
@@ -286,12 +305,11 @@ public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker
             Bundle bundle = data.getExtras();
             relocLatlng = bundle.getParcelable(ConstantUtils.mapLocation.Location);
             address = bundle.getParcelable(ConstantUtils.mapLocation.POINTADDRESS);
-            L.i("ADDDDDD", address.getProviencd());
             tvLat.setText(String.valueOf(relocLatlng.longitude));
             tvLon.setText(String.valueOf(relocLatlng.latitude));
             tvProvince.setText(address.getProviencd());
             tvCity.setText(address.getCity());
-            tvCity.setText(address.getCounty());
+            tvCounty.setText(address.getCounty());
             fireAddEntity.setAdcd(address.getAdcd());
 
         }
@@ -355,6 +373,7 @@ public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker
         fireAddEntity.setLon(String.valueOf(tvLon.getText()));
         fireAddEntity.setProvince(String.valueOf(tvProvince.getText()));
         fireAddEntity.setCounty(String.valueOf(tvCounty.getText()));
+        fireAddEntity.setUsername(String.valueOf(tvUser.getText()));
         if (null != fireAddEntity) {
             DBUtils.getInstance().getmDaoSession().insertOrReplace(fireAddEntity);
         }
@@ -412,17 +431,23 @@ public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker
         }
     }
 
-
+    private View.OnClickListener itemsOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.btn_selectdate_finish:
+                    selectDateWindow.dismiss();
+                    selectDateString = selectDateWindow.datepicker.getDateString();
+                    tvFindTime.setText(selectDateString);
+                    break;
+            }
+        }
+    };
 
 
     @OnClick({R.id.btn_submit})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_selectdate_finish:
-                selectDateWindow.dismiss();
-                selectDateString = selectDateWindow.datepicker.getDateString();
-                tvFindTime.setText(selectDateString);
-                break;
             case R.id.btn_optionselect_finish:
                 /*selectOptionsWindow.dismiss();
                 selectOptionsString = selectOptionsWindow.optionpicker.getOptions_string();
@@ -436,6 +461,16 @@ public class FireAddActivity2 extends AppCompatActivity implements OptionsPicker
                     L.d("selectDateString = " + selectOptionsString + " selectOptionsCode = " + selectOptionsCode);
                 }
                 ((TextView) currentSelectView).setText(selectOptionsString);*/
+                break;
+            case R.id.btn_submit:
+                //保存本地
+                assembleProgectData();
+
+                //上传服务器
+                mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
+                dataSynchronizationPresenter.dataSynchronization();
+                ToastUtils.showShortMsg(mContext, "上报完成");
+                L.i("Upload", "上报完成");
                 break;
         }
     }

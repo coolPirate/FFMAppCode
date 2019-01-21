@@ -71,7 +71,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
 
     protected Context mContext;
 
-    private boolean isRefresh;
+    private boolean isRefresh=true;
     private int pageNumber = 0;
     private String queryAdcd = "";
     private int pageSize = 10;
@@ -108,15 +108,12 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         initListener();
         onRefresh();
 
-        //unbinder = ButterKnife.bind(this, view);
-        //ButterKnife.bind(this,view);
         return view;
     }
 
     private void initView() {
         projectListAdapter = new ProjectListAdapter(mContext);
         //防止数据不足一屏,默认不显示加载更多
-        projectListAdapter.changeMoreStatus(ProjectListAdapter.LOADING_MORE);
         projectListAdapter.changeMoreStatus(ProjectListAdapter.LOADED_MORE);
         //设置布局管理器
         linearLayoutManager = new LinearLayoutManager(mContext);
@@ -180,10 +177,6 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         //设置默认值
         timeSpinner.setVisibility(View.VISIBLE);
         timeSpinner.setGravity(Gravity.CENTER_HORIZONTAL);*/
-
-        //加载数据
-        onRefresh();
-
     }
 
 
@@ -225,6 +218,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
             } else {
                 llEmpty.setVisibility(View.GONE);
             }
+            onRefresh();
         });
 
     }
@@ -237,8 +231,6 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         observable = RxBus.get().register(ConstantUtils.global.RefreshDataStatus, Message.class);
 
         onRefresh();
-
-
     }
 
 

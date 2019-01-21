@@ -34,11 +34,4 @@ public class SPManager {
     public static void setPassword(String password) {
         getSharedPreferences().edit().putString(ConstantUtils.global.LOGIN_PASSWORD, password).commit();
     }
-    /*public static boolean isLoadSPData() {
-        return getSharedPreferences().getBoolean(ConstantUtils.global.isLoadSPData, false);
-    }
-
-    public static void setLoadSPData(boolean loadSPData) {
-        getSharedPreferences().edit().putBoolean(ConstantUtils.global.isLoadSPData, loadSPData).commit();
-    }*/
 }

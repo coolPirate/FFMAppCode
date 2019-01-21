@@ -24,6 +24,7 @@
                 android:textSize="@dimen/sp_16"/>
             <EditText
                 android:id="@+id/tv_findTime"
+                android:focusable="false"
                 style="@style/input_type_right"
                 android:textSize="@dimen/sp_16"/>
         </LinearLayout>
@@ -81,6 +82,7 @@
                 style="@style/input_type_right"
                 android:textSize="@dimen/sp_16"/>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -109,12 +111,27 @@
                 style="@style/input_type_right"
                 android:textSize="@dimen/sp_16"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/input_type_left"
+                android:text="上报人"
+                android:textSize="@dimen/sp_16"/>
+            <EditText
+                android:id="@+id/tv_user"
+                style="@style/input_type_right"
+                android:textSize="@dimen/sp_16"/>
+        </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/imgs_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <TextView
             android:id="@+id/btn_submit"
+            android:visibility="gone"
             style="@style/ButtonStyleBlue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -122,9 +139,5 @@
             android:text="保存" />
 
     </LinearLayout>
-
-
-
-
 
 </ScrollView>

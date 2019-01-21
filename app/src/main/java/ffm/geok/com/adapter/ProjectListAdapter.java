@@ -33,7 +33,7 @@ public class ProjectListAdapter extends BaseRecyclerViewAdapter {
     public static final int LOADING_MORE = 1;
     //上拉加载更多状态-默认为0
     private int LOAD_MORE_STATUS = 0;
-    private boolean isLoadMore = false;
+    private boolean isLoadMore = true;
     private OnItemClickListener onItemClickListener;
 
     public ProjectListAdapter(Context context) {
@@ -162,7 +162,6 @@ public class ProjectListAdapter extends BaseRecyclerViewAdapter {
             ButterKnife.bind(this, view);
         }
     }
-
 
     public void addMoreItem(List<FireDateEntity> newDatas) {
         setLoadMore(true);

@@ -185,6 +185,7 @@ public class MainActivity extends MySupportActivity
                     }
                 });
                 //RxBus.get().post(ConstantUtils.global.DataUpdate,new Message(1000, "数据增加"));
+                RxBus.get().post(ConstantUtils.global.RefreshDataStatus,new Message(0,"刷新数据"));
             }
 
             @Override

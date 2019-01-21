@@ -1,6 +1,7 @@
 package ffm.geok.com.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -47,12 +48,20 @@ import ffm.geok.com.model.LatLngEntity;
 import ffm.geok.com.model.LoginModel;
 import ffm.geok.com.model.ResponseModelAddress;
 import ffm.geok.com.model.ResponseModelLogin;
+import ffm.geok.com.presenter.ILoginPresenter;
+import ffm.geok.com.presenter.IMapAddressPre;
+import ffm.geok.com.presenter.LoginPresenter;
+import ffm.geok.com.presenter.MapAddressPre;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.Convert;
 import ffm.geok.com.uitls.GeoCoderUtil;
 import ffm.geok.com.uitls.L;
+import ffm.geok.com.uitls.NavigationUtils;
+import ffm.geok.com.uitls.SPManager;
 import ffm.geok.com.uitls.ServerUrl;
 import ffm.geok.com.uitls.StringUtils;
+import ffm.geok.com.uitls.ToastUtils;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class MapLocationActivity extends AppCompatActivity implements LocationSource, AMapLocationListener {
 
@@ -78,7 +87,8 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
     private boolean isFirstLoc = true;
 
     private LatLng targetLatLng;
-    private AddressModel address=new AddressModel();
+    private volatile AddressModel address=new AddressModel();
+    private IMapAddressPre mapAddressPre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +142,27 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         //开始定位
         initLocation();
 
+        mapAddressPre=new MapAddressPre(this, new IMapAddressPre.AddressCallback() {
+            @Override
+            public void onAddressSuccess(AddressModel addressModel) {
+                address=addressModel;
+
+                Intent intent = new Intent();
+                L.i("AA",address.getCity());
+                intent.putExtra(ConstantUtils.mapLocation.Location, targetLatLng);
+                intent.putExtra(ConstantUtils.mapLocation.POINTADDRESS,address);
+                setResult(RESULT_OK, intent);//回传数据到主Activity
+
+                finish();
+
+            }
+
+            @Override
+            public void onError(String errMsg) {
+
+            }
+        });
+
     }
 
 
@@ -141,32 +172,8 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
             @Override
             public void onClick(View view) {
 
-                /*GeoCoderUtil.getInstance(MapLocationActivity.this).geoAddress(new LatLngEntity(targetLatLng.latitude,targetLatLng.longitude), new GeoCoderUtil.GeoCoderAddressListener() {
-                    @Override
-                    public void onAddressResult(String result) {
-                        L.i("地址1",String.valueOf(targetLatLng.latitude));
-                        L.i("地址1",String.valueOf(targetLatLng.longitude));
-                        L.i("地址",result);
+                mapAddressPre.getAddress(targetLatLng.longitude,targetLatLng.latitude);
 
-                    }
-
-                    @Override
-                    public void onAddcodeResult(String code) {
-                        String adcd=code;
-                    }
-                });*/
-
-                try {
-                    getAmapByLngAndLat(targetLatLng.longitude,targetLatLng.latitude);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Intent intent = new Intent();
-                L.i("AA",address.getCity());
-                intent.putExtra(ConstantUtils.mapLocation.Location, targetLatLng);
-                intent.putExtra(ConstantUtils.mapLocation.POINTADDRESS,address);
-                setResult(RESULT_OK, intent);//回传数据到主Activity
-                finish();
             }
         });
 
@@ -328,7 +335,7 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                             address.setCounty(addressAttributes.getCounty());
                             address.setProviencd(addressAttributes.getProvince());
                             L.e("Address",addressAttributes.getCity());
-
+                            L.e("Address111",address.getCity());
                         }
                     }
 

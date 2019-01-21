@@ -65,11 +65,11 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         String name = SPManager.getUserName();
-        String password=SPManager.getPassword();
-        if(name!=null&&password!=null){
-            L.i("LOGIN",password);
+        String password1=SPManager.getPassword();
+        if(name!=null&&password1!=null){
+            L.i("LOGIN",password1);
             loginName.setText(name);
-            loginPassword.setText(password);
+            loginPassword.setText(password1);
         }
 
 
