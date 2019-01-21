@@ -7,11 +7,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
+import android.widget.TimePicker;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,9 +26,11 @@ public class SelectDateWindow extends PopupWindow {
     TextView btnSelectdateFinish;
     @BindView(R.id.datepicker)
     public DatePicker datepicker;
+    @BindView(R.id.timePicker)
+    TimePicker timePicker;
     private View mMenuView;
 
-    public SelectDateWindow(Activity context, View.OnClickListener listener, DatePicker.OnSelectingListener selectingListener) {
+    public SelectDateWindow(Activity context, View.OnClickListener listener, DatePicker.OnSelectingListener selectingListener,TimePicker.OnTimeChangedListener timeChangedListener) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMenuView = inflater.inflate(R.layout.date_select, null);
@@ -45,8 +47,10 @@ public class SelectDateWindow extends PopupWindow {
         });
         btnSelectdateFinish.setOnClickListener(listener);
         datepicker.setOnSelectingListener(selectingListener);
+        timePicker.setOnTimeChangedListener(timeChangedListener);
         // 设置监听按钮
 
+        timePicker.setIs24HourView(true);
 
         // 设置SelectPicPopupWindow弹出窗体的高和宽
         this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);

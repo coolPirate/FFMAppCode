@@ -46,14 +46,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/tv_lat"
+                    android:id="@+id/tv_lon"
                     style="@style/input_type_right"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:text="经度"
                     android:text="经度"/>
                 <TextView
-                    android:id="@+id/tv_lon"
+                    android:id="@+id/tv_lat"
                     style="@style/input_type_right"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

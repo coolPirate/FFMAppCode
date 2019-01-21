@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.amap.api.maps.model.LatLng;
 import com.lzy.imagepicker.ImagePicker;
@@ -39,6 +40,7 @@ import ffm.geok.com.R;
 import ffm.geok.com.adapter.BaseInfoImageAdapter;
 import ffm.geok.com.model.AddressModel;
 import ffm.geok.com.model.FireAddEntity;
+import ffm.geok.com.model.FireCheckEntity;
 import ffm.geok.com.model.FireMediaEntity;
 import ffm.geok.com.model.ShowImage;
 import ffm.geok.com.presenter.DataSynchronizationPresenter;
@@ -102,6 +104,7 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
     private SelectDateWindow selectDateWindow;          //时间选择器
     private SelectOptionsWindow selectOptionsWindow;    //下拉选择器
     private String selectDateString;
+    private String selectTimeString;
     private String selectOptionsString;
 
     private FireAddEntity fireAddEntity = new FireAddEntity();
@@ -182,20 +185,13 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
             public void onClick(View v) {
                 hideAllWidow();
                 if (null == selectDateWindow) {
-                    selectDateWindow = new SelectDateWindow(FireAddActivity2.this, itemsOnClick, new DatePicker.OnSelectingListener() {
-                        @Override
-                        public void selected(boolean selected) {
-                           /* hideAllWidow();
-                            tvFindTime.setText(selectDateString);*/
-
-                        }
-                    });
+                    selectDateWindow = new SelectDateWindow(FireAddActivity2.this, itemsOnClick, selectingListener,timeChangedListener);
                 }
                 if (!FireAddActivity2.this.isFinishing() && !selectDateWindow.isShowing()) {
                     //强制隐藏键盘
                     ToolUtils.hideSoftInput(FireAddActivity2.this);
                     // 设置layout在PopupWindow中显示的位置
-                    selectDateWindow.showAtLocation(layoutRoot, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                    selectDateWindow.showAtLocation(layoutRoot, Gravity.CENTER | Gravity.CENTER_HORIZONTAL, 0, 0);
                 }
             }
         });
@@ -305,8 +301,8 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
             Bundle bundle = data.getExtras();
             relocLatlng = bundle.getParcelable(ConstantUtils.mapLocation.Location);
             address = bundle.getParcelable(ConstantUtils.mapLocation.POINTADDRESS);
-            tvLat.setText(String.valueOf(relocLatlng.longitude));
-            tvLon.setText(String.valueOf(relocLatlng.latitude));
+            tvLat.setText(String.valueOf(relocLatlng.latitude));
+            tvLon.setText(String.valueOf(relocLatlng.longitude));
             tvProvince.setText(address.getProviencd());
             tvCity.setText(address.getCity());
             tvCounty.setText(address.getCounty());
@@ -367,6 +363,7 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
 
     private void assembleProgectData() {
         String projectPid = ToolUtils.generateUUID();
+        String modiTime=ToolUtils.getSystemDate();
         fireAddEntity.setId(projectPid);
         fireAddEntity.setCity(String.valueOf(tvCity.getText()));
         fireAddEntity.setLat(String.valueOf(tvLat.getText()));
@@ -374,8 +371,21 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
         fireAddEntity.setProvince(String.valueOf(tvProvince.getText()));
         fireAddEntity.setCounty(String.valueOf(tvCounty.getText()));
         fireAddEntity.setUsername(String.valueOf(tvUser.getText()));
+        fireAddEntity.setCreateTime(String.valueOf(tvFindTime.getText()));
+        fireAddEntity.setFindTime(String.valueOf(tvFindTime.getText()));
+        fireAddEntity.setUpdateTime(String.valueOf(tvFindTime.getText()));
         if (null != fireAddEntity) {
             DBUtils.getInstance().getmDaoSession().insertOrReplace(fireAddEntity);
+        }
+
+        FireCheckEntity fireCheckEntity=new FireCheckEntity();
+        fireCheckEntity.setId(ToolUtils.generateUUID());
+        fireCheckEntity.setFireid(projectPid);
+        fireCheckEntity.setIsfire("是");
+        fireCheckEntity.setConfirmor(String.valueOf(tvUser.getText()));
+        fireCheckEntity.setModitime(modiTime);
+        if(null!=fireCheckEntity){
+            DBUtils.getInstance().getmDaoSession().insertOrReplace(fireCheckEntity);
         }
 
         //保存多媒体
@@ -387,7 +397,7 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
             fireMediaEntity.setAdcd("");
             fireMediaEntity.setFireid(projectPid);
             fireMediaEntity.setObjtp("");
-            fireMediaEntity.setModitime(ToolUtils.getSystemDate());
+            fireMediaEntity.setModitime(modiTime);
             fireMediaEntity.setFname(imageFile.getName());
             fireMediaEntity.setFpath(imageFile.getAbsolutePath());
             String takePicTime = imageFile.getName().substring(imageFile.getName().lastIndexOf("_") + 1, imageFile.getName().lastIndexOf("."));
@@ -438,9 +448,25 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
                 case R.id.btn_selectdate_finish:
                     selectDateWindow.dismiss();
                     selectDateString = selectDateWindow.datepicker.getDateString();
-                    tvFindTime.setText(selectDateString);
+                    tvFindTime.setText(selectDateString+" "+selectTimeString);
                     break;
             }
+        }
+    };
+
+    private DatePicker.OnSelectingListener selectingListener= new DatePicker.OnSelectingListener() {
+        @Override
+        public void selected(boolean selected) {
+
+        }
+    };
+
+    private TimePicker.OnTimeChangedListener timeChangedListener= new TimePicker.OnTimeChangedListener() {
+        @Override
+        public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+            selectTimeString=hourOfDay + "时" + minute + "分";
+
+
         }
     };
 

@@ -48,10 +48,17 @@
         <ffm.geok.com.widget.dialog.DatePicker
             android:id="@+id/datepicker"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="156dp"
             android:layout_gravity="center"
-            android:gravity="center" >
-        </ffm.geok.com.widget.dialog.DatePicker>
+            android:gravity="center"></ffm.geok.com.widget.dialog.DatePicker>
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="match_parent"
+            android:layout_height="171dp"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:timePickerMode="spinner"></TimePicker>
     </LinearLayout>
 
 </RelativeLayout>
