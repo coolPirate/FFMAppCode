@@ -27,7 +27,7 @@ public class SelectDateWindow extends PopupWindow {
     @BindView(R.id.datepicker)
     public DatePicker datepicker;
     @BindView(R.id.timePicker)
-    TimePicker timePicker;
+    public TimePicker timePicker;
     private View mMenuView;
 
     public SelectDateWindow(Activity context, View.OnClickListener listener, DatePicker.OnSelectingListener selectingListener,TimePicker.OnTimeChangedListener timeChangedListener) {

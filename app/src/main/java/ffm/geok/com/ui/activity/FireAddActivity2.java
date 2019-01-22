@@ -137,15 +137,21 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
 
         switch (item.getItemId()) {
             case R.id.action_save:
-                //保存本地
-                assembleProgectData();
+                L.i("tvLat", String.valueOf(tvLat.getText()));
+                L.i("tvLon", String.valueOf(tvLon.getText()));
+                if(String.valueOf(tvLat.getText()).equals("纬度")){
+                    ToastUtils.showShortMsg(mContext, "无数据");
+                    finish();
+                }else {
+                    //保存本地
+                    assembleProgectData();
 
-                //上传服务器
-                mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
-                dataSynchronizationPresenter.dataSynchronization();
-                ToastUtils.showShortMsg(mContext, "上报完成");
-                L.i("Upload", "上报完成");
-
+                    //上传服务器
+                    //mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
+                    //dataSynchronizationPresenter.dataSynchronization();
+                    ToastUtils.showShortMsg(mContext, "上报完成");
+                    L.i("Upload", "上报完成");
+                }
                 break;
             default:
                 break;
@@ -155,7 +161,7 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
     }
 
     private void initView() {
-        toolbar.setTitle("火点信息核查");
+        toolbar.setTitle("火点信息上传");
         //布局渲染完了之后，才能setSupportActionBar
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -362,6 +368,7 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
 
 
     private void assembleProgectData() {
+        if(tvFindTime.getText()==null) return;
         String projectPid = ToolUtils.generateUUID();
         String modiTime=ToolUtils.getSystemDate();
         fireAddEntity.setId(projectPid);
@@ -391,6 +398,7 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
         //保存多媒体
         FireMediaEntity fireMediaEntity = new FireMediaEntity();
         File imageFile = null;
+        if(images==null) return;
         for (ImageItem imageItem : images) {
             imageFile = new File(imageItem.path);
             fireMediaEntity = new FireMediaEntity();
@@ -448,7 +456,11 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
                 case R.id.btn_selectdate_finish:
                     selectDateWindow.dismiss();
                     selectDateString = selectDateWindow.datepicker.getDateString();
-                    tvFindTime.setText(selectDateString+" "+selectTimeString);
+                    String date=selectDateString.replace("年","-").replace("月","-").replace("日","");
+                    int hour=selectDateWindow.timePicker.getHour();
+                    int minute=selectDateWindow.timePicker.getMinute();
+                    String time=getTime(hour,minute);
+                    tvFindTime.setText(date+" "+time);
                     break;
             }
         }
@@ -464,9 +476,7 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
     private TimePicker.OnTimeChangedListener timeChangedListener= new TimePicker.OnTimeChangedListener() {
         @Override
         public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-            selectTimeString=hourOfDay + "时" + minute + "分";
-
-
+            //selectTimeString=view.getHour() + ":" + view.getMinute();
         }
     };
 
@@ -503,6 +513,24 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void selected(boolean selected) {
+
+    }
+
+    private String getTime(int hour,int minutes){
+        String time="";
+        String hourStr="";
+        String minStr="";
+        if(hour<10){
+            hourStr="0"+String.valueOf(hour);
+        }else {
+            hourStr=String.valueOf(hour);
+        }
+        if(minutes<10){
+            minStr="0"+String.valueOf(minutes);
+        }else {
+            minStr=String.valueOf(minutes);
+        }
+        return hourStr+":"+minStr;
 
     }
 }

@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             L.i("LOGIN",password1);
             loginName.setText(name);
             loginPassword.setText(password1);
+            NavigationUtils.getInstance().jumpTo(MainActivity.class, null, true);
         }
 
 

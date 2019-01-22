@@ -29,13 +29,13 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <ffm.geok.com.ui.view.CustomViewPager
+        <!--<ffm.geok.com.ui.view.CustomViewPager
             android:id="@+id/cViewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="12">
+            android:layout_weight="9">
 
-        </ffm.geok.com.ui.view.CustomViewPager>
+        </ffm.geok.com.ui.view.CustomViewPager>-->
 
         <!--<android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
@@ -49,7 +49,7 @@
         <com.next.easynavigation.view.EasyNavigationBar
             android:id="@+id/tab_navigationBar"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="bottom"
             app:Easy_tabSelectColor="@color/color_orange"

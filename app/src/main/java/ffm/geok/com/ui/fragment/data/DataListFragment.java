@@ -44,6 +44,7 @@ import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.DateUtils;
 import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.NavigationUtils;
+import ffm.geok.com.uitls.RecycleViewDivider;
 import ffm.geok.com.uitls.RxBus;
 import ffm.geok.com.uitls.StringUtils;
 import ffm.geok.com.uitls.ToastUtils;
@@ -74,7 +75,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
     private boolean isRefresh=true;
     private int pageNumber = 0;
     private String queryAdcd = "";
-    private int pageSize = 10;
+    private int pageSize = 20;
     private String queryProjectName = "";
     //private String _time;
     private int lastVisibleItem = -1;
@@ -106,7 +107,6 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         initView();
         initData();
         initListener();
-        onRefresh();
 
         return view;
     }
@@ -124,7 +124,9 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         //设置Item增加、移除动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //添加分割线
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new RecycleViewDivider(
+                mContext, LinearLayoutManager.VERTICAL, 1, getResources().getColor(R.color.color_black)));
         //初始化加载全部
         projectPresenter = new ProjectPresenter(getActivity(), new IProjectPresenter.ProjectCallback() {
 
@@ -214,11 +216,13 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         observable.subscribe(message -> {
             L.d("code = " + message.getMsgCode() + " content = " + message.getMsgContent());
             if (0 == projectListAdapter.getDataList().size()) {
+                onRefresh();
                 llEmpty.setVisibility(View.VISIBLE);
             } else {
                 llEmpty.setVisibility(View.GONE);
             }
-            onRefresh();
+            //onRefresh();
+
         });
 
     }
@@ -271,13 +275,11 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
 
     @Override
     public void onLoadmore() {
-        projectListAdapter.changeMoreStatus(ProjectListAdapter.LOADING_MORE);
+        projectListAdapter.changeMoreStatus(projectListAdapter.LOADING_MORE);
         pageNumber++;
         isRefresh = false;
         projectPresenter.getFiresList(queryAdcd, queryProjectName, pageSize, pageNumber);
-        //projectPresenter.getFiresList(_time,queryAdcd, queryProjectName, pageSize, pageNumber);
     }
-
     @Override
     public void onItemClick(int position, View view) {
         if (projectListAdapter.getDataList().size() >= position) {

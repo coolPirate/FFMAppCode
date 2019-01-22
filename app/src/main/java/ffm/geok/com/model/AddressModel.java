@@ -10,6 +10,7 @@ public class AddressModel implements Parcelable  {
     private String proviencd;
     private String city;
     private String county;
+    private String dem;
 
 
     public AddressModel() {
@@ -65,6 +66,14 @@ public class AddressModel implements Parcelable  {
 
     public void setCounty(String county) {
         this.county = county;
+    }
+
+    public String getDem() {
+        return dem;
+    }
+
+    public void setDem(String dem) {
+        this.dem = dem;
     }
 
 

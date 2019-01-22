@@ -48,7 +48,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".ui.activity.projectVertifyActivity" />
+        <activity android:name=".ui.activity.projectVertifyActivity"
+            android:label="@string/title_activity_vertify"/>
         <activity android:name=".ui.activity.ShowImagesActivity" />
         <activity
             android:name=".ui.activity.LoginActivity"
@@ -67,7 +68,8 @@
         <activity
             android:name=".ui.activity.MapLocationActivity"
             android:label="@string/title_activity_map_location"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
         <activity
             android:name=".ui.activity.FireAddActivity2"
             android:label="@string/title_activity_fire_add2"

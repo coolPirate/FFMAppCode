@@ -67,7 +67,7 @@ public class DataSynchronizationPresenter implements IDataSynchronizationPresent
             List<FireAddEntity> fireAddEntities = DBUtils.getInstance().queryAllSynchroData(FireAddEntity.class);
             if (null != fireAddEntities && fireAddEntities.size() > 0) {
                 String fire_Main = Convert.toJson(fireAddEntities);
-                jsonObject.put("fire_Main", fire_Main);
+                jsonObject.put("fire_main", fire_Main);
             }
             List<FireMediaEntity> fireMediaEntityList = DBUtils.getInstance().queryAllSynchroData(FireMediaEntity.class);
             if (null != fireMediaEntityList && fireMediaEntityList.size() > 0) {

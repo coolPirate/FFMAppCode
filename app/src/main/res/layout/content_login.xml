@@ -10,6 +10,7 @@
 
     <ScrollView
         android:id="@+id/login_form"
+        android:background="@color/color_white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

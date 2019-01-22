@@ -1,13 +1,14 @@
 package ffm.geok.com.ui.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -19,49 +20,37 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.amap.api.maps.model.TileOverlay;
+import com.amap.api.maps.model.TileOverlayOptions;
+import com.amap.api.maps.model.TileProvider;
+import com.amap.api.maps.model.UrlTileProvider;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ffm.geok.com.R;
-import ffm.geok.com.global.XApplication;
 import ffm.geok.com.manager.DialogCallback;
 import ffm.geok.com.model.AddressAttributes;
 import ffm.geok.com.model.AddressModel;
-import ffm.geok.com.model.AddressResults;
-import ffm.geok.com.model.FireDateEntity;
-import ffm.geok.com.model.LatLngEntity;
-import ffm.geok.com.model.LoginModel;
 import ffm.geok.com.model.ResponseModelAddress;
-import ffm.geok.com.model.ResponseModelLogin;
-import ffm.geok.com.presenter.ILoginPresenter;
 import ffm.geok.com.presenter.IMapAddressPre;
-import ffm.geok.com.presenter.LoginPresenter;
+import ffm.geok.com.presenter.IMapDemPre;
 import ffm.geok.com.presenter.MapAddressPre;
+import ffm.geok.com.presenter.MapDemPre;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.Convert;
-import ffm.geok.com.uitls.GeoCoderUtil;
 import ffm.geok.com.uitls.L;
-import ffm.geok.com.uitls.NavigationUtils;
-import ffm.geok.com.uitls.SPManager;
 import ffm.geok.com.uitls.ServerUrl;
 import ffm.geok.com.uitls.StringUtils;
-import ffm.geok.com.uitls.ToastUtils;
-import rx.android.schedulers.AndroidSchedulers;
 
 public class MapLocationActivity extends AppCompatActivity implements LocationSource, AMapLocationListener {
 
@@ -69,10 +58,12 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
     Toolbar mtoolBar;
     @BindView(R.id.map)
     MapView map;
-    @BindView(R.id.map_locationDone)
-    Button mapLocationDone;
-    @BindView(R.id.map_locationReset)
-    Button mapLocationReset;
+    @BindView(R.id.googleMap)
+    CheckBox googleMap;
+    /*@BindView(R.id.map_locationDone)
+    Button mapLocationDone;*/
+    /*@BindView(R.id.map_locationReset)
+    Button mapLocationReset;*/
 
     //AMap是地图对象
     private AMap aMap;
@@ -85,10 +76,12 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
     private OnLocationChangedListener mListener = null;
     //标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
+    private TileOverlay tileOverlay;
 
     private LatLng targetLatLng;
-    private volatile AddressModel address=new AddressModel();
+    private volatile AddressModel address = new AddressModel();
     private IMapAddressPre mapAddressPre;
+    private IMapDemPre mapDemPre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +97,31 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         initView();
         initData();
         initListener();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // 这条表示加载菜单文件，第一个参数表示通过那个资源文件来创建菜单
+        // 第二个表示将菜单传入那个对象中。这里我们用Menu传入menu
+        // 这条语句一般系统帮我们创建好
+        getMenuInflater().inflate(R.menu.map_address, menu);
+        return true;
+    }
+
+    // 菜单的监听方法
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_address:
+                mapAddressPre.getAddress(targetLatLng.longitude, targetLatLng.latitude);
+                mapDemPre.getDem(targetLatLng.longitude, targetLatLng.latitude);
+                break;
+            default:
+                break;
+        }
+        return true;
 
     }
 
@@ -142,15 +160,15 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         //开始定位
         initLocation();
 
-        mapAddressPre=new MapAddressPre(this, new IMapAddressPre.AddressCallback() {
+        mapAddressPre = new MapAddressPre(this, new IMapAddressPre.AddressCallback() {
             @Override
             public void onAddressSuccess(AddressModel addressModel) {
-                address=addressModel;
+                address = addressModel;
 
                 Intent intent = new Intent();
-                L.i("AA",address.getCity());
+                L.i("AA", address.getCity());
                 intent.putExtra(ConstantUtils.mapLocation.Location, targetLatLng);
-                intent.putExtra(ConstantUtils.mapLocation.POINTADDRESS,address);
+                intent.putExtra(ConstantUtils.mapLocation.POINTADDRESS, address);
                 setResult(RESULT_OK, intent);//回传数据到主Activity
 
                 finish();
@@ -163,11 +181,54 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
             }
         });
 
+        mapDemPre=new MapDemPre(this, new IMapDemPre.DemCallback() {
+            @Override
+            public void onDemSuccess(String dem) {
+                L.i("DEM",dem);
+            }
+
+            @Override
+            public void onError(String errMsg) {
+
+            }
+        });
+
     }
 
 
-    private void initListener(){
-        Button locDone = (Button) findViewById(R.id.map_locationDone);
+    private void initListener() {
+        googleMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (googleMap.isChecked()) {
+                    //显示google瓦片
+                    final String url = "http://mt0.google.cn/vt/lyrs=y@198&hl=zh-CN&gl=cn&src=app&x=%d&y=%d&z=%d&s=";
+                    TileProvider tileProvider = new UrlTileProvider(256, 256) {
+                        public URL getTileUrl(int x, int y, int zoom) {
+                            try {
+                                return new URL(String.format(url, x, y, zoom));
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+                    };
+                    if (tileProvider != null) {
+                        tileOverlay = aMap.addTileOverlay(new TileOverlayOptions()
+                                .tileProvider(tileProvider)
+                                .diskCacheEnabled(true)
+                                .diskCacheDir("/storage/emulated/0/amap/cache")
+                                .diskCacheSize(100000)
+                                .memoryCacheEnabled(true)
+                                .memCacheSize(100000))
+                        ;
+                    }
+                } else {
+                    tileOverlay.remove();
+                }
+            }
+        });
+        /*Button locDone = (Button) findViewById(R.id.map_locationDone);
         locDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,9 +236,9 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                 mapAddressPre.getAddress(targetLatLng.longitude,targetLatLng.latitude);
 
             }
-        });
+        });*/
 
-        Button reLoc=(Button)findViewById(R.id.map_locationReset);
+        /*Button reLoc=(Button)findViewById(R.id.map_locationReset);
         reLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,7 +246,7 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                 aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMap.getMyLocation().getLatitude(), aMap.getMyLocation().getLongitude())));
 
             }
-        });
+        });*/
 
         aMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
             @Override
@@ -205,7 +266,6 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                 }
             }
         });
-
 
 
     }
@@ -247,13 +307,13 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                     buffer.append(aMapLocation.getCountry() + "" + aMapLocation.getProvince() + "" + aMapLocation.getCity() + "" + aMapLocation.getProvince() + "" + aMapLocation.getDistrict() + "" + aMapLocation.getStreet() + "" + aMapLocation.getStreetNum());
                     Toast.makeText(getApplicationContext(), buffer.toString(), Toast.LENGTH_LONG).show();
 
-                    Marker marker = aMap.addMarker(new MarkerOptions()
+                    /*Marker marker = aMap.addMarker(new MarkerOptions()
                             .position(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()))
                             .title("新增")
                             .icon(BitmapDescriptorFactory
                                     .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                             .draggable(true));
-                    marker.showInfoWindow();
+                    marker.showInfoWindow();*/
 
                     isFirstLoc = false;
                 }
@@ -307,9 +367,9 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
     }
 
     // 将经纬度getLng， getLat   通过getAmapByLngAndLat方法转换地址
-    public void getAmapByLngAndLat(Double getLng, Double getLat){
-        String geometry="{{\"x\":"+getLng+", \"y\":"+getLat+"}}";
-        L.i("GEOMETRY",geometry);
+    public void getAmapByLngAndLat(Double getLng, Double getLat) {
+        String geometry = "{{\"x\":" + getLng + ", \"y\":" + getLat + "}}";
+        L.i("GEOMETRY", geometry);
         OkGo.<String>get(ServerUrl.Address)
                 .tag(this)
                 .params("returnGeometry", "false")
@@ -327,15 +387,15 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                     public void onSuccess(Response<String> response) {
                         String responseString = response.body();
                         L.d("test11", "请求成功：" + responseString);
-                        ResponseModelAddress responseModel = Convert.fromJson(responseString,ResponseModelAddress.class);
-                        if (null != responseModel){
-                            AddressAttributes addressAttributes=responseModel.getResults().get(0).getAttributes();
+                        ResponseModelAddress responseModel = Convert.fromJson(responseString, ResponseModelAddress.class);
+                        if (null != responseModel) {
+                            AddressAttributes addressAttributes = responseModel.getResults().get(0).getAttributes();
                             address.setAdcd(addressAttributes.getAdcd());
                             address.setCity(addressAttributes.getCity());
                             address.setCounty(addressAttributes.getCounty());
                             address.setProviencd(addressAttributes.getProvince());
-                            L.e("Address",addressAttributes.getCity());
-                            L.e("Address111",address.getCity());
+                            L.e("Address", addressAttributes.getCity());
+                            L.e("Address111", address.getCity());
                         }
                     }
 

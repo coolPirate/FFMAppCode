@@ -3,6 +3,7 @@ package ffm.geok.com.ui.fragment.home;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -42,8 +43,8 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
     Toolbar mToolbar;
     /*@BindView(R.id.tab_layout)
     TabLayout tabLayout;*/
-    @BindView(R.id.cViewPager)
-    CustomViewPager cViewPager;
+    /*@BindView(R.id.cViewPager)
+    CustomViewPager cViewPager;*/
     @BindView(R.id.tab_navigationBar)
     EasyNavigationBar tabNavigationBar;
 
@@ -87,6 +88,7 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                 .fragmentList(fragments)
                 .mode(MODE_ADD)
                 .fragmentManager(getChildFragmentManager())
+                .navigationBackground(Color.parseColor("#ffcccccc"))   //导航栏背景色
                 .onTabClickListener(new EasyNavigationBar.OnTabClickListener() {
                     @Override
                     public boolean onTabClickEvent(View view, int position) {

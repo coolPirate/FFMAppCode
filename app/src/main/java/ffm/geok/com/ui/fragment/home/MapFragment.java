@@ -197,7 +197,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
 
 
             LatLng desLatLng = MapConverter.transformFromWGSToGCJ(latLng);
-            L.i("LATLNG111",desLatLng.latitude+"......"+desLatLng.longitude);
+            //L.i("LATLNG111",desLatLng.latitude+"......"+desLatLng.longitude);
             TextView textView = new TextView(getActivity().getApplicationContext());
             textView.setBackgroundResource(R.mipmap.marker4);     //通过View获取BitmapDescriptor对象
             BitmapDescriptor markerIcon = BitmapDescriptorFactory

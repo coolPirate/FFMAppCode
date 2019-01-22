@@ -46,13 +46,19 @@ public final class MapAddressPre implements IMapAddressPre {
                         ResponseModelAddress responseModel = Convert.fromJson(responseString,ResponseModelAddress.class);
                         if (null != responseModel){
                             AddressAttributes addressAttributes=responseModel.getResults().get(0).getAttributes();
+                            AddressAttributes addressAttributes2=responseModel.getResults().get(1).getAttributes();
                             AddressModel address=new AddressModel();
-                            address.setAdcd(addressAttributes.getAdcd());
-                            address.setCity(addressAttributes.getCity());
-                            address.setCounty(addressAttributes.getCounty());
-                            address.setProviencd(addressAttributes.getProvince());
+                            if(addressAttributes!=null){
+                                address.setAdcd(addressAttributes.getAdcd());
+                                address.setCity(addressAttributes.getCity());
+                                address.setCounty(addressAttributes.getCounty());
+                                address.setProviencd(addressAttributes.getProvince());
+                            }
+                            if(addressAttributes2!=null){
+                            }
+
+
                             L.e("Address",addressAttributes.getCity());
-                            L.e("Address111",address.getCity());
                             mAddressCallback.onAddressSuccess(address);
                         }
                     }
