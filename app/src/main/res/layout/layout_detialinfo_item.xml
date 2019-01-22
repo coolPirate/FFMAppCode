@@ -14,9 +14,11 @@
         android:orientation="horizontal">
         <TextView
             style="@style/input_type_left"
+            android:textSize="@dimen/sp_16"
             tools:text="label"/>
         <TextView
             style="@style/input_type"
+            android:textSize="@dimen/sp_16"
             tools:text="显示值"/>
     </LinearLayout>
 

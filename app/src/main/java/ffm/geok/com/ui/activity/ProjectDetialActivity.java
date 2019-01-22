@@ -10,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -36,8 +38,8 @@ public class ProjectDetialActivity extends MySupportActivity {
     Toolbar toolbar;
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
-    @BindView(R.id.btn_vertify)
-    TextView btnVertify;
+    /*@BindView(R.id.btn_vertify)
+    TextView btnVertify;*/
 
     private ArrayList<InputInfoModel> sourceData = null; //录入模板
     private String entityId;
@@ -65,6 +67,32 @@ public class ProjectDetialActivity extends MySupportActivity {
 
     @Override
     protected void OnDestory() {
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // 这条表示加载菜单文件，第一个参数表示通过那个资源文件来创建菜单
+        // 第二个表示将菜单传入那个对象中。这里我们用Menu传入menu
+        // 这条语句一般系统帮我们创建好
+        getMenuInflater().inflate(R.menu.check, menu);
+        return true;
+    }
+
+    // 菜单的监听方法
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_address:
+                Bundle bundle = new Bundle();
+                bundle.putString(ConstantUtils.global.ProjectEntityId, entityId);
+                NavigationUtils.getInstance().jumpTo(projectVertifyActivity.class,bundle,false);
+                break;
+            default:
+                break;
+        }
+        return true;
 
     }
 
@@ -126,14 +154,14 @@ public class ProjectDetialActivity extends MySupportActivity {
      */
     private void initListener() {
 
-        btnVertify.setOnClickListener(new View.OnClickListener() {
+        /*btnVertify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putString(ConstantUtils.global.ProjectEntityId, entityId);
                 NavigationUtils.getInstance().jumpTo(projectVertifyActivity.class,bundle,false);
             }
-        });
+        });*/
 
     }
 

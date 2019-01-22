@@ -54,7 +54,7 @@
             android:layout_gravity="bottom"
             app:Easy_tabSelectColor="@color/color_orange"
             app:Easy_addLayoutRule="RULE_CENTER"
-            android:background="?attr/colorPrimary">
+            android:background="@color/color_shallow">
 
         </com.next.easynavigation.view.EasyNavigationBar>
     </LinearLayout>
