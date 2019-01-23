@@ -147,9 +147,9 @@ public class FireAddActivity2 extends AppCompatActivity implements View.OnClickL
                     assembleProgectData();
 
                     //上传服务器
-                    //mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
-                    //dataSynchronizationPresenter.dataSynchronization();
-                    ToastUtils.showShortMsg(mContext, "上报完成");
+                    mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
+                    dataSynchronizationPresenter.dataSynchronization();
+                    ToastUtils.showShortMsg(mContext, "保存完成");
                     L.i("Upload", "上报完成");
                 }
                 break;

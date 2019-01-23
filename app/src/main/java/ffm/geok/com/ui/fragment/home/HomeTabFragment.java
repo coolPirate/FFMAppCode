@@ -88,7 +88,7 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                 .fragmentList(fragments)
                 .mode(MODE_ADD)
                 .fragmentManager(getChildFragmentManager())
-                .navigationBackground(Color.parseColor("#ffcccccc"))   //导航栏背景色
+                .navigationBackground(Color.parseColor("#8FEEEEEE"))   //导航栏背景色
                 .onTabClickListener(new EasyNavigationBar.OnTabClickListener() {
                     @Override
                     public boolean onTabClickEvent(View view, int position) {
@@ -142,10 +142,10 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                             // TODO Auto-generated method stub
                             Bundle bundle = new Bundle();
                             bundle.putInt(ConstantUtils.global.IS_AutoLogin, ConstantUtils.global.autoLoginValue);
-                            NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
                             SharedPreferences.Editor editor = SPManager.getSharedPreferences().edit();
                             editor.clear().commit();
                             NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
+                            getActivity().finish();
                         }
                     }).
                     setNegativeButton("取消", new DialogInterface.OnClickListener() {

@@ -34,6 +34,11 @@
                 android:layout_marginLeft="@dimen/dp_5"
                 android:layout_marginRight="@dimen/dp_5"
                 android:hint="请输入搜索地址" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.2dp"
+                android:layout_alignParentBottom="true"
+                android:background="#c9c9c9"/>
         </LinearLayout>
 
         <android.support.v4.widget.SwipeRefreshLayout

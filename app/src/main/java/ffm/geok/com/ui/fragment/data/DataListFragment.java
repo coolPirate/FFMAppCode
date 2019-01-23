@@ -1,6 +1,7 @@
 package ffm.geok.com.ui.fragment.data;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -40,6 +41,7 @@ import ffm.geok.com.model.VerificationType;
 import ffm.geok.com.presenter.IProjectPresenter;
 import ffm.geok.com.presenter.ProjectPresenter;
 import ffm.geok.com.ui.activity.ProjectDetialActivity;
+import ffm.geok.com.ui.activity.SearchActivity;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.DateUtils;
 import ffm.geok.com.uitls.L;
@@ -210,6 +212,19 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         });
 
         tvProjectName.setOnEditorActionListener(this);
+        tvProjectName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                int location[] = new int[2];
+                tvProjectName.getLocationOnScreen(location);
+                intent.putExtra("x",location[0]);
+                intent.putExtra("y",location[1]);
+                startActivity(intent);
+                getActivity().overridePendingTransition(0,0);
+
+            }
+        });
 
         projectListAdapter.setOnItemClickListener(this);
 
