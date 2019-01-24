@@ -222,7 +222,6 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
                 intent.putExtra("y",location[1]);
                 startActivity(intent);
                 getActivity().overridePendingTransition(0,0);
-
             }
         });
 
@@ -266,10 +265,10 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
                 System.out.println("action done for number_content: " + v.getText());
                 break;
             case EditorInfo.IME_ACTION_SEARCH:
-                queryProjectName = tvProjectName.getText().toString();
+                /*queryProjectName = tvProjectName.getText().toString();
                 //强制隐藏键盘
                 ToolUtils.hideSoftInput(getActivity());
-                onRefresh();
+                onRefresh();*/
                 break;
         }
         return false;

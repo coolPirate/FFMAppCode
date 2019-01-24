@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -60,6 +62,8 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
         return new HomeTabFragment();
     }
 
+    private View statusBarView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -102,8 +106,32 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                 })
                 .build();
 
+        //设置状态栏颜;
+        getActivity().getWindow().getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                initStatusBar();
+                getActivity().getWindow().getDecorView().removeOnLayoutChangeListener(this);
+            }
+        });
 
-
+        //延时加载数据.
+        Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+            @Override
+            public boolean queueIdle() {
+                if (isStatusBar()) {
+                    initStatusBar();
+                    getActivity().getWindow().getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                        @Override
+                        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                            initStatusBar();
+                        }
+                    });
+                }
+                //只走一次
+                return false;
+            }
+        });
 
 
 
@@ -118,6 +146,21 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
         mTabLayout.setupWithViewPager(cViewPager);*/
 
     }
+
+    private void initStatusBar() {
+        if (statusBarView == null) {
+            int identifier = getResources().getIdentifier("statusBarBackground", "id", "android");
+            statusBarView = getActivity().getWindow().findViewById(identifier);
+        }
+        if (statusBarView != null) {
+            statusBarView.setBackgroundResource(R.drawable.shape_title_bg);
+        }
+    }
+
+    protected boolean isStatusBar() {
+        return true;
+    }
+
 
     @Override
     public void onDestroyView() {

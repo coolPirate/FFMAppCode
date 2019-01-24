@@ -1,27 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:fitsSystemWindows="true"
     tools:context=".ui.activity.SearchActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/abl_title"
+    <FrameLayout
+        android:id="@+id/frame_bg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="150dp"
+        android:background="@color/cardview_shadow_start_color"
+        android:padding="10dp"
+        >
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <ImageView
+            android:id="@+id/iv_arrow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center|left"
+            android:src="@drawable/ic_arrow_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_search_bg"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/search_bg"
+            android:gravity="center"
+            android:padding="10dp"
+            />
 
-    </android.support.design.widget.AppBarLayout>
+        <EditText
+            android:id="@+id/tv_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableLeft="@mipmap/icon_search"
+            android:background="@null"
+            android:gravity="center"
+            android:imeOptions="actionSearch"
+            android:includeFontPadding="false"
+            android:text="搜索商家、商品名称"
+            android:textColor="#bebebe"
+            android:textSize="13sp"
+            />
 
-    <include layout="@layout/content_search" />
+        <TextView
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:layout_marginRight="5dp"
+            android:text="搜索"
+            android:textColor="#fff"
+            />
+    </FrameLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+    <FrameLayout
+        android:id="@+id/frame_content_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="我是搜索页"
+            />
+    </FrameLayout>
+
+
+
+</LinearLayout>

@@ -12,6 +12,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.CompoundButton;
@@ -63,8 +65,8 @@ public class projectVertifyActivity extends AppCompatActivity {
     EditText edtMultext;
     @BindView(R.id.imgs_recyclerview)
     RecyclerView imgsRecyclerview;
-    @BindView(R.id.btn_upload)
-    TextView btnUpload;
+    /*@BindView(R.id.btn_upload)
+    TextView btnUpload;*/
     @BindView(R.id.confirmor)
     EditText confirmor;
     @BindView(R.id.switch_button)
@@ -100,6 +102,38 @@ public class projectVertifyActivity extends AppCompatActivity {
         initView();
         initData();
         initListener();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // 这条表示加载菜单文件，第一个参数表示通过那个资源文件来创建菜单
+        // 第二个表示将菜单传入那个对象中。这里我们用Menu传入menu
+        // 这条语句一般系统帮我们创建好
+        getMenuInflater().inflate(R.menu.save, menu);
+        return true;
+    }
+
+    // 菜单的监听方法
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                //保存本地
+                assembleProgectData();
+
+                //上传服务器
+                mProgressDialog = DialogUtils.getProgressDialog(mContext, "数据同步中...");
+                dataSynchronizationPresenter.dataSynchronization();
+                ToastUtils.showShortMsg(projectVertifyActivity.this, "核查完成");
+                L.i("Upload", "上报完成");
+
+                break;
+            default:
+                break;
+        }
+        return true;
+
     }
 
     private void initData() {
@@ -237,7 +271,7 @@ public class projectVertifyActivity extends AppCompatActivity {
             }
         });
 
-        btnUpload.setOnClickListener(new View.OnClickListener() {
+        /*btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //保存本地
@@ -250,7 +284,7 @@ public class projectVertifyActivity extends AppCompatActivity {
                 L.i("Upload", "上报完成");
 
             }
-        });
+        });*/
 
     }
 

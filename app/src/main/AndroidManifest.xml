@@ -18,10 +18,7 @@
         android:roundIcon="@mipmap/icon_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.activity.SearchActivity"
-            android:label="@string/title_activity_search"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <!-- 设置key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -71,6 +68,11 @@
             android:name=".ui.activity.FireAddActivity2"
             android:label="@string/title_activity_fire_add2"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
