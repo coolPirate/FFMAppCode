@@ -84,7 +84,7 @@ public class ProjectDetialActivity extends MySupportActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.action_address:
+            case R.id.action_check:
                 Bundle bundle = new Bundle();
                 bundle.putString(ConstantUtils.global.ProjectEntityId, entityId);
                 NavigationUtils.getInstance().jumpTo(projectVertifyActivity.class,bundle,false);
