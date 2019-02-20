@@ -78,8 +78,8 @@ public class ProjectListAdapter extends BaseRecyclerViewAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
             FireDateEntity fireDateEntity = (FireDateEntity) mDataList.get(position);
-            ((ItemViewHolder) holder).tvProjectLoc.setText(fireDateEntity.getCounty());
-            ((ItemViewHolder) holder).tvProjectTime.setText(fireDateEntity.getCreateTime());
+            ((ItemViewHolder) holder).tvProjectLoc.setText(fireDateEntity.getCity()+fireDateEntity.getCounty());
+            ((ItemViewHolder) holder).tvProjectTime.setText(fireDateEntity.getCreateTime()+" "+fireDateEntity.getSatellite());
             holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(position,v));
         } else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;

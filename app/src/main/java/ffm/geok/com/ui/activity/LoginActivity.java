@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
         String name = SPManager.getUserName();
         String password1=SPManager.getPassword();
-        if(name!=null&&password1!=null){
+        if(name!=null&&password1!=null&&isAutoLogin!=ConstantUtils.global.autoLoginValue){
             L.i("LOGIN",password1);
             loginName.setText(name);
             loginPassword.setText(password1);
@@ -81,9 +81,9 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = SPManager.getSharedPreferences().edit();
                 editor.putString(ConstantUtils.global.LOGIN_NAME, loginname);
                 editor.putString(ConstantUtils.global.LOGIN_PASSWORD, password);
+                SPManager.setADCD(loginModel.getAdcd());
                 L.i("LOGIN11",password);
                 editor.commit();
-                SPManager.setADCD(loginModel.getAdcd());
                 NavigationUtils.getInstance().jumpTo(MainActivity.class, null, true);
             }
 

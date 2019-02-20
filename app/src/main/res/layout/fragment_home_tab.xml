@@ -19,12 +19,11 @@
             android:fitsSystemWindows="true"
             android:theme="@style/AppTheme.AppBarOverlay"
             app:expanded="true">
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/colorPrimary"
+                android:background="@drawable/shape_title_bg"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.AppBarLayout>
@@ -52,9 +51,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="bottom"
+            app:Easy_navigationBackground="@color/base_bg1"
             app:Easy_tabSelectColor="@color/color_orange"
             app:Easy_addLayoutRule="RULE_CENTER"
-            android:background="@color/color_shallow">
+            android:background="@color/base_bg1">
 
         </com.next.easynavigation.view.EasyNavigationBar>
     </LinearLayout>

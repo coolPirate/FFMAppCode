@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -60,6 +62,8 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
         return new HomeTabFragment();
     }
 
+    private View statusBarView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,7 +92,7 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                 .fragmentList(fragments)
                 .mode(MODE_ADD)
                 .fragmentManager(getChildFragmentManager())
-                .navigationBackground(Color.parseColor("#ffcccccc"))   //导航栏背景色
+                .navigationBackground(Color.parseColor("#8FEEEEEE"))   //导航栏背景色
                 .onTabClickListener(new EasyNavigationBar.OnTabClickListener() {
                     @Override
                     public boolean onTabClickEvent(View view, int position) {
@@ -102,8 +106,32 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                 })
                 .build();
 
+        //设置状态栏颜;
+        getActivity().getWindow().getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                initStatusBar();
+                getActivity().getWindow().getDecorView().removeOnLayoutChangeListener(this);
+            }
+        });
 
-
+        //延时加载数据.
+        Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+            @Override
+            public boolean queueIdle() {
+                if (isStatusBar()) {
+                    initStatusBar();
+                    getActivity().getWindow().getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                        @Override
+                        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                            initStatusBar();
+                        }
+                    });
+                }
+                //只走一次
+                return false;
+            }
+        });
 
 
 
@@ -118,6 +146,21 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
         mTabLayout.setupWithViewPager(cViewPager);*/
 
     }
+
+    private void initStatusBar() {
+        if (statusBarView == null) {
+            int identifier = getResources().getIdentifier("statusBarBackground", "id", "android");
+            statusBarView = getActivity().getWindow().findViewById(identifier);
+        }
+        if (statusBarView != null) {
+            statusBarView.setBackgroundResource(R.drawable.shape_title_bg);
+        }
+    }
+
+    protected boolean isStatusBar() {
+        return true;
+    }
+
 
     @Override
     public void onDestroyView() {
@@ -142,10 +185,10 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                             // TODO Auto-generated method stub
                             Bundle bundle = new Bundle();
                             bundle.putInt(ConstantUtils.global.IS_AutoLogin, ConstantUtils.global.autoLoginValue);
-                            NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
                             SharedPreferences.Editor editor = SPManager.getSharedPreferences().edit();
                             editor.clear().commit();
                             NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
+                            getActivity().finish();
                         }
                     }).
                     setNegativeButton("取消", new DialogInterface.OnClickListener() {

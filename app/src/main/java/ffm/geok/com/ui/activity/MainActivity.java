@@ -48,6 +48,7 @@ import ffm.geok.com.uitls.L;
 import ffm.geok.com.uitls.NavigationUtils;
 import ffm.geok.com.uitls.RxBus;
 import ffm.geok.com.uitls.SPManager;
+import ffm.geok.com.uitls.ToolUtils;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -97,9 +98,9 @@ public class MainActivity extends MySupportActivity
     }
 
     private void loadData(){
-        //获取当前及以前5天的数据
+        //获取当前及以前3天的数据
         String curDateStr=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
-        String st=DateUtils.getDateStr(curDateStr,14);
+        String st=DateUtils.getDateStr(curDateStr,3);
         L.i("Date","ST："+curDateStr+" ET"+st);
 
         //firesPresenter.getFiresList("2018-11-10","2019-11-19");
@@ -322,6 +323,8 @@ public class MainActivity extends MySupportActivity
     @Override
     protected void onResume() {
         super.onResume();
+        //强制隐藏键盘
+        ToolUtils.hideSoftInput(this);
         //updateData();
     }
 

@@ -75,6 +75,7 @@
     <string name="title_activity_map_location">火点位置</string>
     <string name="title_activity_fire_add2">火点信息上传</string>
     <string name="title_activity_vertify">火点信息核查</string>
+    <string name="title_activity_search">搜索</string>
 
 
 </resources>

@@ -13,19 +13,17 @@
 
         <TextView
             style="@style/input_type_left"
+            android:visibility="gone"
             android:textSize="@dimen/dp_15"
             android:text="@string/address" />
 
         <TextView
             android:id="@+id/tv_project_loc"
             android:textSize="@dimen/dp_15"
-            style="@style/input_type"
+            android:textStyle="bold"
+            style="@style/input_type1"
             tools:text="@string/projectLocation" />
 
-        <!--<TextView
-            android:id="@+id/tv_project_loc"
-            style="@style/input_type_right"
-            tools:text="@string/projectLocation" />-->
     </LinearLayout>
 
     <LinearLayout
@@ -35,13 +33,14 @@
 
         <TextView
             style="@style/input_type_left"
+            android:visibility="gone"
             android:textSize="@dimen/dp_15"
             android:text="@string/create_time" />
 
         <TextView
             android:id="@+id/tv_project_time"
             android:textSize="@dimen/dp_15"
-            style="@style/input_type"
+            style="@style/input_type1"
             tools:text="@string/create_time" />
     </LinearLayout>
 </LinearLayout>
