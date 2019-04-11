@@ -520,7 +520,6 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        L.i("LATLON","lat1:");
     }
 
     @Override

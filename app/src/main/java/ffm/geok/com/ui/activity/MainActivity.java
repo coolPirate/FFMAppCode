@@ -127,9 +127,9 @@ public class MainActivity extends MySupportActivity
         //TODO
         /*mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
-        mNavigationView.setCheckedItem(R.id.nav_home);*/
+        mNavigationView.setCheckedItem(R.id.nav_home);
 
-        /*LinearLayout llNavHeader = (LinearLayout) mNavigationView.getHeaderView(0);
+        LinearLayout llNavHeader = (LinearLayout) mNavigationView.getHeaderView(0);
         mTvName = (TextView) llNavHeader.findViewById(R.id.tv_name);
         mImgNav = (ImageView) llNavHeader.findViewById(R.id.img_nav);
         llNavHeader.setOnClickListener(new View.OnClickListener() {

@@ -1,0 +1,102 @@
+Microsoft Windows [版本 10.0.17763.379]
+(c) 2018 Microsoft Corporation。保留所有权利。
+
+C:\Users\way>cd .android
+
+C:\Users\way\.android>keytool -list-v -keystore debug.keystore
+非法选项:  -list-v
+密钥和证书管理工具
+
+命令:
+
+ -certreq            生成证书请求
+ -changealias        更改条目的别名
+ -delete             删除条目
+ -exportcert         导出证书
+ -genkeypair         生成密钥对
+ -genseckey          生成密钥
+ -gencert            根据证书请求生成证书
+ -importcert         导入证书或证书链
+ -importpass         导入口令
+ -importkeystore     从其他密钥库导入一个或所有条目
+ -keypasswd          更改条目的密钥口令
+ -list               列出密钥库中的条目
+ -printcert          打印证书内容
+ -printcertreq       打印证书请求的内容
+ -printcrl           打印 CRL 文件的内容
+ -storepasswd        更改密钥库的存储口令
+
+使用 "keytool -command_name -help" 获取 command_name 的用法
+
+C:\Users\way\.android>keytool -list -v -keystore debug.keystore
+输入密钥库口令:
+
+密钥库类型: JKS
+密钥库提供方: SUN
+
+您的密钥库包含 1 个条目
+
+别名: androiddebugkey
+创建日期: 2016-6-23
+条目类型: PrivateKeyEntry
+证书链长度: 1
+证书[1]:
+所有者: C=US, O=Android, CN=Android Debug
+发布者: C=US, O=Android, CN=Android Debug
+序列号: 1
+有效期开始日期: Thu Jun 23 11:06:49 CST 2016, 截止日期: Sat Jun 16 11:06:49 CST 2046
+证书指纹:
+         MD5: 3F:BE:99:84:37:81:31:37:7D:C8:8D:69:F8:C1:47:D3
+         SHA1: B4:93:E7:FC:BC:C2:B5:33:18:07:C6:4C:E7:09:96:38:00:77:6D:B4
+         SHA256: 4E:8A:AA:C5:07:82:B5:08:7F:F4:AC:D4:6F:F7:68:12:82:B9:23:98:69:72:D0:AB:C8:8B:D9:B4:F6:12:EA:0D
+         签名算法名称: SHA1withRSA
+         版本: 1
+
+
+*******************************************
+*******************************************
+
+
+
+C:\Users\way\.android>keytool -list -v -keystore E:\Git\FFMAppCode\key_store_office1.jks
+输入密钥库口令:
+
+密钥库类型: JKS
+密钥库提供方: SUN
+
+您的密钥库包含 1 个条目
+
+别名: key0
+创建日期: 2019-4-8
+条目类型: PrivateKeyEntry
+证书链长度: 1
+证书[1]:
+所有者: CN=L, OU=cn, O=zkss, L=bj, ST=bj, C=00
+发布者: CN=L, OU=cn, O=zkss, L=bj, ST=bj, C=00
+序列号: 4f590a37
+有效期开始日期: Mon Apr 08 14:29:05 CST 2019, 截止日期: Fri Apr 01 14:29:05 CST 2044
+证书指纹:
+         MD5: A8:98:96:37:B3:10:36:14:E6:AC:A3:0F:AE:A1:12:E7
+         SHA1: 37:E9:D3:AE:7D:E3:CD:C8:16:D8:14:0C:FC:EC:DA:FB:42:11:BE:12
+         SHA256: EC:1B:58:26:E4:E0:68:09:B7:13:B7:09:B9:A4:40:FC:90:C0:C3:B3:F4:36:09:23:48:70:1C:17:1E:1F:33:7B
+         签名算法名称: SHA256withRSA
+         版本: 3
+
+扩展:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: B9 52 D9 3F FC CC A6 1C   6E 7E C1 50 3A 71 8A 3A  .R.?....n..P:q.:
+0010: 1E C4 90 34                                        ...4
+]
+]
+
+
+
+*******************************************
+*******************************************
+
+
+
+C:\Users\way\.android>
