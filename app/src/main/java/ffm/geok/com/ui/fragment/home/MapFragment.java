@@ -251,7 +251,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
                 aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
 
                 //设置缩放级别
-                aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                aMap.moveCamera(CameraUpdateFactory.zoomTo(8));
                 //将地图移动到定位点
                 aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
                 //点击定位按钮 能够将地图的中心移动到定位点

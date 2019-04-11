@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 
 import com.next.easynavigation.view.EasyNavigationBar;
 
+import org.greenrobot.greendao.test.DbTest;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +28,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ffm.geok.com.R;
 import ffm.geok.com.base.BaseMainFragment;
+import ffm.geok.com.javagen.FireAddEntityDao;
+import ffm.geok.com.javagen.FireCheckEntityDao;
+import ffm.geok.com.javagen.FireMediaEntityDao;
+import ffm.geok.com.model.FireAddEntity;
+import ffm.geok.com.model.FireCheckEntity;
+import ffm.geok.com.model.FireDateEntity;
+import ffm.geok.com.model.FireMediaEntity;
 import ffm.geok.com.ui.activity.FireAddActivity;
 import ffm.geok.com.ui.activity.FireAddActivity2;
 import ffm.geok.com.ui.activity.LoginActivity;
 import ffm.geok.com.ui.fragment.data.DataListFragment;
 import ffm.geok.com.ui.view.CustomViewPager;
 import ffm.geok.com.uitls.ConstantUtils;
+import ffm.geok.com.uitls.DBUtils;
 import ffm.geok.com.uitls.NavigationUtils;
 import ffm.geok.com.uitls.SPManager;
 
@@ -185,9 +195,13 @@ public class HomeTabFragment extends BaseMainFragment implements Toolbar.OnMenuI
                             // TODO Auto-generated method stub
                             Bundle bundle = new Bundle();
                             bundle.putInt(ConstantUtils.global.IS_AutoLogin, ConstantUtils.global.autoLoginValue);
+                            DBUtils.getInstance().deleteAll(FireMediaEntity.class);
+                            DBUtils.getInstance().deleteAll(FireDateEntity.class);
+                            DBUtils.getInstance().deleteAll(FireCheckEntity.class);
+                            DBUtils.getInstance().deleteAll(FireAddEntity.class);
+                            NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
                             SharedPreferences.Editor editor = SPManager.getSharedPreferences().edit();
                             editor.clear().commit();
-                            NavigationUtils.getInstance().jumpTo(LoginActivity.class, bundle, false);
                             getActivity().finish();
                         }
                     }).

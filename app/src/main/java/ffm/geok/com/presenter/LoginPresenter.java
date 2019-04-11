@@ -6,14 +6,11 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.lzy.okgo.OkGo;
 
-import java.lang.reflect.Type;
-
 import ffm.geok.com.R;
 import ffm.geok.com.global.XApplication;
 import ffm.geok.com.manager.DialogCallback;
 import ffm.geok.com.model.LoginModel;
-import ffm.geok.com.model.ResponseModel;
-import ffm.geok.com.model.ResponseModelLogin;
+import ffm.geok.com.model.ResponseModelLogin2;
 import ffm.geok.com.uitls.ConstantUtils;
 import ffm.geok.com.uitls.Convert;
 import ffm.geok.com.uitls.L;
@@ -44,12 +41,12 @@ public final class LoginPresenter implements ILoginPresenter {
                             String responseString = response.body();
                             L.d("登录请求成功：" + responseString);
                             try {
-                                ResponseModelLogin responseModel = Convert.fromJson(responseString,ResponseModelLogin.class);
-                                L.d("登录请求22：" + responseModel.getResult());
+                                ResponseModelLogin2 responseModel = Convert.fromJson(responseString,ResponseModelLogin2.class);
                                 if (null != responseModel&&responseModel.getResult().equals("true" )){
                                     String adcd=responseModel.getUser().getRefObj().getOffice().getOfficeCode();
-                                    LoginModel loginModel = new LoginModel(adcd);
-                                    L.d("登录请求22：" + loginModel.getAdcd());
+                                    LoginModel loginModel = new LoginModel();
+                                    loginModel.setAdcd(adcd);
+                                    L.d("登录请求22：" + adcd);
                                     XApplication.getInstance().put(ConstantUtils.global.LoginModel,loginModel);
                                     mListener.onLogin(loginModel);
                                 }

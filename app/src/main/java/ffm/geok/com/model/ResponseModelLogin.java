@@ -46,4 +46,5 @@ public class ResponseModelLogin {
     public void set__url(String __url) {
         this.__url = __url;
     }
+
 }

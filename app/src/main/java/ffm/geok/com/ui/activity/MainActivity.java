@@ -100,7 +100,7 @@ public class MainActivity extends MySupportActivity
     private void loadData(){
         //获取当前及以前3天的数据
         String curDateStr=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
-        String st=DateUtils.getDateStr(curDateStr,3);
+        String st=DateUtils.getDateStr(curDateStr,5);
         L.i("Date","ST："+curDateStr+" ET"+st);
 
         //firesPresenter.getFiresList("2018-11-10","2019-11-19");
