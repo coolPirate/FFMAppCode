@@ -78,7 +78,7 @@ public class ProjectPresenter implements IProjectPresenter {
                 .tag(this)
                 .params(ConstantUtils.RequestTag.ST, startTime)
                 .params(ConstantUtils.RequestTag.ET, endTime)
-                .params(ConstantUtils.RequestTag.ADCD, SPManager.getADCD())
+                .params(ConstantUtils.RequestTag.ADCD, SPManager.getADCD().equals("00")?"":SPManager.getADCD())
                 .execute(new DialogCallback(mActivity) {
 
                     @Override
