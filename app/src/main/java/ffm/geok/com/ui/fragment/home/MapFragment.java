@@ -112,7 +112,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
 
     private Dialog inputDialog = null;
     Observable<Message> observableMarker;//地图中心
-    Observable<Message> observableMarker2;//地图中心
+    Observable<Message> observableMarker2;//地图刷新图标
     private ArrayList<InputInfoModel> sourceData = new ArrayList<InputInfoModel>(); //录入模板
 
 
@@ -138,8 +138,6 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         initListener(view);
         initMaker();
 
-
-
         //unbinder = ButterKnife.bind(this, view);
         //ButterKnife.bind(this,view);
         return view;
@@ -155,13 +153,6 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         /*初始化地图*/
         mapLocationPresenter = new MapLocationPresenter(getContext(), locationCallBack);
         mapLocationPresenter.initAMap(getActivity());
-
-        /*mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-
-        mToolbar.setTitle(R.string.home);
-        initToolbarNav(mToolbar, true);
-        mToolbar.inflateMenu(R.menu.home);
-        mToolbar.setOnMenuItemClickListener(this);*/
 
 
         //设置显示定位按钮 并且可以点击
@@ -182,7 +173,6 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
 
     private void initMaker() {
         //初始化新增数据marker
-        //List<FireDateEntity> fireDateEntityList = DBUtils.getInstance().queryAllBySingleWhereConditions(FireDateEntity.class, FireDateEntityDao.Properties.See.eq("1"));
         List<FireDateEntity> fireDateEntityList=DBUtils.getInstance().queryAll(FireDateEntity.class);
         int cnt=fireDateEntityList.size();
         L.i("Marker数", String.valueOf(cnt));
@@ -210,6 +200,8 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
                     .draggable(false));
             //marker.showInfoWindow();
         }
+        aMap.reloadMap();//刷新地图
+
     }
 
     @Override
@@ -388,7 +380,6 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
                 marker.remove();//移除当前Marker
             }
         }
-        aMap.reloadMap();//刷新地图
     }
 
     private void initDialogParams(String id) {
@@ -504,7 +495,7 @@ public class MapFragment extends BaseMainFragment implements LocationSource, Too
         super.onDestroyView();
         //unbinder.unbind();
         RxBus.get().unregister("DataSelected",observableMarker);
-        RxBus.get().unregister("DataSelected",observableMarker2);
+        RxBus.get().unregister(ConstantUtils.global.DataUpdate,observableMarker2);
     }
 
     @Override

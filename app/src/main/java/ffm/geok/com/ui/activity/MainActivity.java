@@ -100,8 +100,8 @@ public class MainActivity extends MySupportActivity
     private void loadData(){
         //获取当前及以前3天的数据
         String curDateStr=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
-        String st=DateUtils.getDateStr(curDateStr,5);
-        L.i("Date","ST："+curDateStr+" ET"+st);
+        String st=DateUtils.getDateStr(curDateStr,7);
+        L.i("Date","ST："+st+" ET"+curDateStr);
 
         //firesPresenter.getFiresList("2018-11-10","2019-11-19");
         firesPresenter.getFiresList(st,curDateStr);
@@ -185,8 +185,7 @@ public class MainActivity extends MySupportActivity
                         }
                     }
                 });
-                //RxBus.get().post(ConstantUtils.global.DataUpdate,new Message(1000, "数据增加"));
-                RxBus.get().post(ConstantUtils.global.RefreshDataStatus,new Message(0,"刷新数据"));
+
             }
 
             @Override

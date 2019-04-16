@@ -84,6 +84,7 @@ public class ProjectPresenter implements IProjectPresenter {
                     @Override
                     public void onSuccess(Response<String> response) {
                         String responseString = response.body();
+                        L.i("GETST",startTime+"_"+endTime);
                         L.i("response",responseString);
                         try {
                             ResponseModel responseModel = Convert.fromJson(responseString, ResponseModel.class);
@@ -186,7 +187,6 @@ public class ProjectPresenter implements IProjectPresenter {
                     if(dt.after(timeDate)){
                         fireDateEntityList1.add(entity);
                     }
-
                 }
 
                 if (null != fireDateEntityList1) {

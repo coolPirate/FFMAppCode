@@ -3,6 +3,7 @@ package ffm.geok.com.ui.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -53,7 +54,8 @@ public class SearchActivity extends AppCompatActivity {
     private void execute() {
         mSearchBGTxt.getViewTreeObserver()
                 .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override public void onGlobalLayout() {
+                    @Override
+                    public void onGlobalLayout() {
                         mSearchBGTxt.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         performEnterAnimation();
                     }
@@ -62,6 +64,15 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+        mSearchTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent();
+                intent.putExtra("fireName",mHintTxt.getText());
+                setResult(11,intent);
+                finish();
             }
         });
     }

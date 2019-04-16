@@ -57,6 +57,8 @@ import rx.Observable;
 
 public class DataListFragment extends BaseMainFragment implements OnRefreshAndLoadmore, OnItemClickListener, TextView.OnEditorActionListener {
 
+    private int Intent_For_Result=1;
+
     @BindView(R.id.tv_project_name)
     SearchEditText tvProjectName;
     @BindView(R.id.mRecyclerView)
@@ -81,8 +83,6 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
     private String queryProjectName = "";
     //private String _time;
     private int lastVisibleItem = -1;
-    private String _startTime = "2018-11-10";
-    private String _endTime = "2019-11-19";
     private ArrayAdapter adapter;
 
     private ArrayList<InputInfoModel> sourceData = new ArrayList<InputInfoModel>(); //录入模板
@@ -110,6 +110,14 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         initData();
         initListener();
 
+        //获取当前及以前7天的数据
+        String curDateStr=DateUtils.Date2String(new Date(),DateUtils.pattern_full);
+        String st=DateUtils.getDateStr(curDateStr,7);
+        projectPresenter.getFiresList(st,curDateStr);
+
+        RxBus.get().post(ConstantUtils.global.RefreshDataStatus, new Message(0,"刷新数据"));
+        RxBus.get().post(ConstantUtils.global.DataUpdate,new Message(100,"mark刷新"));
+
         return view;
     }
 
@@ -134,6 +142,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
 
             @Override
             public void onFiresListSuccess(List<FireDateEntity> fireDateEntityList) {
+                //if(fireDateEntityList.size()==0) return;
                 if (isRefresh) {
                     mSwiperefreshlayout.setRefreshing(false);
                     projectListAdapter.setDataList(fireDateEntityList);
@@ -220,7 +229,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
                 tvProjectName.getLocationOnScreen(location);
                 intent.putExtra("x",location[0]);
                 intent.putExtra("y",location[1]);
-                startActivity(intent);
+                startActivityForResult(intent,Intent_For_Result);
                 getActivity().overridePendingTransition(0,0);
             }
         });
@@ -230,13 +239,10 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         observable.subscribe(message -> {
             L.d("code = " + message.getMsgCode() + " content = " + message.getMsgContent());
             if (0 == projectListAdapter.getDataList().size()) {
-                onRefresh();
                 llEmpty.setVisibility(View.VISIBLE);
             } else {
                 llEmpty.setVisibility(View.GONE);
             }
-            //onRefresh();
-
         });
 
     }
@@ -249,6 +255,7 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
         observable = RxBus.get().register(ConstantUtils.global.RefreshDataStatus, Message.class);
 
         onRefresh();
+
     }
 
 
@@ -308,6 +315,20 @@ public class DataListFragment extends BaseMainFragment implements OnRefreshAndLo
                 //地图更新
                 RxBus.get().post("DataSelected",new Message(1000, String.valueOf(fireDateEntity.getLat())+","+String.valueOf(fireDateEntity.getLon())));
             }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==Intent_For_Result){
+            switch (resultCode){
+                case 11:
+                    tvProjectName.setText(data.getStringExtra("fireName"));
+                    projectPresenter.getFiresList(queryAdcd, queryProjectName, pageSize, pageNumber);
+                    break;
+            }
+
         }
     }
 
